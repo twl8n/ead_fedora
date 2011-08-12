@@ -1,0 +1,299 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<foxml:digitalObject
+   VERSION="1.1"
+   PID="<%= @pid %>"
+   xmlns:foxml="info:fedora/fedora-system:def/foxml#"
+   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+   xsi:schemaLocation="info:fedora/fedora-system:def/foxml# http://www.fedora.info/definitions/1/0/foxml1-1.xsd">
+  <!-- Fix label? Where to get the value? -->
+  <foxml:objectProperties>
+    <foxml:property NAME="info:fedora/fedora-system:def/model#state" VALUE="Active"/>
+    <foxml:property NAME="info:fedora/fedora-system:def/model#label" VALUE=""/>
+    <foxml:property NAME="info:fedora/fedora-system:def/model#ownerId" VALUE="fedoraAdmin"/>
+    <foxml:property NAME="info:fedora/fedora-system:def/model#createdDate" VALUE="<%= ef_create_date %>"/>
+    <foxml:property NAME="info:fedora/fedora-system:def/view#lastModifiedDate" VALUE="<%= ef_create_date %>"/>
+  </foxml:objectProperties>
+
+  <foxml:datastream ID="DC" STATE="A" CONTROL_GROUP="X" VERSIONABLE="true">
+    <!-- Can end users see foxml:datastreamVersion label? Or can only Fedora admins see it? -->
+    <foxml:datastreamVersion
+       ID="DC1.0"
+       LABEL="Dublin Core Record for this object" 
+       CREATED="<%= ef_create_date %>" 
+       MIMETYPE="text/xml"
+       FORMAT_URI="http://www.openarchives.org/OAI/2.0/oai_dc/"
+       SIZE="406">
+      <foxml:xmlContent>
+        <oai_dc:dc xmlns:dc="http://purl.org/dc/elements/1.1/"
+		   xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/"
+		   xmlns:srw_dc="info:srw/schema/1/dc-schema"
+		   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		   xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/oai_dc/ http://www.openarchives.org/OAI/2.0/oai_dc.xsd">
+	  <!-- duplicate of mods:abstract displayLabel="Scope and Contents" -->
+          <dc:description>
+	  </dc:description>
+	  <!-- unittitle -->
+          <dc:title><%= agn_title %></dc:title>
+	  <!-- <origination label="Creator:"><persname rules="aacr" source="ingest"> -->
+          <dc:creator><%= agn_creator %></dc:creator>
+	  <!-- no uuid or druid, maybe later -->
+	  <!-- unitid, Can identifiers have a space? -->
+          <dc:identifier><%= agn_id %></dc:identifier>
+        </oai_dc:dc>
+      </foxml:xmlContent>
+    </foxml:datastreamVersion>
+  </foxml:datastream>
+  
+  <foxml:datastream ID="RELS-EXT" STATE="A" CONTROL_GROUP="X" VERSIONABLE="true">
+    <!-- Size?, Label? -->
+    <foxml:datastreamVersion
+       ID="RELS-EXT.0"
+       LABEL=""
+       CREATED="<%= ef_create_date %>"
+       MIMETYPE="text/xml"
+       SIZE="302">
+      <foxml:xmlContent>
+        <rdf:RDF
+	   xmlns:fedora-model="info:fedora/fedora-system:def/model#"
+	   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+	   xmlns:rel="info:fedora/fedora-system:def/relations-external#"
+	   xmlns:hydra="http://projecthydra.org/ns/relations#">
+
+	  <!-- Should we create our own fixture name? If so, need to
+	       get then guidelines.  Must match PID in the header.
+	       -->
+	  
+          <rdf:Description rdf:about="info:fedora/<%= pid %>">
+
+            <!-- need a new druid? Apparently this is the druid of the
+	    governing rdf object? or governing rdf model?-->
+
+	    <!--
+	    <hydra:isGovernedBy rdf:resource="info:fedora/druid:hv992ry2431"/>
+	    -->
+
+	    <!-- Is there an afmodel collection object? By archival
+	    nomenclature, this is a collection, not a set.  -->
+
+	    <hasModel xmlns="info:fedora/fedora-system:def/relations-external#"	rdf:resource="info:fedora/afmodel:HypatiaSet" />
+	    
+          </rdf:Description>
+        </rdf:RDF>
+      </foxml:xmlContent>
+    </foxml:datastreamVersion>
+  </foxml:datastream>
+  
+  <foxml:datastream ID="descMetadata" STATE="A" CONTROL_GROUP="X" VERSIONABLE="true">
+    <!-- Fix size? -->
+    <foxml:datastreamVersion
+       ID="descMetadata.0"
+       LABEL=""
+       CREATED="<%= ef_creation_date %>"
+       MIMETYPE="text/xml"
+       SIZE="276">
+      <foxml:xmlContent>
+
+	<!-- Why does Lynn's XML have so many more mods elements? See
+	     "Set object for collection M1292" at:
+	     https://wiki.duraspace.org/display/HYPAT/Xanadu+EAD+and+Hypatia+fixture+objects
+	     -->
+
+        <mods:mods xmlns:mods="http://www.loc.gov/mods/v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="3.3" xsi:schemaLocation="http://www.loc.gov/mods/v3 http://www.loc.gov/standards/mods/v3/mods-3-3.xsd">
+          <mods:titleInfo>
+
+	    <!-- unittitle -->
+	    <!-- duplicate of dc:title -->
+
+            <mods:title><%= agn_title %></mods:title>
+          </mods:titleInfo>
+          <mods:typeOfResource collection="yes"/>
+
+	  <!-- </bioghist> <scopecontent -->
+
+          <mods:abstract displayLabel="Scope and Contents">
+	    <%= agn_scope %>
+	  </mods:abstract> 
+
+          <mods:identifier type="local"><%= agn_type %></mods:identifier>
+
+	  <!-- What is "marcrelator"? The date is part of the EAD
+	  persname, so I've copied it over just as a computer
+	  would. -->
+
+	  <!-- <archdesc><did><origination label="Creator:"><persname> -->
+	  
+          <mods:name type="personal">
+            <mods:namePart><%= agn_creator %></mods:namePart>
+            <mods:role>
+              <mods:roleTerm authority="marcrelator" type="text">creator</mods:roleTerm>
+            </mods:role>
+          </mods:name>
+	  
+	  <!-- I have used the recommended <repository> <corpname>,
+	  althought <publicationstmt> <publisher> <publisher> works
+	  better for Tobin. -->
+	  
+          <!-- <publisher>Yale University Library</publisher>
+            <publisher>Manuscripts and Archives</publisher> -->
+
+
+          <mods:name type="corporate">
+            <mods:namePart><%= agn_corp_name %></mods:namePart>
+            <mods:role>
+              <mods:roleTerm authority="local" type="text">repository</mods:roleTerm>
+            </mods:role>
+          </mods:name>
+
+          <mods:typeOfResource collection="yes"/>
+
+	  <!-- Tobin has no <controlaccess><genreform source="##"> -->
+	  
+          <mods:genre authority="aat"></mods:genre>
+
+	  <!-- <unitdate> -->
+
+          <mods:originInfo>
+            <mods:dateCreated><%= agn_create_date %></mods:dateCreated>
+          </mods:originInfo>
+
+          <mods:language>
+            <mods:languageTerm authority="iso639-2b" type="code">eng</mods:languageTerm>
+          </mods:language>
+
+	  <!-- <physdesc> -->
+
+          <mods:physicalDescription>
+            <mods:extent><%= agn_extent %></mods:extent>
+          </mods:physicalDescription>
+
+	  <!-- scopecontent -->
+	  
+          <mods:abstract>
+	    <%= agn_abstract %>
+	  </mods:abstract>
+	  
+	  <!-- Not in Gretchen's crosswalk. For Xanadu it said "The
+	  collection includes files from XOC, VHS tapes, and Drexler
+	  drafts and galley proofs." -->
+	  
+          <mods:abstract displayLabel="Collection Scope and Content Summary">
+	  </mods:abstract>
+
+	  <!-- <scopcontent> has no attribute "label" -->
+
+	  <!-- <bioghist> (not including <head>) -->
+
+          <mods:abstract displayLabel="Biography">
+	    <%= agn_bio %>
+	  </mods:abstract>
+
+	  <!-- <acqinfo> -->
+
+          <mods:abstract displayLabel="Acquisition Information">
+	    <%= agn_acq_info %>
+	  </mods:abstract>
+
+	  <!-- prefercite -->
+
+          <mods:abstract displayLabel="Preferred Citation">
+	    <%= agn_cite %>
+	  </mods:abstract>
+
+	  <!-- Tobin has no <controlaccess> element. Example topic
+	  values are: "Electronic publishing.", "Hypertext systems."-->
+
+          <mods:subject authority="lcsh">
+            <mods:topic></mods:topic>
+          </mods:subject>
+
+          <mods:accessCondition displayLabel="Publication Rights" type="useAndReproduction">
+
+	    Property rights reside with the repository. Literary
+            rights reside with the creators of the documents or their
+            heirs. To obtain permission to publish or reproduce,
+            please contact the Public Services Librarian of the
+            Dept. of Special Collections.
+
+	  </mods:accessCondition>
+
+          <mods:accessCondition displayLabel="Access" type="restrictionOnAccess">
+	    
+	    The Media materials require at least two weeks advance notice to use
+	    in order to allow staff time to have use copies made from the original
+	    items.
+
+	  </mods:accessCondition>
+
+	  <!-- The Tobin id has a space in it. -->
+
+          <mods:identifier type="local"><%= agn_id %></mods:identifier>
+        </mods:mods>
+      </foxml:xmlContent>
+    </foxml:datastreamVersion>
+  </foxml:datastream>
+  
+  <foxml:datastream ID="rightsMetadata" STATE="A" CONTROL_GROUP="X" VERSIONABLE="true">
+    <!-- Does size have any meaning? Should this have a machine generated label? -->
+    <foxml:datastreamVersion
+       ID="rightsMetadata.0"
+       LABEL=""
+       CREATED="<%= ef_create_date %>"
+       MIMETYPE="text/xml"
+       SIZE="302">
+
+      <foxml:xmlContent>
+
+	<!-- Where will non-stanford users get the rights meta data schema? -->
+
+        <rightsMetadata xmlns="http://hydra-collab.stanford.edu/schemas/rightsMetadata/v1" version="0.1">
+          <access type="discover">
+            <machine>
+              <group>public</group>
+            </machine>
+          </access>
+          <access type="read">
+            <machine>
+              <group>public</group>
+            </machine>
+          </access>
+        </rightsMetadata>
+      </foxml:xmlContent>
+    </foxml:datastreamVersion>
+  </foxml:datastream>
+  
+  <foxml:datastream ID="identityMetadata" STATE="A" CONTROL_GROUP="X" VERSIONABLE="true">
+    <foxml:datastreamVersion
+       ID="identityMetadata.0"
+       LABEL=""
+       CREATED="<%= ef_create_date %>"
+       MIMETYPE="text/xml"
+       SIZE="302">
+      <foxml:xmlContent>
+        <identityMetadata>
+          <adminPolicy>hypatia:fixture_xanadu_apo</adminPolicy>
+
+	  <!-- Again with fixture_coll change to generic "collection"?
+	       I've entered it as a new collection name in keeping
+	       with the examples. -->
+
+          <objectId><%= pid %></objectId>
+          <objectType><%= agn_object_type %></objectType>
+          <setType><%= agn_set_type %></setType>
+
+	  <!-- I've used unittitle (again). Where did Lynn fill this
+	       in from? It appears he used data from another source. -->
+	  
+          <objectLabel><%= agn_title %></objectLabel>
+          <objectCreator>DOR</objectCreator>
+
+	  <!-- Need new druid for the agreement. Does Tobin even have
+	       an agreement? Check to see what type of agreement this
+	       is. -->
+
+          <agreementId><%= agn_agreement_id %></agreementId>
+          <tag>Project : Tobin</tag>
+        </identityMetadata>
+      </foxml:xmlContent>
+    </foxml:datastreamVersion>
+  </foxml:datastream>
+</foxml:digitalObject>

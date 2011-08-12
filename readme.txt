@@ -35,7 +35,7 @@ Introduction
 
 This project is a small Ruby utility (Module, Class, API) that reads a
 standard EAD finding aid, and creates Fedora objects for he collection
-and all c0x container elements. Enhancements will include integration
-with another utility to create objects for the digital files, or will
-be updated to create Fedora objects for the digital files.
+and all c0x container elements. Enhancements will include creating
+objects for the digital files. This will happen via an external
+utility if such a utility can be found. 
 

@@ -25,7 +25,7 @@ class Fx_maker
   # This class can have all the action in initialize() then exit.
   # Name the calling code "run.rb" which should be pretty obvious.
 
-  def initialize
+  def initialize(fname)
     # read the EAD
     # pull info from collection, make foxml
     # Use a foxml erb template
@@ -37,8 +37,19 @@ class Fx_maker
     # ef_ is for ead_fedora system technical data
 
     @base_url = "http://fedoraAdmin:fedoraAdmin@localhost:8983/fedora"
-    @pid_namespace = "ead_fc"
+    @pid_namespace = "eadfc"
+    @pid = gen_pid()
 
+  end
+
+  def read_and_parse
+    # collection data
+    collection_h = {}
+    # container list of hash. Same hash elements for each container
+    cloh = []
+    exml = IO.read(@fname)
+    
+    return [collection_h, cloh]
   end
 
 
@@ -50,8 +61,9 @@ class Fx_maker
     # post().
 
     working_url = "#{@base_url}/objects/nextPID?namespace=#{@pid_namespace}&format=xml"
+    print "wu: #{working_url}\n"
     some_xml = RestClient.post(working_url, '')
-
+    return some_xml.match(/<pid>#{@pid_namespace}:(\d+)<\/pid>/)[1]
   end
 
   def ingest(fname)

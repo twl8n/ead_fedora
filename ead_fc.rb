@@ -18,6 +18,7 @@
 require 'rubygems'
 require 'rest-client'
 require 'nokogiri'
+require 'erb'
 
 module Ead_fc
 
@@ -38,10 +39,22 @@ class Fx_maker
     # ef_ is for ead_fedora system technical data
 
     @base_url = "http://fedoraAdmin:fedoraAdmin@localhost:8983/fedora"
+    @collection_t_file = "/usr/local/projects/ead_fedora/generic.foxml.xml.erb"
+
     @pid_namespace = "eadfc"
     @pid = gen_pid()
     @ef_create_date = todays_date()
-    
+    read_and_parse()
+
+    # Someone should explain each of the args.
+    @collection_template = ERB.new(File.new(collection_t_file).read, nil, "%")
+
+    # Since we are using instance vars which are essentially global,
+    # we might not need binding() which passes the current execution
+    # heap space.
+
+    xml_out = coll_template.result(binding())
+    return xml_out
   end
 
   def todays_date
@@ -61,12 +74,14 @@ class Fx_maker
     # Not used currently, but could be later.
     ead_schema_ns = 'urn:isbn:1-931666-22-9'
 
-    # Agnostic variables. This is oop so it is ok to use instance vars
+    # Agnostic variables. This is OOP so it is ok to use instance vars
     # because they won't cause any of the bugs that arise from using
     # globals in imperative code. Obi wan says: These aren't the
-    # globals you're looking for.
+     # globals you're looking for.
 
-    @agn_title = xml.xpath("//*/xmlns:titleproper[@type='formal']")[0].content
+    @agn_titleproper = xml.xpath("//*/xmlns:titleproper[@type='formal']")[0].content
+
+    @agn_title = xml.xpath("//*/xmlns:archdesc/xmlns:did/xmlns:unittitle")[0].content
 
     # <!-- <origination label="Creator:"><persname rules="aacr" source="ingest"> -->
 
@@ -138,14 +153,28 @@ class Fx_maker
       tween = "\n\n"
     }
 
-    # ?
-    @agn_type = xml.xpath("//*/xmlns:titleproper[@type='formal']")[0].content
+    # Used in <mods:identifier type="local">
 
-    @agn_object_type = xml.xpath("//*/xmlns:titleproper[@type='formal']")[0].content
-    @agn_set_type = xml.xpath("//*/xmlns:titleproper[@type='formal']")[0].content
+    # How we know if this is a "collection": <archdesc level="collection"
 
-    @agn_agreement_id = xml.xpath("//*/xmlns:titleproper[@type='formal']")[0].content
-    @agn_project = xml.xpath("//*/xmlns:titleproper[@type='formal']")[0].content
+    # <c01 id="ref11" level="series"> has a
+    # <did><unittitle>Inventory</unittitle></did> that could be used
+    # to additionally specify the type. Or not.
+
+    # Some containers have a container element that tells us the type,
+    # and the box id number. <did><container type="Box">1</container>
+
+    @agn_type = xml.xpath("//*/xmlns:archdesc")[0].attributes['level']
+    
+    # Used in foxml identitymetadata <objectId> and <objectType>
+
+    if (@agn_type == "collection")
+      @agn_object_type = "set"
+      @agn_set_type = @agn_type
+    end
+
+    @agn_agreement_id = ""
+    @agn_project = @agn_title
 
   end
 

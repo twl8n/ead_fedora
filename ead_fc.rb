@@ -106,25 +106,37 @@ class Fx_maker
 
     @agn_create_date = xml.xpath("//*/xmlns:archdesc/xmlns:did/xmlns:unitdate")[0].content
 
-    # <!-- <physdesc> -->
+    @agn_extent = xml.xpath("//*/xmlns:archdesc/xmlns:did/xmlns:physdesc/xmlns:extent")[0].content
 
-    @agn_extent = xml.xpath("//*/xmlns:titleproper[@type='formal']")[0].content
+    @agn_abstract = xml.xpath("//*/xmlns:archdesc/xmlns:did/xmlns:abstract")[0].content
+    
+    # Not including the <head>. Could be multiple <p> so separate with
+    # "\n\n". See comments above about tween.
 
-    # 	  <!-- scopecontent -->
-
-    @agn_abstract = xml.xpath("//*/xmlns:titleproper[@type='formal']")[0].content
-
-    # 	  <!-- <bioghist> (not including <head>) -->
-
-    @agn_bio = xml.xpath("//*/xmlns:titleproper[@type='formal']")[0].content # bioghist
+    tween = ""
+    @agn_bio = ""
+    xml.xpath("//*/xmlns:archdesc/xmlns:bioghist/xmlns:p").each { |ele|
+      @agn_bio += "#{tween}#{ele.content}"
+      tween = "\n\n"
+    }
 
     # <!-- <acqinfo> -->
 
-    @agn_acq_info = xml.xpath("//*/xmlns:titleproper[@type='formal']")[0].content
+    tween = ""
+    @agn_acq_info = ""
+    xml.xpath("//*/xmlns:archdesc/xmlns:descgrp/xmlns:descgrp/xmlns:acqinfo/xmlns:p").each { |ele|
+      @agn_acq_info += "#{tween}#{ele.content}"
+      tween = "\n\n"
+    }
 
     # <!-- prefercite -->
 
-    @agn_cite = xml.xpath("//*/xmlns:titleproper[@type='formal']")[0].content
+    tween = ""
+    @agn_cite = ""
+    xml.xpath("//*/xmlns:archdesc/xmlns:descgrp/xmlns:prefercite/xmlns:p").each { |ele|
+      @agn_cite += "#{tween}#{ele.content.strip}"
+      tween = "\n\n"
+    }
 
     # ?
     @agn_type = xml.xpath("//*/xmlns:titleproper[@type='formal']")[0].content

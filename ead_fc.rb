@@ -27,6 +27,8 @@ class Fx_maker
   # This class can have all the action in initialize() then exit.
   # Name the calling code "run.rb" which should be pretty obvious.
 
+  attr_reader :pid
+
   def initialize(fname)
     # read the EAD
     # pull info from collection, make foxml
@@ -38,8 +40,9 @@ class Fx_maker
     
     # ef_ is for ead_fedora system technical data
 
+    @fname = fname
     @base_url = "http://fedoraAdmin:fedoraAdmin@localhost:8983/fedora"
-    @collection_t_file = "/usr/local/projects/ead_fedora/generic.foxml.xml.erb"
+    collection_t_file = "/usr/local/projects/ead_fedora/generic.foxml.xml.erb"
 
     @pid_namespace = "eadfc"
     @pid = gen_pid()
@@ -47,14 +50,42 @@ class Fx_maker
     read_and_parse()
 
     # Someone should explain each of the args.
-    @collection_template = ERB.new(File.new(collection_t_file).read, nil, "%")
+    collection_template = ERB.new(File.new(collection_t_file).read, nil, "%")
 
     # Since we are using instance vars which are essentially global,
     # we might not need binding() which passes the current execution
     # heap space.
 
-    xml_out = coll_template.result(binding())
-    return xml_out
+    @xml_out = collection_template.result(binding())
+  end
+
+  def ingest_internal
+
+    # Ingest existing @xml_out. 
+
+    wuri = "#{@base_url}/objects/new?format=info:fedora/fedora-system:FOXML-1.1"
+    payload = RestClient::Payload.generate(@xml_out)
+
+    # Do not call to_s() on payload because payload is a stream object
+    # and to_s() doesn't reset the stream byte counter which
+    # essentially means the stream becomes empty.
+
+    if true
+      deb = payload.inspect()
+      print "working uri: #{wuri}\nvar: #{deb[0,10]}\n...\n#{deb[-80,80]}\n"
+      ingest_result_xml = RestClient.post(wuri,
+                                          payload,
+                                          :content_type => "text/xml")
+      return ingest_result_xml
+    else
+      var = payload
+      print "working uri: #{wuri}\nvar: #{payload.to_s[0,10]}\n again: #{var}more stuff\n"
+      return ""
+    end
+  end
+
+  def xml_out
+    return @xml_out
   end
 
   def todays_date
@@ -187,9 +218,12 @@ class Fx_maker
     # post().
 
     working_url = "#{@base_url}/objects/nextPID?namespace=#{@pid_namespace}&format=xml"
-    print "wu: #{working_url}\n"
     some_xml = RestClient.post(working_url, '')
-    return some_xml.match(/<pid>#{@pid_namespace}:(\d+)<\/pid>/)[1]
+    numeric_pid = some_xml.match(/<pid>#{@pid_namespace}:(\d+)<\/pid>/)[1]
+
+    # Fedora requires pids to match a regex, apparently text:number
+
+    return "#{@pid_namespace}:#{numeric_pid}"
   end
 
   def ingest(fname)

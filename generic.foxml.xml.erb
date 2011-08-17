@@ -8,7 +8,7 @@
   <!-- Fix label? Where to get the value? -->
   <foxml:objectProperties>
     <foxml:property NAME="info:fedora/fedora-system:def/model#state" VALUE="Active"/>
-    <foxml:property NAME="info:fedora/fedora-system:def/model#label" VALUE=""/>
+    <foxml:property NAME="info:fedora/fedora-system:def/model#label" VALUE="<%= @agn_title %>"/>
     <foxml:property NAME="info:fedora/fedora-system:def/model#ownerId" VALUE="fedoraAdmin"/>
     <foxml:property NAME="info:fedora/fedora-system:def/model#createdDate" VALUE="<%= @ef_create_date %>"/>
     <foxml:property NAME="info:fedora/fedora-system:def/view#lastModifiedDate" VALUE="<%= @ef_create_date %>"/>
@@ -35,7 +35,7 @@
 	  <!-- unittitle -->
           <dc:title><%= @agn_title %></dc:title>
 	  <!-- <origination label="Creator:"><persname rules="aacr" source="ingest"> -->
-          <dc:creator><%= agn_creator %></dc:creator>
+          <dc:creator><%= @agn_creator %></dc:creator>
 	  <!-- no uuid or druid, maybe later -->
 	  <!-- unitid, Can identifiers have a space? -->
           <dc:identifier><%= @agn_id %></dc:identifier>
@@ -49,7 +49,7 @@
     <foxml:datastreamVersion
        ID="RELS-EXT.0"
        LABEL=""
-       CREATED="<%= ef_create_date %>"
+       CREATED="<%= @ef_create_date %>"
        MIMETYPE="text/xml"
        SIZE="302">
       <foxml:xmlContent>
@@ -63,7 +63,7 @@
 	       get then guidelines.  Must match PID in the header.
 	       -->
 	  
-          <rdf:Description rdf:about="info:fedora/<%= pid %>">
+          <rdf:Description rdf:about="info:fedora/<%= @pid %>">
 
             <!-- need a new druid? Apparently this is the druid of the
 	    governing rdf object? or governing rdf model?-->
@@ -88,7 +88,7 @@
     <foxml:datastreamVersion
        ID="descMetadata.0"
        LABEL=""
-       CREATED="<%= ef_creation_date %>"
+       CREATED="<%= @ef_create_date %>"
        MIMETYPE="text/xml"
        SIZE="276">
       <foxml:xmlContent>

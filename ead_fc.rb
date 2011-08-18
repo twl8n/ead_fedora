@@ -47,6 +47,9 @@ class Fx_maker
     @pid_namespace = "eadfc"
     @pid = gen_pid()
     @ef_create_date = todays_date()
+    @is_container = false
+    @agn_type_of_resource = 'collection="yes"'
+
     read_and_parse()
 
     # Someone should explain each of the args.
@@ -57,6 +60,17 @@ class Fx_maker
     # heap space.
 
     @xml_out = collection_template.result(binding())
+
+    # Where do we process the contain elements?
+
+    @is_container = true
+
+    @cn_loh.each { |@cn|
+      # rename collection_template to generic_template
+      # render the template
+    }
+
+
   end
 
   def ingest_internal

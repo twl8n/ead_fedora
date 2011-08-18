@@ -42,36 +42,191 @@ class Fx_maker
 
     @fname = fname
     @base_url = "http://fedoraAdmin:fedoraAdmin@localhost:8983/fedora"
-    collection_t_file = "/usr/local/projects/ead_fedora/generic.foxml.xml.erb"
-
-    @pid_namespace = "eadfc"
-    @pid = gen_pid()
-    @ef_create_date = todays_date()
-    @is_container = false
-    @agn_type_of_resource = 'collection="yes"'
-
-    read_and_parse()
+    generic_t_file = "/usr/local/projects/ead_fedora/generic.foxml.xml.erb"
+    @xml = Nokogiri::XML(open(@fname))
 
     # Someone should explain each of the args.
-    collection_template = ERB.new(File.new(collection_t_file).read, nil, "%")
+    generic_template = ERB.new(File.new(generic_t_file).read, nil, "%")
 
-    # Since we are using instance vars which are essentially global,
-    # we might not need binding() which passes the current execution
-    # heap space.
+    @pid_namespace = "eadfc"
+    @ef_create_date = todays_date()
 
-    @xml_out = collection_template.result(binding())
+    # collection/container list of hash. Data for each foxml object is
+    # in one of the array elements, and each element is a hash.
 
-    # Where do we process the contain elements?
+    @cn_loh = []
 
-    @is_container = true
+    # A new hash. We'll push this onto @cn_loh.
+    
+    # First a singular bit of code for the collection, then below is a
+    # loop for each container.
+
+    rh = Hash.new()
+
+    rh{'pid'} = gen_pid()
+    rh{'ef_create_date'} = @ef_create_date
+    rh{'is_container'} = false
+    rh{'type_of_resource'} = 'collection="yes"'
+
+    # Ruby objects are always passed by reference? This should update
+    # rh as a side effect.
+
+    collection_parse(rh)
+
+    push(@cn_loh, rh)
+
+    # Process the container elements. Hashes are pass byreference,
+    # but Fixnums (ints) are pass by value.
+
+    con_count = 1
+    while (con_count = container_parse(rh, con_count))
+      # rh['is_container'] = true
+      push(@cn_loh, rh)
+    end
 
     @cn_loh.each { |@cn|
-      # rename collection_template to generic_template
-      # render the template
+
+      # Render (and load) the template for each hash in the list of hashes.
+      
+      # Since we are using instance vars which are essentially global,
+      # we might not need binding() which passes the current execution
+      # heap space.
+      
+      @xml_out = generic_template.result(binding())
+      
+      # load into Fedora
     }
 
-
   end
+
+  def container_parse(rh, con_count)
+    
+
+    return con_count
+  end
+
+
+  def collection_parse(rh)
+    
+    # Not used currently, but could be later.
+    ead_schema_ns = 'urn:isbn:1-931666-22-9'
+    
+    # Agnostic variables. This is OOP so it is ok to use instance vars
+    # because they won't cause any of the bugs that arise from using
+    # globals in imperative code. Obi wan says: These aren't the
+    # globals you're looking for.
+    
+    rh['titleproper'] = @xml.xpath("//*/xmlns:titleproper[@type='formal']")[0].content
+    
+    rh['title'] = @xml.xpath("//*/xmlns:archdesc/xmlns:did/xmlns:unittitle")[0].content
+    
+    # <!-- <origination label="Creator:"><persname rules="aacr" source="ingest"> -->
+    
+    rh['creator'] = @xml.xpath("//*/xmlns:origination[@label='Creator:']/xmlns:persname")[0].content
+    
+    # <!-- unitid, Can identifiers have a space? -->
+    rh['id'] = @xml.xpath("//*/xmlns:archdesc/xmlns:did/xmlns:unitid")[0].content
+    
+    # <archdesc><scopecontent><p> Ignore <head>. Get all <p> and separate by \n -->
+    
+    # Tween always at the beginning. Start with "" and change to the
+    # tween string after the first iteration. No knowing what this
+    # text will be used for, separate paragraphs with a double
+    # newline. 
+    
+    tween = ""
+    rh['scope'] = ""
+    @xml.xpath("//*/xmlns:archdesc/xmlns:scopecontent/xmlns:p").each { |ele|
+      rh['scope'] += "#{tween}#{ele.content}"
+      tween = "\n\n"
+    }
+    
+    # <!-- <publisher>Yale University Library</publisher>
+    #            <publisher>Manuscripts and Archives</publisher> -->
+
+    # It is hard to know how other institutions will handle this. In
+    # the short term using ", " as the tween looks pretty reasonable.
+
+    tween = ""
+    rh['corp_name'] = ""
+    @xml.xpath("//*/xmlns:publicationstmt/xmlns:publisher").each { |ele|
+      rh['corp_name'] += "#{tween}#{ele.content}"
+      tween = ", "
+    }
+    
+    # <!-- <unitdate> -->
+
+    rh['create_date'] = @xml.xpath("//*/xmlns:archdesc/xmlns:did/xmlns:unitdate")[0].content
+
+    rh['extent'] = @xml.xpath("//*/xmlns:archdesc/xmlns:did/xmlns:physdesc/xmlns:extent")[0].content
+
+    rh['abstract'] = @xml.xpath("//*/xmlns:archdesc/xmlns:did/xmlns:abstract")[0].content
+    
+    # Not including the <head>. Could be multiple <p> so separate with
+    # "\n\n". See comments above about tween.
+
+    tween = ""
+    rh['bio'] = ""
+    @xml.xpath("//*/xmlns:archdesc/xmlns:bioghist/xmlns:p").each { |ele|
+      rh['bio'] += "#{tween}#{ele.content}"
+      tween = "\n\n"
+    }
+
+    # <!-- <acqinfo> -->
+
+    tween = ""
+    rh['acq_info'] = ""
+    @xml.xpath("//*/xmlns:archdesc/xmlns:descgrp/xmlns:descgrp/xmlns:acqinfo/xmlns:p").each { |ele|
+      rh['acq_info'] += "#{tween}#{ele.content}"
+      tween = "\n\n"
+    }
+    
+    # <!-- prefercite -->
+
+    tween = ""
+    rh['cite'] = ""
+    @xml.xpath("//*/xmlns:archdesc/xmlns:descgrp/xmlns:prefercite/xmlns:p").each { |ele|
+      rh['cite'] += "#{tween}#{ele.content.strip}"
+      tween = "\n\n"
+    }
+
+    # Used in <mods:identifier type="local">
+
+    # How we know if this is a "collection": <archdesc level="collection"
+
+    # <c01 id="ref11" level="series"> has a
+    # <did><unittitle>Inventory</unittitle></did> that could be used
+    # to additionally specify the type. Or not.
+
+    # Some containers have a container element that tells us the type,
+    # and the box id number. <did><container type="Box">1</container>
+    
+    rh['type'] = @xml.xpath("//*/xmlns:archdesc")[0].attributes['level']
+    
+    # Used in foxml identitymetadata <objectId> and <objectType>
+
+    if (rh['type'] == "collection")
+      rh['object_type'] = "set"
+      rh['set_type'] = rh['type']
+    end
+    
+    rh['agreement_id'] = ""
+    rh['project'] = rh['title']
+  end # collection_parse
+  
+
+  
+  def write_foxml
+    if true
+      fn = fxm.pid + ".xml"
+      fn.gsub!(/:/,"_")
+      File.open(fn, "wb") { |my_xml|
+        my_xml.write(fxm.xml_out())
+      }
+      print "Wrote: #{fn}\n"
+    end
+  end
+
 
   def ingest_internal
 
@@ -113,118 +268,7 @@ class Fx_maker
     return Time.now.utc.strftime("%Y-%m-%dT%T.000Z")
   end
 
-  def read_and_parse
-    xml = Nokogiri::XML(open(@fname))
-
-    # Not used currently, but could be later.
-    ead_schema_ns = 'urn:isbn:1-931666-22-9'
-
-    # Agnostic variables. This is OOP so it is ok to use instance vars
-    # because they won't cause any of the bugs that arise from using
-    # globals in imperative code. Obi wan says: These aren't the
-     # globals you're looking for.
-
-    @agn_titleproper = xml.xpath("//*/xmlns:titleproper[@type='formal']")[0].content
-
-    @agn_title = xml.xpath("//*/xmlns:archdesc/xmlns:did/xmlns:unittitle")[0].content
-
-    # <!-- <origination label="Creator:"><persname rules="aacr" source="ingest"> -->
-
-    @agn_creator = xml.xpath("//*/xmlns:origination[@label='Creator:']/xmlns:persname")[0].content
-
-    # <!-- unitid, Can identifiers have a space? -->
-    @agn_id = xml.xpath("//*/xmlns:archdesc/xmlns:did/xmlns:unitid")[0].content
-
-    # <archdesc><scopecontent><p> Ignore <head>. Get all <p> and separate by \n -->
-
-    # Tween always at the beginning. Start with "" and change to the
-    # tween string after the first iteration. No knowing what this
-    # text will be used for, separate paragraphs with a double
-    # newline. 
-
-    tween = ""
-    @agn_scope = ""
-    xml.xpath("//*/xmlns:archdesc/xmlns:scopecontent/xmlns:p").each { |ele|
-      @agn_scope += "#{tween}#{ele.content}"
-      tween = "\n\n"
-    }
-
-    # <!-- <publisher>Yale University Library</publisher>
-    #            <publisher>Manuscripts and Archives</publisher> -->
-
-    # It is hard to know how other institutions will handle this. In
-    # the short term using ", " as the tween looks pretty reasonable.
-
-    tween = ""
-    @agn_corp_name = ""
-    xml.xpath("//*/xmlns:publicationstmt/xmlns:publisher").each { |ele|
-      @agn_corp_name += "#{tween}#{ele.content}"
-      tween = ", "
-    }
-
-    # <!-- <unitdate> -->
-
-    @agn_create_date = xml.xpath("//*/xmlns:archdesc/xmlns:did/xmlns:unitdate")[0].content
-
-    @agn_extent = xml.xpath("//*/xmlns:archdesc/xmlns:did/xmlns:physdesc/xmlns:extent")[0].content
-
-    @agn_abstract = xml.xpath("//*/xmlns:archdesc/xmlns:did/xmlns:abstract")[0].content
-    
-    # Not including the <head>. Could be multiple <p> so separate with
-    # "\n\n". See comments above about tween.
-
-    tween = ""
-    @agn_bio = ""
-    xml.xpath("//*/xmlns:archdesc/xmlns:bioghist/xmlns:p").each { |ele|
-      @agn_bio += "#{tween}#{ele.content}"
-      tween = "\n\n"
-    }
-
-    # <!-- <acqinfo> -->
-
-    tween = ""
-    @agn_acq_info = ""
-    xml.xpath("//*/xmlns:archdesc/xmlns:descgrp/xmlns:descgrp/xmlns:acqinfo/xmlns:p").each { |ele|
-      @agn_acq_info += "#{tween}#{ele.content}"
-      tween = "\n\n"
-    }
-
-    # <!-- prefercite -->
-
-    tween = ""
-    @agn_cite = ""
-    xml.xpath("//*/xmlns:archdesc/xmlns:descgrp/xmlns:prefercite/xmlns:p").each { |ele|
-      @agn_cite += "#{tween}#{ele.content.strip}"
-      tween = "\n\n"
-    }
-
-    # Used in <mods:identifier type="local">
-
-    # How we know if this is a "collection": <archdesc level="collection"
-
-    # <c01 id="ref11" level="series"> has a
-    # <did><unittitle>Inventory</unittitle></did> that could be used
-    # to additionally specify the type. Or not.
-
-    # Some containers have a container element that tells us the type,
-    # and the box id number. <did><container type="Box">1</container>
-
-    @agn_type = xml.xpath("//*/xmlns:archdesc")[0].attributes['level']
-    
-    # Used in foxml identitymetadata <objectId> and <objectType>
-
-    if (@agn_type == "collection")
-      @agn_object_type = "set"
-      @agn_set_type = @agn_type
-    end
-
-    @agn_agreement_id = ""
-    @agn_project = @agn_title
-
-  end
-
-
-  def gen_pid
+def gen_pid
 
     # If we use a "format" param in the URL, then the returned object
     # is of the expected type. If not, it is probably necessary to

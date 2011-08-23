@@ -39,3 +39,12 @@ and all c0x container elements. Enhancements will include creating
 objects for the digital files. This will happen via an external
 utility if such a utility can be found. 
 
+
+
+How to run
+----------
+
+Install hydra-jetty, and start the server.
+
+Run the ruby script "run.rb".
+

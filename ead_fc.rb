@@ -97,10 +97,10 @@ class Fx_maker
 
     nset.children.each_with_index { |ele,xx|
       # debug
-      if xx > 30
-        print "dev testing break after 30 containers\n"
-        break
-      end
+      # if xx > 30
+      #   print "dev testing break after 30 containers\n"
+      #   break
+      # end
      
       rh = Hash.new()
 
@@ -180,7 +180,7 @@ class Fx_maker
         # the nokogiri universe) there are invisible text elements
         # around all other elements.
 
-        rh['container_scope']
+        rh['container_scope'] = ""
         if ele.name.match(/c01/)
           scon = ele.xpath("./xmlns:scopecontent")[0]
           if scon.class.to_s.match(/nil/i)
@@ -217,9 +217,9 @@ class Fx_maker
         # rh['project'] = rh['title']
         
         @xml_out = @generic_template.result(binding())
-        ingest_internal()
         write_foxml(rh['pid'])
-        print "finished: pid: #{rh['pid']} id: #{rh['id']}\n"
+        print "Wrote foxml: pid: #{rh['pid']} id: #{rh['id']}\n"
+        ingest_internal()
 
         @cn_loh.push(rh)
         container_parse(ele)

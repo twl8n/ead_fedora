@@ -2,7 +2,8 @@
 
 require 'ead_fc'
 
-fxm = Ead_fc::Fx_maker.new("/home/twl8n/ead_fedora/tobin_mssa.ms.1746.bpg.xml")
-# puts fxm.xml_out()
+# unbuffer output.
+STDOUT.sync = true
 
-# print "Ingest result: #{fxm.ingest_internal()}\n"
+fxm = Ead_fc::Fx_maker.new("tobin_mssa.ms.1746.bpg.xml")
+

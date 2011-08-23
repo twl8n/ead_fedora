@@ -1,0 +1,2348 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ead xmlns:ns2="http://www.w3.org/1999/xlink" xmlns="urn:isbn:1-931666-22-9"
+     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+     xsi:schemaLocation="urn:isbn:1-931666-22-9 http://www.library.yale.edu/facc/schemas/ead/ead.xsd"
+     id="mssa.ms.1746">
+   <eadheader findaidstatus="edited-full-draft" repositoryencoding="iso15511"
+              countryencoding="iso3166-1"
+              dateencoding="iso8601"
+              langencoding="iso639-2b"
+              scriptencoding="iso15924"
+              audience="internal">
+      <eadid countrycode="US" mainagencycode="US-CtY"
+             publicid="-//Yale University::Manuscripts and Archives//TEXT (US::CtY::::[James Tobin papers])//EN"
+             url="http://hdl.handle.net/10079/fa/mssa.ms.1746">mssa.ms.1746</eadid>
+      <filedesc>
+         <titlestmt>
+            <titleproper type="formal">Preliminary Guide to the James Tobin Papers
+                    </titleproper>
+            <titleproper type="filing" audience="internal">Tobin (James) Papers</titleproper>
+            <author>compiled by staff of Manuscripts and Archives</author>
+         </titlestmt>
+         <publicationstmt>
+            <publisher>Yale University Library</publisher>
+            <publisher>Manuscripts and Archives</publisher>
+            <address>
+               <addressline>New Haven, Connecticut</addressline>
+            </address>
+            <date calendar="gregorian" era="ce" type="original" normal="1999-07">July 1999</date>
+            <p>
+               <extref ns2:type="simple" ns2:actuate="onRequest" ns2:show="new"
+                       ns2:href="http://hdl.handle.net/10079/drs/yfad/facopyright">Copyright © <date type="copyright" normal="2011">2011</date> by the Yale University Library. </extref>
+            </p>
+         </publicationstmt>
+         <notestmt>
+            <note type="bpg">
+               <p>This encoded finding aid is compliant with the Yale EAD Best Practice Guidelines, Version 1.0.</p>
+            </note>
+         </notestmt>
+      </filedesc>
+      <profiledesc>
+         <creation>This finding aid was produced using the Archivists' Toolkit
+                </creation>
+         <langusage>Finding aid written in 
+                <language langcode="eng" scriptcode="Latn">English</language>.</langusage>
+         <descrules>Finding aid created in accordance with Manuscripts and Archives' Processing Manual.</descrules>
+      </profiledesc>
+      <revisiondesc>
+         <change>
+            <date calendar="gregorian" era="ce" normal="2008-01">January 2008</date>
+            <item>[unspecified revision]</item>
+         </change>
+      </revisiondesc>
+   </eadheader>
+   <archdesc level="collection" relatedencoding="MARC21" type="register">
+      <did>
+         <head>Overview</head>
+         <unitid label="Call Number:" countrycode="US" repositorycode="US-CtY">MS 1746</unitid>
+         <origination label="Creator:">
+            <persname rules="aacr" source="ingest">Tobin, James, 1918-</persname>
+         </origination>
+         <unittitle label="Title:">James Tobin papers</unittitle>
+         <unitdate normal="1930/2002" type="inclusive" calendar="gregorian" era="ce"
+                   label="Dates:"
+                   datechar="creation">1930-2002</unitdate>
+         <physdesc label="Physical Description:">
+            <extent>56.25 linear feet</extent>
+         </physdesc>
+         <abstract label="Summary:">The papers consist of correspondence, subject files, and writings, primarily documenting the professional career and personal life of James Tobin as an economist and educator.</abstract>
+         <langmaterial label="Language(s):">The materials are in <language langcode="eng" scriptcode="Latn">English</language>.</langmaterial>
+         <repository label="Repository:">
+            <corpname>Manuscripts and Archives</corpname>
+            <address>
+               <addressline>Sterling Memorial Library</addressline>
+               <addressline>128 Wall Street</addressline>
+               <addressline>P.O. Box 208240</addressline>
+               <addressline>New Haven, CT 06520</addressline>
+               <addressline altrender="email">Email: mssa.faq@yale.edu</addressline>
+               <addressline altrender="phone">Phone: (203) 432-1735</addressline>
+               <addressline altrender="fax">Fax: (203) 432-7441</addressline>
+            </address>
+         </repository>
+      </did>
+      <descgrp type="admininfo" id="ai">
+         <head>Administrative Information</head>
+         <descgrp type="provenance" id="prov">
+            <head>Provenance</head>
+            <acqinfo id="ref3">
+               <p>Gift of James Tobin, 1999; Elizabeth Tobin, 2002, 2004, and 2006. Gift of Roger G. Tobin and Linda M. Blum, 2004; Gift of William C. Brainard, 2005. Gift of Cowles Foundation, 2005.</p>
+            </acqinfo>
+         </descgrp>
+         <accessrestrict id="ref5">
+            <head>Information about Access</head>
+            <p>Box 17 of the original accession is restricted until January 1, 2024, and Box 19 of the original accession is restricted until January 1, 2074. Boxes 13-19 of Accession 2004-M-088 are restricted until January 1, 2045, without the written permission of any one of Tobin's children or William C. Brainard. Original floppy discs, audiotape and videotape, as well as preservation masters and duplicating masters, may not be played. Researchers should contact the reference archivist to arrange for the creation of use copies of these materials.</p>
+         </accessrestrict>
+         <userestrict id="ref4">
+            <head>Ownership &amp; Copyright</head>
+            <p>Copyright has been transferred to Yale University.</p>
+         </userestrict>
+         <prefercite id="ref6">
+            <head>Cite As</head>
+            <p>James Tobin Papers. Manuscripts and Archives, Yale University Library.</p>
+         </prefercite>
+      </descgrp>
+      <bioghist id="ref9">
+         <head>Biographical History</head>
+         <p>James Tobin, Nobel laureate and long-time professor of economics at Yale University, was born in Champaign, Illinois, in 1918. In 1939, he graduated from Harvard University, where he also obtained his master's degree in 1940 and his Ph.D. in 1947. He worked in the Office of Price Administration and on the Civilian Supply and War Production Board before enlisting in the navy in 1941 and serving as an officer aboard the USS Kearney. Tobin began his career at Yale in 1950 as an associate professor, and went on to become the Sterling Professor of Economics. In 1961, he was asked to serve on the Council of Economic Advisors to President John F. Kennedy. His highly regarded work as a Keynesian macro economist, particularly the development of his "portfolio selection theory," earned him the Nobel Memorial Prize in Economic Science in 1981. Tobin married Elizabeth Fay Ringo in 1946; they had four children: Margaret, Louis, Hugh, and Roger. Tobin died on March 11, 2002, in New Haven.</p>
+      </bioghist>
+      <scopecontent id="ref10">
+         <head>Description of the Papers</head>
+         <p>The papers consist of correspondence, subject files, and writings, primarily documenting the professional career and personal life of James Tobin as an economist and educator.</p>
+      </scopecontent>
+      <arrangement id="ref7">
+         <head>Arrangement</head>
+         <list type="ordered">
+            <item>
+               <ref target="ref11" ns2:type="simple" ns2:actuate="onRequest" ns2:show="replace">Inventory</ref>
+            </item>
+            <item>
+               <ref target="ref92" ns2:type="simple" ns2:actuate="onRequest" ns2:show="replace">Accession 2003-M-005</ref>
+            </item>
+            <item>
+               <ref target="ref123" ns2:type="simple" ns2:actuate="onRequest" ns2:show="replace">Accession 2004-M-088</ref>
+            </item>
+            <item>
+               <ref target="ref328" ns2:type="simple" ns2:actuate="onRequest" ns2:show="replace">Accession 2005-M-006</ref>
+            </item>
+            <item>
+               <ref target="ref333" ns2:type="simple" ns2:actuate="onRequest" ns2:show="replace">Accession 2006-M-100, 1963-1987</ref>
+            </item>
+            <item>
+               <ref target="ref339" ns2:type="simple" ns2:actuate="onRequest" ns2:show="replace">Accession 2006-M-101, 1993-1996</ref>
+            </item>
+            <item>
+               <ref target="ref343" ns2:type="simple" ns2:actuate="onRequest" ns2:show="replace">Accession 2007-M-009, 1947</ref>
+            </item>
+         </list>
+      </arrangement>
+      <dsc type="combined">
+        <head>Collection Contents</head>
+        <c01 id="ref11" level="series">
+          <did>
+            <unittitle>Inventory</unittitle>
+          </did>
+          <c02 id="ref12" level="file">
+            <did>
+              <unittitle>Correspondence, miscellaneous</unittitle>
+            </did>
+            <c03 id="ref13" level="file">
+              <did>
+                <container type="Box">1</container>
+                <unittitle>1973-1983</unittitle>
+              </did>
+            </c03>
+            <c03 id="ref14" level="file">
+              <did>
+                <container type="Box">2</container>
+                <unittitle>1983-1988</unittitle>
+              </did>
+            </c03>
+            <c03 id="ref15" level="file">
+              <did>
+                <container type="Box">3</container>
+                <unittitle>1987-1993</unittitle>
+              </did>
+            </c03>
+            <c03 id="ref16" level="file">
+              <did>
+                <container type="Box">4</container>
+                <unittitle>1994 Jan-Oct</unittitle>
+              </did>
+            </c03>
+            <c03 id="ref17" level="file">
+              <did>
+                <container type="Box">5</container>
+                <unittitle>1994 Nov-Dec</unittitle>
+              </did>
+            </c03>
+          </c02>
+          <c02 id="ref18" level="file">
+            <did>
+              <container type="Box">6-7</container>
+              <unittitle>Class notes [lecture notes taken by Tobin in undergraduate courses]</unittitle>
+              <unitdate normal="1930/2002" type="inclusive" calendar="gregorian" era="ce">1930s, no date</unitdate>
+            </did>
+          </c02>
+          <c02 id="ref19" level="file">
+            <did>
+              <container type="Box">7</container>
+              <unittitle>Teaching files</unittitle>
+              <unitdate normal="1951/1996" type="inclusive" calendar="gregorian" era="ce">1951-1996</unitdate>
+            </did>
+            <c03 id="ref20" level="file">
+              <did>
+                <container type="Box">8</container>
+                <unittitle>1951-1976</unittitle>
+              </did>
+            </c03>
+            <c03 id="ref21" level="file">
+              <did>
+                <container type="Box">9</container>
+                <unittitle>1975-1980</unittitle>
+              </did>
+            </c03>
+            <c03 id="ref22" level="file">
+              <did>
+                <container type="Box">10</container>
+                <unittitle>1981-1988</unittitle>
+              </did>
+            </c03>
+            <c03 id="ref23" level="file">
+              <did>
+                <container type="Box">11</container>
+                <unittitle>1990-1998, no date</unittitle>
+              </did>
+            </c03>
+            <c03 id="ref24" level="file">
+              <did>
+                <container type="Box">19</container>
+                <unittitle>Restricted files</unittitle>
+                <unitdate normal="1954/1998" type="inclusive" calendar="gregorian" era="ce">1954-1998</unitdate>
+              </did>
+            </c03>
+          </c02>
+          <c02 id="ref25" level="file">
+            <did>
+              <unittitle>Subject files</unittitle>
+            </did>
+            <c03 id="ref26" level="file">
+              <did>
+                <container type="Box">12</container>
+                <unittitle>Economists</unittitle>
+                <unitdate normal="1930/2002" type="inclusive" calendar="gregorian" era="ce">1955-1973, no date</unitdate>
+              </did>
+            </c03>
+            <c03 id="ref27" level="file">
+              <did>
+                <container type="Box">12</container>
+                <unittitle>Health care policy</unittitle>
+                <unitdate normal="1994/1994" calendar="gregorian" era="ce">1994</unitdate>
+              </did>
+            </c03>
+            <c03 id="ref28" level="file">
+              <did>
+                <container type="Box">12</container>
+                <unittitle>South Africa</unittitle>
+                <unitdate normal="1986/1986" calendar="gregorian" era="ce">1986</unitdate>
+              </did>
+            </c03>
+            <c03 id="ref29" level="file">
+              <did>
+                <container type="Box">12</container>
+                <unittitle>Bishop's pastoral letter</unittitle>
+                <unitdate normal="1930/2002" type="inclusive" calendar="gregorian" era="ce">1985-1986, no date</unitdate>
+              </did>
+            </c03>
+            <c03 id="ref30" level="file">
+              <did>
+                <container type="Box">12</container>
+                <unittitle>Exxon-Valdez</unittitle>
+                <unitdate normal="1991/1991" calendar="gregorian" era="ce">1991</unitdate>
+              </did>
+            </c03>
+            <c03 id="ref31" level="file">
+              <did>
+                <container type="Box">12</container>
+                <unittitle>Tobin's Q ratio</unittitle>
+                <unitdate normal="1930/2002" type="inclusive" calendar="gregorian" era="ce">1987-1993, no date</unitdate>
+              </did>
+            </c03>
+            <c03 id="ref32" level="file">
+              <did>
+                <container type="Box">12</container>
+                <unittitle>Conference (Little Rock, Arkansas)</unittitle>
+                <unitdate normal="1982/1982" calendar="gregorian" era="ce">1982</unitdate>
+              </did>
+            </c03>
+            <c03 id="ref33" level="file">
+              <did>
+                <container type="Box">12</container>
+                <unittitle>Fisher, Irving</unittitle>
+                <unitdate normal="1930/2002" type="inclusive" calendar="gregorian" era="ce">1993-1995, no date</unitdate>
+              </did>
+            </c03>
+            <c03 id="ref34" level="file">
+              <did>
+                <container type="Box">13</container>
+                <unittitle>Poverty, welfare, Murray</unittitle>
+                <unitdate normal="1930/2002" type="inclusive" calendar="gregorian" era="ce">1983, n.d</unitdate>
+              </did>
+            </c03>
+            <c03 id="ref35" level="file">
+              <did>
+                <container type="Box">13</container>
+                <unittitle>Leuven Belgium lectures</unittitle>
+                <unitdate normal="1982/1983" type="inclusive" calendar="gregorian" era="ce">1982-1983</unitdate>
+              </did>
+            </c03>
+            <c03 id="ref36" level="file">
+              <did>
+                <container type="Box">13</container>
+                <unittitle>China</unittitle>
+                <unitdate normal="1985/1985" calendar="gregorian" era="ce">1985</unitdate>
+              </did>
+            </c03>
+            <c03 id="ref37" level="file">
+              <did>
+                <container type="Box">13</container>
+                <unittitle>McGovern campaign</unittitle>
+                <unitdate normal="1972/1972" calendar="gregorian" era="ce">1972</unitdate>
+              </did>
+            </c03>
+            <c03 id="ref38" level="file">
+              <did>
+                <container type="Box">14</container>
+                <unittitle>Balanced budget amendment</unittitle>
+                <unitdate normal="1980/1999" type="inclusive" calendar="gregorian" era="ce">1980s-1990s</unitdate>
+              </did>
+            </c03>
+            <c03 id="ref39" level="file">
+              <did>
+                <container type="Box">14</container>
+                <unittitle>"100 economists letter"</unittitle>
+                <unitdate normal="1992/1992" calendar="gregorian" era="ce">1992</unitdate>
+              </did>
+            </c03>
+            <c03 id="ref40" level="file">
+              <did>
+                <container type="Box">14</container>
+                <unittitle>Food demand experiment</unittitle>
+                <unitdate normal="1930/2002" type="inclusive" calendar="gregorian" era="ce">1995-1997, no date</unitdate>
+              </did>
+            </c03>
+            <c03 id="ref41" level="file">
+              <did>
+                <container type="Box">14</container>
+                <unittitle>Puerto Rico</unittitle>
+                <unitdate normal="1975/1975" calendar="gregorian" era="ce">1975</unitdate>
+              </did>
+            </c03>
+            <c03 id="ref42" level="file">
+              <did>
+                <container type="Box">15</container>
+                <unittitle>"Money" book</unittitle>
+                <unitdate normal="1951/1979" type="inclusive" calendar="gregorian" era="ce">1951-1979</unitdate>
+              </did>
+            </c03>
+            <c03 id="ref43" level="file">
+              <did>
+                <container type="Box">15</container>
+                <unittitle>Kenya [working papers]</unittitle>
+                <unitdate normal="1972/1973" type="inclusive" calendar="gregorian" era="ce">1972-1973</unitdate>
+              </did>
+            </c03>
+            <c03 id="ref44" level="file">
+              <did>
+                <container type="Box">15</container>
+                <unittitle>Patinkin, Don</unittitle>
+                <unitdate normal="1981/1981" calendar="gregorian" era="ce">1981</unitdate>
+              </did>
+            </c03>
+            <c03 id="ref45" level="file">
+              <did>
+                <container type="Box">15</container>
+                <unittitle>Growth and development</unittitle>
+                <unitdate normal="1930/2002" type="inclusive" calendar="gregorian" era="ce">1970, no date</unitdate>
+              </did>
+            </c03>
+            <c03 id="ref46" level="file">
+              <did>
+                <container type="Box">15</container>
+                <unittitle>Arms race</unittitle>
+                <unitdate normal="1993/1995" type="inclusive" calendar="gregorian" era="ce">1993-1995</unitdate>
+              </did>
+            </c03>
+            <c03 id="ref47" level="file">
+              <did>
+                <container type="Box">15</container>
+                <unittitle>Economics articles</unittitle>
+                <unitdate normal="1930/2002" type="inclusive" calendar="gregorian" era="ce">1978, no date</unitdate>
+              </did>
+            </c03>
+            <c03 id="ref48" level="file">
+              <did>
+                <container type="Box">15</container>
+                <unittitle>Science priorities</unittitle>
+                <unitdate normal="1997/1997" calendar="gregorian" era="ce">1997</unitdate>
+              </did>
+            </c03>
+            <c03 id="ref49" level="file">
+              <did>
+                <container type="Box">15</container>
+                <unittitle>Federal Reserve Bank of New York</unittitle>
+                <unitdate normal="1996/1996" calendar="gregorian" era="ce">1996</unitdate>
+              </did>
+            </c03>
+            <c03 id="ref50" level="file">
+              <did>
+                <container type="Box">15</container>
+                <unittitle>Yellen, Janet L.</unittitle>
+                <unitdate normal="1989/1997" type="inclusive" calendar="gregorian" era="ce">1989-1997</unitdate>
+              </did>
+            </c03>
+            <c03 id="ref51" level="file">
+              <did>
+                <container type="Box">15</container>
+                <unittitle>Magnus, Jan R.</unittitle>
+                <unitdate normal="1996/1996" calendar="gregorian" era="ce">1996</unitdate>
+              </did>
+            </c03>
+            <c03 id="ref52" level="file">
+              <did>
+                <container type="Box">15</container>
+                <unittitle>Global economy conference</unittitle>
+                <unitdate normal="1997/1997" calendar="gregorian" era="ce">1997</unitdate>
+              </did>
+            </c03>
+            <c03 id="ref53" level="file">
+              <did>
+                <container type="Box">15</container>
+                <unittitle>Magnus/Morgan experiment</unittitle>
+                <unitdate normal="1978/1986" type="inclusive" calendar="gregorian" era="ce">1978-1986</unitdate>
+              </did>
+            </c03>
+            <c03 id="ref54" level="file">
+              <did>
+                <container type="Box">15</container>
+                <unittitle>Marshall Plan</unittitle>
+                <unitdate normal="1930/2002" type="inclusive" calendar="gregorian" era="ce">1997, no date</unitdate>
+              </did>
+            </c03>
+            <c03 id="ref55" level="file">
+              <did>
+                <container type="Box">15</container>
+                <unittitle>Russian economic policy</unittitle>
+                <unitdate normal="1930/2002" type="inclusive" calendar="gregorian" era="ce">1996-1997, no date</unitdate>
+              </did>
+            </c03>
+            <c03 id="ref56" level="file">
+              <did>
+                <container type="Box">15</container>
+                <unittitle>Minnesota</unittitle>
+                <unitdate normal="1982/1982" calendar="gregorian" era="ce">1982</unitdate>
+              </did>
+            </c03>
+            <c03 id="ref57" level="file">
+              <did>
+                <container type="Box">15</container>
+                <unittitle>Gorbachev, Mikhail</unittitle>
+                <unitdate normal="1997/1997" calendar="gregorian" era="ce">1997</unitdate>
+              </did>
+            </c03>
+            <c03 id="ref58" level="file">
+              <did>
+                <container type="Box">15</container>
+                <unittitle>Nobel Prize [clippings]</unittitle>
+                <unitdate normal="1981/1981" calendar="gregorian" era="ce">1981</unitdate>
+              </did>
+            </c03>
+            <c03 id="ref59" level="file">
+              <did>
+                <container type="Box">15</container>
+                <unittitle>China</unittitle>
+                <unitdate normal="1972/1972" calendar="gregorian" era="ce">1972</unitdate>
+              </did>
+            </c03>
+            <c03 id="ref60" level="file">
+              <did>
+                <container type="Box">15</container>
+                <unittitle>University of California, Berkeley [commencement address]</unittitle>
+                <unitdate normal="1983/1983" calendar="gregorian" era="ce">1983</unitdate>
+              </did>
+            </c03>
+            <c03 id="ref61" level="file">
+              <did>
+                <container type="Box">16</container>
+                <unittitle>Commission on inflation and economic welfare</unittitle>
+                <unitdate normal="1969/1970" type="inclusive" calendar="gregorian" era="ce">1969-1970</unitdate>
+              </did>
+            </c03>
+            <c03 id="ref62" level="file">
+              <did>
+                <container type="Box">16</container>
+                <unittitle>Speech notes</unittitle>
+                <unitdate normal="1930/2002" type="inclusive" calendar="gregorian" era="ce">no date</unitdate>
+              </did>
+            </c03>
+            <c03 id="ref63" level="file">
+              <did>
+                <container type="Box">16</container>
+                <unittitle>Stein, Jerome</unittitle>
+                <unitdate normal="1977/1978" type="inclusive" calendar="gregorian" era="ce">1977-1978</unitdate>
+              </did>
+            </c03>
+            <c03 id="ref64" level="file">
+              <did>
+                <container type="Box">16</container>
+                <unittitle>Reviews of Tobin's writings</unittitle>
+                <unitdate normal="1930/2002" type="inclusive" calendar="gregorian" era="ce">1981, no date</unitdate>
+              </did>
+            </c03>
+            <c03 id="ref65" level="file">
+              <did>
+                <container type="Box">16</container>
+                <unittitle>Friedman, Milton</unittitle>
+                <unitdate normal="1930/2002" type="inclusive" calendar="gregorian" era="ce">1981, no date</unitdate>
+              </did>
+            </c03>
+            <c03 id="ref66" level="file">
+              <did>
+                <container type="Box">16</container>
+                <unittitle>Ratner, Jonathan</unittitle>
+                <unitdate normal="1930/2002" type="inclusive" calendar="gregorian" era="ce">no date</unitdate>
+              </did>
+            </c03>
+            <c03 id="ref67" level="file">
+              <did>
+                <container type="Box">16</container>
+                <unittitle>Nobel Prize [articles on]</unittitle>
+                <unitdate normal="1967/1978" type="inclusive" calendar="gregorian" era="ce">1967-1978</unitdate>
+              </did>
+            </c03>
+            <c03 id="ref68" level="file">
+              <did>
+                <container type="Box">16</container>
+                <unittitle>1990-1996</unittitle>
+              </did>
+            </c03>
+            <c03 id="ref69" level="file">
+              <did>
+                <container type="Box">16</container>
+                <unittitle>Memorandum on economic growth</unittitle>
+                <unitdate normal="1960/1960" calendar="gregorian" era="ce">1960</unitdate>
+              </did>
+            </c03>
+            <c03 id="ref70" level="file">
+              <did>
+                <container type="Box">16</container>
+                <unittitle>Currency unions</unittitle>
+                <unitdate normal="1998/1998" calendar="gregorian" era="ce">1998</unitdate>
+              </did>
+            </c03>
+            <c03 id="ref71" level="file">
+              <did>
+                <container type="Box">16</container>
+                <unittitle>Gamble lecture panel</unittitle>
+                <unitdate normal="1998/1998" calendar="gregorian" era="ce">1998</unitdate>
+              </did>
+            </c03>
+            <c03 id="ref72" level="file">
+              <did>
+                <container type="Box">16</container>
+                <unittitle>Alcohol tax</unittitle>
+                <unitdate normal="1930/2002" type="inclusive" calendar="gregorian" era="ce">no date</unitdate>
+              </did>
+            </c03>
+            <c03 id="ref73" level="file">
+              <did>
+                <container type="Box">16</container>
+                <unittitle>Brookings Institution</unittitle>
+                <unitdate normal="1998/1998" calendar="gregorian" era="ce">1998</unitdate>
+              </did>
+            </c03>
+            <c03 id="ref74" level="file">
+              <did>
+                <container type="Box">16</container>
+                <unittitle>1993</unittitle>
+              </did>
+            </c03>
+            <c03 id="ref75" level="file">
+              <did>
+                <container type="Box">16</container>
+                <unittitle>American Philosophical Society</unittitle>
+                <unitdate normal="1997/1998" type="inclusive" calendar="gregorian" era="ce">1997-1998</unitdate>
+              </did>
+            </c03>
+            <c03 id="ref76" level="file">
+              <did>
+                <container type="Box">16</container>
+                <unittitle>Modeling capital inflow</unittitle>
+                <unitdate normal="1930/2002" type="inclusive" calendar="gregorian" era="ce">1987, no date</unitdate>
+              </did>
+            </c03>
+            <c03 id="ref77" level="file">
+              <did>
+                <container type="Box">16</container>
+                <unittitle>Growth and environment</unittitle>
+                <unitdate normal="1930/2002" type="inclusive" calendar="gregorian" era="ce">no date</unitdate>
+              </did>
+            </c03>
+            <c03 id="ref78" level="file">
+              <did>
+                <container type="Box">16</container>
+                <unittitle>Inflation</unittitle>
+                <unitdate normal="1930/2002" type="inclusive" calendar="gregorian" era="ce">1979, 1988</unitdate>
+              </did>
+            </c03>
+            <c03 id="ref79" level="file">
+              <did>
+                <container type="Box">16</container>
+                <unittitle>Money and Income: Post Hoc Ergo Propter Hoc</unittitle>
+                <unitdate normal="1969/1969" calendar="gregorian" era="ce">1969</unitdate>
+              </did>
+            </c03>
+            <c03 id="ref80" level="file">
+              <did>
+                <container type="Box">16</container>
+                <unittitle>Monetarist counter-revolution today</unittitle>
+                <unitdate normal="1980/1980" calendar="gregorian" era="ce">1980</unitdate>
+              </did>
+            </c03>
+            <c03 id="ref81" level="file">
+              <did>
+                <container type="Box">16</container>
+                <unittitle>Janeway lectures</unittitle>
+                <unitdate normal="1974/1978" type="inclusive" calendar="gregorian" era="ce">1974-1978</unitdate>
+              </did>
+            </c03>
+            <c03 id="ref82" level="file">
+              <did>
+                <container type="Box">16</container>
+                <unittitle>Monetarism conference</unittitle>
+                <unitdate normal="1930/2002" type="inclusive" calendar="gregorian" era="ce">1975, no date</unitdate>
+              </did>
+            </c03>
+            <c03 id="ref83" level="file">
+              <did>
+                <container type="Box">16</container>
+                <unittitle>Basic income allowances</unittitle>
+                <unitdate normal="1930/2002" type="inclusive" calendar="gregorian" era="ce">1965, no date</unitdate>
+              </did>
+            </c03>
+            <c03 id="ref84" level="file">
+              <did>
+                <container type="Box">16</container>
+                <unittitle>Miscellaneous</unittitle>
+                <unitdate normal="1960/1999" type="inclusive" calendar="gregorian" era="ce">1960s-1990s</unitdate>
+              </did>
+            </c03>
+          </c02>
+          <c02 id="ref85" level="file">
+            <did>
+              <unittitle>Yale University 
+                <emph render="smcaps">(restricted until January 1, 2024)</emph>
+              </unittitle>
+            </did>
+            <c03 id="ref86" level="file">
+              <did>
+                <container type="Box">17</container>
+                <unittitle>Yale governance</unittitle>
+                <unitdate normal="1971/1995" type="inclusive" calendar="gregorian" era="ce">1971-1995</unitdate>
+              </did>
+            </c03>
+            <c03 id="ref87" level="file">
+              <did>
+                <container type="Box">17</container>
+                <unittitle>School of Management crisis</unittitle>
+                <unitdate normal="1989/1989" calendar="gregorian" era="ce">1989</unitdate>
+              </did>
+            </c03>
+            <c03 id="ref88" level="file">
+              <did>
+                <container type="Box">17</container>
+                <unittitle>Ad Hoc Committee on Faculty Appointments</unittitle>
+                <unitdate normal="1981/1981" calendar="gregorian" era="ce">1981</unitdate>
+              </did>
+            </c03>
+            <c03 id="ref89" level="file">
+              <did>
+                <container type="Box">17</container>
+                <unittitle>Tuition postponement option</unittitle>
+                <unitdate normal="1970/1979" type="inclusive" calendar="gregorian" era="ce">1970s</unitdate>
+              </did>
+            </c03>
+            <c03 id="ref90" level="file">
+              <did>
+                <container type="Box">17</container>
+                <unittitle>Brewster, Kingman</unittitle>
+                <unitdate normal="1970/1979" type="inclusive" calendar="gregorian" era="ce">1970s</unitdate>
+              </did>
+            </c03>
+          </c02>
+          <c02 id="ref91" level="file">
+            <did>
+              <container type="Box">18</container>
+              <unittitle>Council of Economic Advisors [duplicates of materials sent to the John F. Kennedy Presidential Library]</unittitle>
+              <unitdate normal="1960/1969" type="inclusive" calendar="gregorian" era="ce">1960s</unitdate>
+            </did>
+          </c02>
+        </c01>
+        <c01 id="ref92" level="series">
+          <did>
+            <unitid>Accession 2003-M-005</unitid>
+            <unittitle>Additional Material</unittitle>
+          </did>
+          <scopecontent>
+            <p>This accession consists of files taken from Tobin's office shortly after his death. Dates range from the 1930s to the 2000s. The General files include correspondence, printed matter, and other materials relating to Tobin's work as an economist and professor at Yale University. The files are arranged alphabetically. The Writings comprise predominantly unpublished pieces by Tobin.</p>
+          </scopecontent>
+          <c02 id="ref93" level="file">
+            <did>
+              <unittitle>General files</unittitle>
+            </did>
+            <c03 id="ref94" level="file">
+              <did>
+                <container type="Box">1</container>
+                <unittitle>Airline ticketing-Conference Board</unittitle>
+              </did>
+            </c03>
+            <c03 id="ref95" level="file">
+              <did>
+                <container type="Box">2</container>
+                <unittitle>Conference Board-CSFI</unittitle>
+              </did>
+            </c03>
+            <c03 id="ref96" level="file">
+              <did>
+                <container type="Box">3</container>
+                <unittitle>Dahl, Robert-Eichengreen, Barry</unittitle>
+              </did>
+            </c03>
+            <c03 id="ref97" level="file">
+              <did>
+                <container type="Box">4</container>
+                <unittitle>Eisner, Robert-Gebauer, Wolfgang</unittitle>
+              </did>
+            </c03>
+            <c03 id="ref98" level="file">
+              <did>
+                <container type="Box">5</container>
+                <unittitle>Friends of the South Asian Study Committee-Institute for Social Research</unittitle>
+              </did>
+            </c03>
+            <c03 id="ref99" level="file">
+              <did>
+                <container type="Box">6</container>
+                <unittitle>Institute for Women's Policy Research- 
+                  <emph render="italic">Korean Daily</emph>
+                </unittitle>
+              </did>
+            </c03>
+            <c03 id="ref100" level="file">
+              <did>
+                <container type="Box">7</container>
+                <unittitle>Kotz, Hans-Helmut-Massachusetts Institute of Technology</unittitle>
+              </did>
+            </c03>
+            <c03 id="ref101" level="file">
+              <did>
+                <container type="Box">8</container>
+                <unittitle>Mitsui Lectures- 
+                  <emph render="italic">Quarterly Journal of Economics</emph>
+                </unittitle>
+              </did>
+            </c03>
+            <c03 id="ref102" level="file">
+              <did>
+                <container type="Box">9</container>
+                <unittitle>Quality Stabilization Bill-Scherer, Fred</unittitle>
+              </did>
+            </c03>
+            <c03 id="ref103" level="file">
+              <did>
+                <container type="Box">10</container>
+                <unittitle>Schiff, Frank-Tinbergen, Jan</unittitle>
+              </did>
+            </c03>
+            <c03 id="ref104" level="file">
+              <did>
+                <container type="Box">11</container>
+                <unittitle>Tobin biographical material-Tobin Tax</unittitle>
+              </did>
+            </c03>
+            <c03 id="ref105" level="file">
+              <did>
+                <container type="Box">12</container>
+                <unittitle>Tobin Tax-Yale College Steering Committee</unittitle>
+              </did>
+            </c03>
+            <c03 id="ref106" level="file">
+              <did>
+                <container type="Box">13</container>
+                <unittitle>Yale College Steering Committee-Zoumaras, Thomas</unittitle>
+              </did>
+            </c03>
+          </c02>
+          <c02 id="ref107" level="file">
+            <did>
+              <container type="Box">14-15</container>
+              <unittitle>Miscellaneous topical files</unittitle>
+            </did>
+          </c02>
+          <c02 id="ref108" level="file">
+            <did>
+              <container type="Box">16</container>
+              <unittitle>Subject files, 1995 correspondence, teaching materials</unittitle>
+            </did>
+          </c02>
+          <c02 id="ref109" level="file">
+            <did>
+              <container type="Box">17-18</container>
+              <unittitle>Harvard class notes</unittitle>
+            </did>
+          </c02>
+          <c02 id="ref110" level="file">
+            <did>
+              <unittitle>Chronological correspondence</unittitle>
+            </did>
+            <c03 id="ref111" level="file">
+              <did>
+                <container type="Box">19</container>
+                <unittitle>1986-1989, 1997-1999</unittitle>
+              </did>
+            </c03>
+            <c03 id="ref112" level="file">
+              <did>
+                <container type="Box">20</container>
+                <unittitle>1995-1996</unittitle>
+              </did>
+            </c03>
+          </c02>
+          <c02 id="ref113" level="file">
+            <did>
+              <container type="Box">21</container>
+              <unittitle>Topical files including Conference Board on Consumer Price Index, SANWA, Yale Workshop in Quantitative Economic Research, teaching files, personal data, "Kennedy recollections"</unittitle>
+            </did>
+          </c02>
+          <c02 id="ref114" level="file">
+            <did>
+              <container type="Box">22</container>
+              <unittitle>Tobin Tax</unittitle>
+            </did>
+          </c02>
+          <c02 id="ref115" level="file">
+            <did>
+              <container type="Box">23</container>
+              <unittitle>Tobin Q ratio</unittitle>
+            </did>
+          </c02>
+          <c02 id="ref116" level="file">
+            <did>
+              <unittitle>Writings</unittitle>
+            </did>
+            <c03 id="ref117" level="file">
+              <did>
+                <container type="Box">24</container>
+                <unittitle>A-Economic</unittitle>
+              </did>
+            </c03>
+            <c03 id="ref118" level="file">
+              <did>
+                <container type="Box">25</container>
+                <unittitle>Economic-Heller</unittitle>
+              </did>
+            </c03>
+            <c03 id="ref119" level="file">
+              <did>
+                <container type="Box">26</container>
+                <unittitle>House-Memo for the Kennedy Campaign</unittitle>
+              </did>
+            </c03>
+            <c03 id="ref120" level="file">
+              <did>
+                <container type="Box">27</container>
+                 <unittitle>Memorial remarks-On the Federal Budget Deficit</unittitle>
+              </did>
+            </c03>
+            <c03 id="ref121" level="file">
+              <did>
+                <container type="Box">28</container>
+                <unittitle>Ontario-Yes</unittitle>
+              </did>
+            </c03>
+          </c02>
+        </c01>
+        <c01 id="ref123" level="series">
+          <did>
+            <unitid>Accession 2004-M-088</unitid>
+            <unittitle>Additional Material</unittitle>
+          </did>
+          <scopecontent>
+            <p>This accession consists of files taken from Tobin's home two years after his death. Dates range from the 1920s to 2001. The files are primarily personal papers and include correspondence, photographs, manuscript materials, and some memorabilia relating to Tobin's personal life as well as his work as an economist and professor at Yale University. The files have been named and arranged in the order in which they arrived. The broadest headings come from labels affixed to boxes by Elizabeth Tobin (James Tobin's niece) when she prepared the papers for transfer.</p><p>Original audiotapes and videotapes in Box 11 and floppy discs in Box 12 are restricted. Researchers should contact the reference archivist to arrange for the creation of use copies of these materials.</p>
+            <p>Boxes 13-19 are restricted until January 1, 2045. Written permission from one of James Tobin's children or William C. Brainard must be obtained to consult these materials. Researchers should consult with the reference archivist for details.</p>
+          </scopecontent>
+          <c02 id="ref124" level="file">
+            <did>
+              <unittitle>Family history, Jim's pre-1935 letters</unittitle>
+            </did>
+            <c03 id="ref125" level="file">
+              <did>
+                <container type="Box">1</container>
+                <unittitle>Letters home from Camp Highlands and other youth related material</unittitle>
+              </did>
+            </c03>
+            <c03 id="ref126" level="file">
+              <did>
+                <container type="Box">1</container>
+                <unittitle>Grade school</unittitle>
+              </did>
+            </c03>
+            <c03 id="ref127" level="file">
+              <did>
+                <container type="Box">1</container>
+                <unittitle>High school graduation</unittitle>
+                <unitdate normal="1935/1935" calendar="gregorian" era="ce">1935</unitdate>
+              </did>
+            </c03>
+            <c03 id="ref128" level="file">
+              <did>
+                <container type="Box">1</container>
+                <unittitle>"JT Academic Record" in a folder together with this label [report cards]</unittitle>
+              </did>
+            </c03>
+            <c03 id="ref129" level="file">
+              <did>
+                <container type="Box">1</container>
+                <unittitle>Parents</unittitle>
+              </did>
+            </c03>
+            <c03 id="ref130" level="file">
+              <did>
+                <container type="Box">1</container>
+                <unittitle>Materials collected by Jim about his father</unittitle>
+              </did>
+            </c03>
+            <c03 id="ref131" level="file">
+              <did>
+                <container type="Box">1</container>
+                <unittitle>Louis Michael Tobin insurance</unittitle>
+                <unitdate normal="1915/1925" type="inclusive" calendar="gregorian" era="ce">ca. 1920</unitdate>
+              </did>
+            </c03>
+            <c03 id="ref132" level="file">
+              <did>
+                <container type="Box">1</container>
+                <unittitle>Margaret A. Tobin's real estate</unittitle>
+              </did>
+            </c03>
+            <c03 id="ref133" level="file">
+              <did>
+                <container type="Box">2</container>
+                <unittitle>Mother</unittitle>
+              </did>
+            </c03>
+            <c03 id="ref134" level="file">
+              <did>
+                <container type="Box">2</container>
+                <unittitle>RGT material</unittitle>
+                <unitdate normal="1935/1945" type="inclusive" calendar="gregorian" era="ce">ca. 1940</unitdate>
+              </did>
+            </c03>
+            <c03 id="ref135" level="file">
+              <did>
+                <container type="Box">2</container>
+                <unittitle>University High [high school writings and ephemera]</unittitle>
+                <unitdate normal="1935/1945" type="inclusive" calendar="gregorian" era="ce">ca. 1940</unitdate>
+              </did>
+            </c03>
+            <c03 id="ref136" level="file">
+              <did>
+                <container type="Box">2</container>
+                <unittitle>Letters from Ireland - family history- 19thcentury [letters, photographs, lock of hair]</unittitle>
+                <unitdate normal="1800/1809" type="inclusive" calendar="gregorian" era="ce">1800's</unitdate>
+              </did>
+            </c03>
+            <c03 id="ref137" level="file">
+              <did>
+                <container type="Box">2</container>
+                <unittitle>M.E.T. property</unittitle>
+                <unitdate normal="1970/1979" type="inclusive" calendar="gregorian" era="ce">1970s</unitdate>
+              </did>
+            </c03>
+            <c03 id="ref138" level="file">
+              <did>
+                <container type="Box">2</container>
+                <unittitle>University High</unittitle>
+                <unitdate normal="1980/1990" type="inclusive" calendar="gregorian" era="ce">ca. 1985</unitdate>
+              </did>
+            </c03>
+            <c03 id="ref139" level="file">
+              <did>
+                <container type="Box">2</container>
+                <unittitle>18thcentury portraits of James Feliz Tobin</unittitle>
+              </did>
+            </c03>
+            <c03 id="ref140" level="file">
+              <did>
+                <container type="Box">2</container>
+                <unittitle>Margaret Tobin Lecture Series</unittitle>
+                <unitdate normal="1988/1988" calendar="gregorian" era="ce">1988</unitdate>
+              </did>
+            </c03>
+            <c03 id="ref141" level="file">
+              <did>
+                <container type="Box">2</container>
+                <unittitle>Family history [many clippings]</unittitle>
+              </did>
+            </c03>
+          </c02>
+          <c02 id="ref142" level="file">
+            <did>
+              <unittitle>Letters to Jim</unittitle>
+            </did>
+            <c03 id="ref143" level="file">
+              <did>
+                <container type="Box">3</container>
+                <unittitle>SAT</unittitle>
+                <unitdate normal="1935/1935" calendar="gregorian" era="ce">1935</unitdate>
+              </did>
+            </c03>
+            <c03 id="ref144" level="file">
+              <did>
+                <unittitle>Letters to Jim</unittitle>
+              </did>
+              <c04 id="ref145" level="file">
+                <did>
+                  <container type="Box">3</container>
+                  <unittitle>1935</unittitle>
+                </did>
+              </c04>
+              <c04 id="ref146" level="file">
+                <did>
+                  <container type="Box">3</container>
+                  <unittitle>1935-1939 [letters plus Spanish War pin]</unittitle>
+                </did>
+              </c04>
+              <c04 id="ref147" level="file">
+                <did>
+                  <container type="Box">3</container>
+                  <unittitle>1937-1938</unittitle>
+                </did>
+              </c04>
+              <c04 id="ref148" level="file">
+                <did>
+                  <container type="Box">3</container>
+                  <unittitle>1937-1941 ["some possibly earlier"]</unittitle>
+                </did>
+              </c04>
+              <c04 id="ref149" level="file">
+                <did>
+                  <container type="Box">3</container>
+                  <unittitle>1938-1939</unittitle>
+                </did>
+              </c04>
+              <c04 id="ref150" level="file">
+                <did>
+                  <container type="Box">3</container>
+                  <unittitle>c. 1939-1941 ["1980 copies of Murphy letters of Mis folder given to Murphy"]</unittitle>
+                </did>
+              </c04>
+              <c04 id="ref151" level="file">
+                <did>
+                  <container type="Box">3</container>
+                  <unittitle>1940</unittitle>
+                </did>
+              </c04>
+              <c04 id="ref152" level="file">
+                <did>
+                  <container type="Box">3</container>
+                  <unittitle>1941 friends and family</unittitle>
+                </did>
+              </c04>
+              <c04 id="ref153" level="file">
+                <did>
+                  <container type="Box">3</container>
+                  <unittitle>1941-1942 from friends</unittitle>
+                </did>
+              </c04>
+            </c03>
+          </c02>
+          <c02 id="ref154" level="file">
+            <did>
+              <container type="Box">4</container>
+              <unittitle>Professional correspondence [job offers made to Jim]</unittitle>
+            </did>
+          </c02>
+          <c02 id="ref155" level="file">
+            <did>
+              <unittitle>Nobel Prize related correspondence and other materials</unittitle>
+            </did>
+            <c03 id="ref156" level="file">
+              <did>
+                <container type="Box">4</container>
+                <unittitle>American Economic Association</unittitle>
+                <unitdate calendar="gregorian" era="ce">29 Dec 1982</unitdate>
+              </did>
+            </c03>
+            <c03 id="ref157" level="file">
+              <did>
+                <container type="Box">4</container>
+                <unittitle>Telegram from Nobel Committee</unittitle>
+                <unitdate normal="1981/1981" calendar="gregorian" era="ce">1981</unitdate>
+              </did>
+            </c03>
+            <c03 id="ref158" level="file">
+              <did>
+                <container type="Box">4</container>
+                <unittitle>Nobel congratulations letters</unittitle>
+                <unitdate normal="1930/2002" type="inclusive" calendar="gregorian" era="ce">1981 and after</unitdate>
+              </did>
+            </c03>
+            <c03 id="ref159" level="file">
+              <did>
+                <container type="Box">5</container>
+                <unittitle>Nobel congratulations letters</unittitle>
+                <unitdate normal="1930/2002" type="inclusive" calendar="gregorian" era="ce">1981 and after</unitdate>
+              </did>
+            </c03>
+            <c03 id="ref160" level="file">
+              <did>
+                <container type="Box">5</container>
+                <unittitle>Nobel statement by Jim</unittitle>
+                <unitdate normal="1981/1981" calendar="gregorian" era="ce">1981</unitdate>
+              </did>
+            </c03>
+            <c03 id="ref161" level="file">
+              <did>
+                <container type="Box">5</container>
+                <unittitle>Nobel articles</unittitle>
+                <unitdate normal="1981/1983" type="inclusive" calendar="gregorian" era="ce">[1981-1983]</unitdate>
+              </did>
+            </c03>
+          </c02>
+          <c02 id="ref162" level="file">
+            <did>
+              <container type="Box">5</container>
+              <unittitle>Personal correspondence</unittitle>
+              <unitdate normal="1990/1999" type="inclusive" calendar="gregorian" era="ce">1990s</unitdate>
+            </did>
+          </c02>
+          <c02 id="ref163" level="file">
+            <did>
+              <container type="Box">5</container>
+              <unittitle>"MISC for WISC" [includes correspondence with Lawrence Summers and others, notes, and other miscellaneous materials]</unittitle>
+              <unitdate normal="1994/1999" type="inclusive" calendar="gregorian" era="ce">1994-1999</unitdate>
+            </did>
+          </c02>
+          <c02 id="ref164" level="file">
+            <did>
+              <container type="Box">5</container>
+              <unittitle>Social Security reform speech</unittitle>
+              <unitdate normal="1999/1999" calendar="gregorian" era="ce">1999</unitdate>
+            </did>
+          </c02>
+          <c02 id="ref165" level="file">
+            <did>
+              <container type="Box">5</container>
+              <unittitle>Saving Social Security 62%</unittitle>
+              <unitdate normal="1999/1999" calendar="gregorian" era="ce">1999</unitdate>
+            </did>
+          </c02>
+          <c02 id="ref166" level="file">
+            <did>
+              <container type="Box">6</container>
+              <unittitle>NYE/Guide to Keynes</unittitle>
+            </did>
+          </c02>
+          <c02 id="ref167" level="file">
+            <did>
+              <container type="Box">6</container>
+              <unittitle>Harvard 55th</unittitle>
+              <unitdate normal="1994/1994" calendar="gregorian" era="ce">1994</unitdate>
+            </did>
+          </c02>
+          <c02 id="ref168" level="file">
+            <did>
+              <container type="Box">6</container>
+              <unittitle>Harvard 6/8/95 [Honorary Degree]</unittitle>
+            </did>
+          </c02>
+          <c02 id="ref169" level="file">
+            <did>
+              <container type="Box">6</container>
+              <unittitle>About Russian non-visit</unittitle>
+              <unitdate normal="1999/1999" calendar="gregorian" era="ce">1999</unitdate>
+            </did>
+          </c02>
+          <c02 id="ref170" level="file">
+            <did>
+              <container type="Box">6</container>
+              <unittitle>Poetry</unittitle>
+            </did>
+          </c02>
+          <c02 id="ref171" level="file">
+            <did>
+              <container type="Box">6</container>
+              <unittitle>Autobiographical</unittitle>
+            </did>
+          </c02>
+          <c02 id="ref172" level="file">
+            <did>
+              <container type="Box">6</container>
+              <unittitle>Poetry 2001</unittitle>
+            </did>
+          </c02>
+          <c02 id="ref173" level="file">
+            <did>
+              <unittitle>Nobel Prize</unittitle>
+              <unitdate normal="1976/1986" type="inclusive" calendar="gregorian" era="ce">ca. 1981</unitdate>
+            </did>
+            <c03 id="ref174" level="file">
+              <did>
+                <container type="Box">6</container>
+                <unittitle>Congratulation letters and clippings [multiple folders]</unittitle>
+              </did>
+            </c03>
+            <c03 id="ref175" level="file">
+              <did>
+                <container type="Box">6</container>
+                <unittitle>Stockholm, Sweden, scheduled events</unittitle>
+                <unitdate normal="1930/2002" type="inclusive" calendar="gregorian" era="ce">no date</unitdate>
+              </did>
+            </c03>
+          </c02>
+          <c02 id="ref177" level="file">
+            <did>
+              <container type="Box">7</container>
+              <unittitle>Armistice Day photograph</unittitle>
+              <unitdate normal="1918/1918" calendar="gregorian" era="ce">1918</unitdate>
+            </did>
+          </c02>
+          <c02 id="ref178" level="file">
+            <did>
+              <container type="Box">7</container>
+              <unittitle>Retirement, correspondence</unittitle>
+              <unitdate normal="1988/1988" calendar="gregorian" era="ce">1988</unitdate>
+            </did>
+          </c02>
+          <c02 id="ref179" level="file">
+            <did>
+              <container type="Box">7</container>
+              <unittitle>Kennedy telegram [invitation to JFK funeral]</unittitle>
+              <unitdate normal="1963/1963" calendar="gregorian" era="ce">1963</unitdate>
+            </did>
+            <c03 id="ref176" level="file">
+              <did>
+                <container type="Box">7</container>
+                <unittitle>Dad's clippings [L. M. Tobin clippings file on James]</unittitle>
+              </did>
+            </c03>
+          </c02>
+          <c02 id="ref180" level="file">
+            <did>
+              <container type="Box">7</container>
+              <unittitle>Central Intelligence Agency [Project Charles]</unittitle>
+              <unitdate normal="1951/1953" type="inclusive" calendar="gregorian" era="ce">1951-1953</unitdate>
+            </did>
+          </c02>
+          <c02 id="ref181" level="file">
+            <did>
+              <container type="Box">7</container>
+              <unittitle>Civil Service</unittitle>
+              <unitdate normal="1940/1969" type="inclusive" calendar="gregorian" era="ce">1940s-1960s</unitdate>
+            </did>
+          </c02>
+          <c02 id="ref182" level="file">
+            <did>
+              <container type="Box">7</container>
+              <unittitle>U.S. Navy Officer Service Record [includes shoulder board]</unittitle>
+              <unitdate normal="1940/1959" type="inclusive" calendar="gregorian" era="ce">1940s-1950s</unitdate>
+            </did>
+          </c02>
+          <c02 id="ref183" level="file">
+            <did>
+              <container type="Box">7</container>
+              <unittitle>War [four photographs]</unittitle>
+              <unitdate normal="1940/1950" type="inclusive" calendar="gregorian" era="ce">ca. 1945</unitdate>
+            </did>
+          </c02>
+          <c02 id="ref184" level="file">
+            <did>
+              <unittitle>Files from Bill Brainard, other work files, speeches, talks, etc.</unittitle>
+            </did>
+            <c03 id="ref185" level="file">
+              <did>
+                <container type="Box">7</container>
+                <unittitle>Autobiographical notes</unittitle>
+              </did>
+            </c03>
+            <c03 id="ref186" level="file">
+              <did>
+                <container type="Box">7</container>
+                <unittitle>Obstfeldt-Taylor draft</unittitle>
+                <unitdate normal="1998/1998" calendar="gregorian" era="ce">1998</unitdate>
+              </did>
+            </c03>
+            <c03 id="ref187" level="file">
+              <did>
+                <container type="Box">7</container>
+                <unittitle>Yale-Brookings Conference Washington, DC [Okun]</unittitle>
+                <unitdate normal="1930/2002" type="inclusive" calendar="gregorian" era="ce">1999 Nov</unitdate>
+              </did>
+            </c03>
+            <c03 id="ref188" level="file">
+              <did>
+                <container type="Box">7</container>
+                <unittitle>Reprints sent</unittitle>
+                <unitdate normal="1976/1986" type="inclusive" calendar="gregorian" era="ce">ca. 1981</unitdate>
+              </did>
+            </c03>
+            <c03 id="ref189" level="file">
+              <did>
+                <container type="Box">7</container>
+                <unittitle>Congratulations</unittitle>
+              </did>
+            </c03>
+            <c03 id="ref190" level="file">
+              <did>
+                <container type="Box">7</container>
+                <unittitle>Nobel Prize</unittitle>
+              </did>
+            </c03>
+            <c03 id="ref191" level="file">
+              <did>
+                <container type="Box">8</container>
+                <unittitle>Manuscript of a textbook on intellectual development, macroeconomics [unpublished, with Bill Brainard, Gary Smith, and Janet Yellin]</unittitle>
+                <unitdate normal="1960/1979" type="inclusive" calendar="gregorian" era="ce">1960s-1970s</unitdate>
+              </did>
+            </c03>
+            <c03 id="ref192" level="file">
+              <did>
+                <container type="Box">8</container>
+                <unittitle>Early manuscripts and important professional correspondence</unittitle>
+              </did>
+            </c03>
+            <c03 id="ref193" level="file">
+              <did>
+                <container type="Box">9</container>
+                <unittitle>Guideposts [manuscript, probably for Council of Economic Advisors, with background]</unittitle>
+                <unitdate normal="1930/2002" type="inclusive" calendar="gregorian" era="ce">no date</unitdate>
+              </did>
+            </c03>
+            <c03 id="ref194" level="file">
+              <did>
+                <container type="Box">9</container>
+                <unittitle>Negative Income Tax Experiment - adjudication for Watts and Baumel welfare sampling</unittitle>
+                <unitdate normal="1964/1974" type="inclusive" calendar="gregorian" era="ce">ca. 1969</unitdate>
+              </did>
+            </c03>
+            <c03 id="ref195" level="file">
+              <did>
+                <container type="Box">9</container>
+                <unittitle>Professional correspondence - Harry Johnson</unittitle>
+                <unitdate normal="1961/1971" type="inclusive" calendar="gregorian" era="ce">ca. 1966</unitdate>
+              </did>
+            </c03>
+            <c03 id="ref196" level="file">
+              <did>
+                <container type="Box">9</container>
+                <unittitle>Survey Research Center - early drafts</unittitle>
+                <unitdate normal="1960/1969" type="inclusive" calendar="gregorian" era="ce">1960s</unitdate>
+              </did>
+            </c03>
+            <c03 id="ref197" level="file">
+              <did>
+                <container type="Box">9</container>
+                <unittitle>Talks and material for talks</unittitle>
+                <unitdate normal="1960/1989" type="inclusive" calendar="gregorian" era="ce">[1960s-1980s]</unitdate>
+              </did>
+            </c03>
+            <c03 id="ref198" level="file">
+              <did>
+                <container type="Box">9</container>
+                <unittitle>"Committee to Study Puerto Rico's Finances, Report to the Governor"</unittitle>
+                <unitdate normal="1975/1975" calendar="gregorian" era="ce">1975</unitdate>
+              </did>
+            </c03>
+            <c03 id="ref199" level="file">
+              <did>
+                <container type="Box">9</container>
+                <unittitle>Unpublished manuscript from the 1940s [on "optimizing behavior," parts written in Switzerland in 1959]</unittitle>
+                <unitdate normal="1940/1959" type="inclusive" calendar="gregorian" era="ce">1940s-1950s</unitdate>
+              </did>
+            </c03>
+            <c03 id="ref200" level="file">
+              <did>
+                <container type="Box">9</container>
+                <unittitle>Teaching</unittitle>
+                <unitdate normal="1990/1999" type="inclusive" calendar="gregorian" era="ce">1990s</unitdate>
+              </did>
+            </c03>
+          </c02>
+          <c02 id="ref201" level="file">
+            <did>
+              <unittitle>Unsorted - for archives</unittitle>
+            </did>
+            <c03 id="ref202" level="file">
+              <did>
+                <container type="Box">9</container>
+                <unittitle>Fisher Conference Hall Discussion</unittitle>
+                <unitdate calendar="gregorian" era="ce">May 1998</unitdate>
+              </did>
+            </c03>
+            <c03 id="ref203" level="file">
+              <did>
+                <container type="Box">9</container>
+                <unittitle>Ellis, Barber, JFK</unittitle>
+                <unitdate normal="1994/2004" type="inclusive" calendar="gregorian" era="ce">ca. 1999</unitdate>
+              </did>
+            </c03>
+            <c03 id="ref204" level="file">
+              <did>
+                <container type="Box">9</container>
+                <unittitle>Health Policy - Bradley</unittitle>
+              </did>
+            </c03>
+            <c03 id="ref205" level="file">
+              <did>
+                <container type="Box">9</container>
+                <unittitle>CPI Report - Final</unittitle>
+              </did>
+            </c03>
+            <c03 id="ref206" level="file">
+              <did>
+                <container type="Box">9</container>
+                <unittitle>Lindbeck Welfare State</unittitle>
+              </did>
+            </c03>
+            <c03 id="ref207" level="file">
+              <did>
+                <container type="Box">9</container>
+                <unittitle>Fisher/Club</unittitle>
+              </did>
+            </c03>
+            <c03 id="ref208" level="file">
+              <did>
+                <container type="Box">10</container>
+                <unittitle>"The Tobin Tax: How to Make it Real"</unittitle>
+                <unitdate normal="1999/1999" calendar="gregorian" era="ce">1999</unitdate>
+              </did>
+            </c03>
+            <c03 id="ref209" level="file">
+              <did>
+                <container type="Box">10</container>
+                <unittitle>Japan Yoshikawa</unittitle>
+                <unitdate normal="1999/2000" type="inclusive" calendar="gregorian" era="ce">1999-2000</unitdate>
+              </did>
+            </c03>
+            <c03 id="ref210" level="file">
+              <did>
+                <container type="Box">10</container>
+                <unittitle>Godley</unittitle>
+              </did>
+            </c03>
+            <c03 id="ref211" level="file">
+              <did>
+                <container type="Box">10</container>
+                <unittitle>World Bank paper offprints</unittitle>
+              </did>
+            </c03>
+            <c03 id="ref212" level="file">
+              <did>
+                <container type="Box">10</container>
+                <unittitle>Neoclassical synthesis</unittitle>
+                <unitdate normal="1988/1998" type="inclusive" calendar="gregorian" era="ce">ca. 1993</unitdate>
+              </did>
+            </c03>
+            <c03 id="ref213" level="file">
+              <did>
+                <container type="Box">10</container>
+                <unittitle>Fisher Symposium, comment on Hall</unittitle>
+              </did>
+            </c03>
+            <c03 id="ref214" level="file">
+              <did>
+                <container type="Box">10</container>
+                <unittitle>To Wisconsin, miscellaneous</unittitle>
+              </did>
+            </c03>
+            <c03 id="ref215" level="file">
+              <did>
+                <container type="Box">10</container>
+                <unittitle>Office- Yale</unittitle>
+                <unitdate normal="1994/2004" type="inclusive" calendar="gregorian" era="ce">ca. 1999</unitdate>
+              </did>
+            </c03>
+            <c03 id="ref216" level="file">
+              <did>
+                <container type="Box">10</container>
+                <unittitle>W. Godley</unittitle>
+              </did>
+            </c03>
+            <c03 id="ref217" level="file">
+              <did>
+                <container type="Box">10</container>
+                <unittitle>[Loose papers]</unittitle>
+              </did>
+            </c03>
+          </c02>
+          <c02 id="ref218" level="file">
+            <did>
+              <unittitle>Videocassettes</unittitle>
+            </did>
+            <c03 id="ref219" level="file">
+              <did>
+                <container type="Box">11</container>
+                <unittitle>"James Tobin and California Economy"</unittitle>
+                <unitdate normal="1930/2002" type="inclusive" calendar="gregorian" era="ce">1993 Feb 16</unitdate>
+              </did>
+            </c03>
+            <c03 id="ref220" level="file">
+              <did>
+                <container type="Box">11</container>
+                <unittitle>"JEC: James Tobin, Paul Samuelson, George Perry, L. Kudlow testimony"</unittitle>
+                <unitdate normal="1930/2002" type="inclusive" calendar="gregorian" era="ce">1992 Feb</unitdate>
+              </did>
+            </c03>
+            <c03 id="ref221" level="file">
+              <did>
+                <container type="Box">11</container>
+                <unittitle>"JEC: Professors Tobin, Solow, Meltzer"</unittitle>
+                <unitdate normal="1930/2002" type="inclusive" calendar="gregorian" era="ce">1993 Feb 11</unitdate>
+              </did>
+            </c03>
+            <c03 id="ref222" level="file">
+              <did>
+                <container type="Box">11</container>
+                <unittitle>"First Annual Pacific-Basin Finance Conference"</unittitle>
+                <unitdate normal="1930/2002" type="inclusive" calendar="gregorian" era="ce">no date</unitdate>
+              </did>
+            </c03>
+            <c03 id="ref223" level="file">
+              <did>
+                <container type="Box">11</container>
+                <unittitle>"U.S.S. Kearney DD432"</unittitle>
+                <unitdate normal="1930/2002" type="inclusive" calendar="gregorian" era="ce">1992 Oct 15</unitdate>
+              </did>
+              <c04 id="ref224" level="file">
+                <did>
+                  <container type="Box">11</container>
+                  <unittitle>Original videocassette 
+                    <emph render="smcaps">[restricted]</emph>
+                  </unittitle>
+                </did>
+              </c04>
+              <c04 id="ref225" level="file">
+                <did>
+                  <container type="Box">11-D</container>
+                  <unittitle>Duplicating master 
+                    <emph render="smcaps">[restricted]</emph>
+                  </unittitle>
+                </did>
+              </c04>
+              <c04 id="ref226" level="file">
+                <did>
+                  <container type="Box">11U</container>
+                  <unittitle>Use copy</unittitle>
+                </did>
+              </c04>
+            </c03>
+          </c02>
+          <c02 id="ref227" level="file">
+            <did>
+              <unittitle>Audiocassettes</unittitle>
+            </did>
+            <c03 id="ref228" level="file">
+              <did>
+                <container type="Box">11</container>
+                <unittitle>"Broadcast of May 4, 1995 Side 1" [2 copies]</unittitle>
+              </did>
+            </c03>
+            <c03 id="ref229" level="file">
+              <did>
+                <container type="Box">11</container>
+                <unittitle>"Lecture at KDI"</unittitle>
+                <unitdate normal="1930/2002" type="inclusive" calendar="gregorian" era="ce">1989 Mar 23</unitdate>
+              </did>
+            </c03>
+          </c02>
+          <c02 id="ref230" level="file">
+            <did>
+              <container type="Box">12</container>
+              <unittitle>Computer diskettes [3.5 inch]</unittitle>
+            </did>
+            <c03 id="ref231" level="file">
+              <did>
+                <container type="Box">12</container>
+                <unitid>2004-M-088.0001</unitid>
+                <unittitle>HP SL Drivers Disk 1 of 3 [removed for preservation; consult reference archivist]</unittitle>
+              </did>
+            </c03>
+            <c03 id="ref345" level="file">
+              <did>
+                <container type="Box">12</container>
+                <unitid>2004-M-088.0002</unitid>
+                <unittitle>HP SL Drivers Disk 2 of 3 [removed for preservation; consult reference archivist]</unittitle>
+              </did>
+            </c03>
+            <c03 id="ref346" level="file">
+              <did>
+                <container type="Box">12</container>
+                <unitid>2004-M-088.0003</unitid>
+                <unittitle>HP SL Drivers Disk 3 of 3 [removed for preservation; consult reference archivist]</unittitle>
+              </did>
+            </c03>
+            <c03 id="ref232" level="file">
+              <did>
+                <container type="Box">12</container>
+                <unitid>2004-M-088.0004</unitid>
+                <unittitle>fpapers5-2; helsink1; tunn2; clinton.nks; clinton2; cbo1192; ecseccnl [removed for preservation; consult reference archivist]</unittitle>
+                <unitdate normal="1987/1997" type="inclusive" calendar="gregorian" era="ce">ca. 1992</unitdate>
+              </did>
+            </c03>
+            <c03 id="ref233" level="file">
+              <did>
+                <container type="Box">12</container>
+                <unitid>2004-M-088.0005</unitid>
+                <unittitle>Kennedy.wpd 10-17-97; WP6.1 Tobin; QDATA Backup 7-5-99 [removed for preservation; consult reference archivist]</unittitle>
+                <unitdate normal="1930/2002" type="inclusive" calendar="gregorian" era="ce">1997, 1999</unitdate>
+              </did>
+            </c03>
+            <c03 id="ref234" level="file">
+              <did>
+                <container type="Box">12</container>
+                <unitid>2004-M-088.0006</unitid>
+                <unittitle>\amphlsoc; \bonn [removed for preservation; consult reference archivist]</unittitle>
+              </did>
+            </c03>
+            <c03 id="ref235" level="file">
+              <did>
+                <container type="Box">12</container>
+                <unitid>2004-M-088.0007</unitid>
+                <unittitle>Tobin2 [removed for preservation; consult reference archivist]</unittitle>
+              </did>
+            </c03>
+            <c03 id="ref236" level="file">
+              <did>
+                <container type="Box">12</container>
+                <unitid>2004-M-088.0008</unitid>
+                <unittitle>June 22 95; selected c:\123wk c:\tspwk; Stevens Feb 96; 123wk6*.* [lectures?] [removed for preservation; consult reference archivist]</unittitle>
+                <unitdate normal="1995/1996" type="inclusive" calendar="gregorian" era="ce">1995-1996</unitdate>
+              </did>
+            </c03>
+            <c03 id="ref237" level="file">
+              <did>
+                <container type="Box">12</container>
+                <unitid>2004-M-088.0009</unitid>
+                <unittitle>Tobin's Q and Serkan's work, all Lotus [removed for preservation; consult reference archivist]</unittitle>
+              </did>
+            </c03>
+            <c03 id="ref238" level="file">
+              <did>
+                <container type="Box">12</container>
+                <unitid>2004-M-088.0010</unitid>
+                <unittitle>Serkan Savasoglu; File Disk as in c:\office; general; rec; misc; manuscr; ch2 app. new 10/23; tinberg [removed for preservation; consult reference archivist]</unittitle>
+              </did>
+            </c03>
+            <c03 id="ref239" level="file">
+              <did>
+                <container type="Box">12</container>
+                <unitid>2004-M-088.0011</unitid>
+                <unittitle>2 note files [removed for preservation; consult reference archivist]</unittitle>
+              </did>
+            </c03>
+            <c03 id="ref240" level="file">
+              <did>
+                <container type="Box">12</container>
+                <unitid>2004-M-088.0012</unitid>
+                <unittitle>7/87 from JT office; \office selected files; Fshrdrft [removed for preservation; consult reference archivist]</unittitle>
+                <unitdate normal="1987/1987" calendar="gregorian" era="ce">1987</unitdate>
+              </did>
+            </c03>
+            <c03 id="ref241" level="file">
+              <did>
+                <container type="Box">12</container>
+                <unitid>2004-M-088.0013</unitid>
+                <unittitle>10/21/99; publist.wrk; telephon [removed for preservation; consult reference archivist]</unittitle>
+              </did>
+            </c03>
+            <c03 id="ref242" level="file">
+              <did>
+                <container type="Box">12</container>
+                <unitid>2004-M-088.0014</unitid>
+                <unittitle>Bio; Manuscr; Publist; Telephon; General; Misc; Rec [removed for preservation; consult reference archivist]</unittitle>
+              </did>
+            </c03>
+            <c03 id="ref347" level="file">
+              <did>
+                <container type="Box">12</container>
+                <unitid>2004-M-088.0015</unitid>
+                <unittitle>General; Manuscript; Misc; Publist; Rec; Telephon Fishtxt.197 [removed for preservation; consult reference archivist]</unittitle>
+              </did>
+            </c03>
+            <c03 id="ref348" level="file">
+              <did>
+                <container type="Box">12</container>
+                <unitid>2004-M-088.0016</unitid>
+                <unittitle>Tobin 9-97; General; Misc.; Publist2.new; Rec; wagner.ins; Manuscr; Q; Telephon.97 [removed for preservation; consult reference archivist]</unittitle>
+              </did>
+            </c03>
+            <c03 id="ref243" level="file">
+              <did>
+                <container type="Box">12</container>
+                <unitid>2004-M-088.0017</unitid>
+                <unittitle>publist publistwrkg } deleted by mistake [removed for preservation; consult reference archivist]</unittitle>
+              </did>
+            </c03>
+            <c03 id="ref244" level="file">
+              <did>
+                <container type="Box">12</container>
+                <unitid>2004-M-088.0018</unitid>
+                <unittitle>publist.wpd - clean list; publistwkg.wpd - working list w/ corrections [removed for preservation; consult reference archivist]</unittitle>
+              </did>
+            </c03>
+            <c03 id="ref245" level="file">
+              <did>
+                <container type="Box">12</container>
+                <unitid>2004-M-088.0019</unitid>
+                <unittitle>1998 WPD files; Hansen et al [removed for preservation; consult reference archivist]</unittitle>
+                <unitdate normal="1998/1998" calendar="gregorian" era="ce">1998</unitdate>
+              </did>
+            </c03>
+            <c03 id="ref246" level="file">
+              <did>
+                <container type="Box">12</container>
+                <unitid>2004-M-088.0020</unitid>
+                <unittitle>Bushtax.abs [removed for preservation; consult reference archivist]</unittitle>
+              </did>
+            </c03>
+            <c03 id="ref247" level="file">
+              <did>
+                <container type="Box">12</container>
+                <unitid>2004-M-088.0021</unitid>
+                <unittitle>\letters summer 94 CLEAN; JEC 794 [removed for preservation; consult reference archivist]</unittitle>
+              </did>
+            </c03>
+            <c03 id="ref248" level="file">
+              <did>
+                <container type="Box">12</container>
+                <unitid>2004-M-088.0022</unitid>
+                <unittitle>Summer 95 letters for office; \radright [removed for preservation; consult reference archivist]</unittitle>
+              </did>
+            </c03>
+            <c03 id="ref249" level="file">
+              <did>
+                <container type="Box">12</container>
+                <unitid>2004-M-088.0023</unitid>
+                <unittitle>Summer 97 for Wisco; From F:\; From: \office [removed for preservation; consult reference archivist]</unittitle>
+              </did>
+            </c03>
+            <c03 id="ref250" level="file">
+              <did>
+                <container type="Box">12</container>
+                <unitid>2004-M-088.0024</unitid>
+                <unittitle>Papers 6; opeds [removed for preservation; consult reference archivist]</unittitle>
+              </did>
+            </c03>
+            <c03 id="ref251" level="file">
+              <did>
+                <container type="Box">12</container>
+                <unitid>2004-M-088.0025</unitid>
+              </did>
+            </c03>
+            <c03 id="ref252" level="file">
+              <did>
+                <container type="Box">12</container>
+                <unitid>2004-M-088.0026</unitid>
+                <unittitle>Bill Parker - remarks at retirement, May 1989 - JT [removed for preservation; consult reference archivist]</unittitle>
+                <unitdate calendar="gregorian" era="ce">May 1989</unitdate>
+              </did>
+            </c03>
+            <c03 id="ref253" level="file">
+              <did>
+                <container type="Box">12</container>
+                <unitid>2004-M-088.0027</unitid>
+                <unittitle>JTvolEE - new volume of Tobin essays [removed for preservation; consult reference archivist]</unittitle>
+              </did>
+            </c03>
+          </c02>
+          <c02 id="ref254" level="file">
+            <did>
+              <unittitle>Restricted papers</unittitle>
+            </did>
+            <c03 id="ref255" level="file">
+              <did>
+                <unittitle>Family History</unittitle>
+              </did>
+              <c04 id="ref256" level="file">
+                <did>
+                  <container type="Box">13</container>
+                  <unittitle>Roget Anketell Homestead</unittitle>
+                  <unitdate normal="1901/1901" calendar="gregorian" era="ce">1901</unitdate>
+                </did>
+              </c04>
+              <c04 id="ref257" level="file">
+                <did>
+                  <container type="Box">13</container>
+                  <unittitle>Correspondence with family</unittitle>
+                  <unitdate normal="1943/1953" type="inclusive" calendar="gregorian" era="ce">c. 1948</unitdate>
+                </did>
+              </c04>
+              <c04 id="ref258" level="file">
+                <did>
+                  <container type="Box">13</container>
+                  <unittitle>"Pearl harbor and After" Autobiographical Note with floppy</unittitle>
+                </did>
+              </c04>
+              <c04 id="ref259" level="file">
+                <did>
+                  <container type="Box">13</container>
+                  <unittitle>"Harvard in the 1930s." Autobiographical Note.</unittitle>
+                </did>
+              </c04>
+              <c04 id="ref260" level="file">
+                <did>
+                  <container type="Box">13</container>
+                  <unittitle>"Navy 42" Autobiographical Note.</unittitle>
+                </did>
+              </c04>
+              <c04 id="ref261" level="file">
+                <did>
+                  <container type="Box">13</container>
+                  <unittitle>Jim's children artwork, in his office in 2000</unittitle>
+                </did>
+              </c04>
+              <c04 id="ref262" level="file">
+                <did>
+                  <container type="Box">13</container>
+                  <unittitle>40th Wedding Anniversary Celebration</unittitle>
+                </did>
+              </c04>
+              <c04 id="ref263" level="file">
+                <did>
+                  <container type="Box">13</container>
+                  <unittitle>Family photos (1922) and official history deaths of Jim's great grandparents</unittitle>
+                </did>
+              </c04>
+              <c04 id="ref264" level="file">
+                <did>
+                  <container type="Box">13</container>
+                  <unittitle>Passports</unittitle>
+                </did>
+              </c04>
+              <c04 id="ref265" level="file">
+                <did>
+                  <container type="Box">13</container>
+                  <unittitle>Anketell and Tobin history - found in a file together</unittitle>
+                </did>
+              </c04>
+              <c04 id="ref266" level="file">
+                <did>
+                  <container type="Box">13</container>
+                  <unittitle>"St. Luke's Story" Autobiographical fragment</unittitle>
+                </did>
+              </c04>
+              <c04 id="ref267" level="file">
+                <did>
+                  <container type="Box">13</container>
+                  <unittitle>Springbrook history photos - labeled by MET</unittitle>
+                </did>
+              </c04>
+              <c04 id="ref268" level="file">
+                <did>
+                  <container type="Box">13</container>
+                  <unittitle>From a file labelled "Letters to keep"</unittitle>
+                </did>
+              </c04>
+              <c04 id="ref269" level="file">
+                <did>
+                  <container type="Box">13</container>
+                  <unittitle>Family history materials sent to Jim from Louis Anketell's descendents in Nampa, Idaho [photographs and postcards]</unittitle>
+                  <unitdate normal="1895/1905" type="inclusive" calendar="gregorian" era="ce">c. 1900s</unitdate>
+                </did>
+              </c04>
+              <c04 id="ref270" level="file">
+                <did>
+                  <container type="Box">13</container>
+                  <unittitle>Birth, marriage, passport documents</unittitle>
+                </did>
+              </c04>
+            </c03>
+            <c03 id="ref271" level="file">
+              <did>
+                <unittitle>Harvard undergraduate years</unittitle>
+              </did>
+              <c04 id="ref272" level="file">
+                <did>
+                  <container type="Box">14</container>
+                  <unittitle>Letters home from Harvard undergraduate years</unittitle>
+                  <unitdate normal="1930/1949" type="inclusive" calendar="gregorian" era="ce">1930s-1940s</unitdate>
+                </did>
+              </c04>
+              <c04 id="ref273" level="file">
+                <did>
+                  <container type="Box">14</container>
+                  <unittitle>Harvard awards</unittitle>
+                </did>
+              </c04>
+              <c04 id="ref274" level="file">
+                <did>
+                  <container type="Box">14</container>
+                  <unittitle>Unsorted [contains clippings and photographs]</unittitle>
+                  <unitdate normal="1930/1949" type="inclusive" calendar="gregorian" era="ce">1930s-1940s</unitdate>
+                </did>
+              </c04>
+              <c04 id="ref275" level="file">
+                <did>
+                  <container type="Box">14</container>
+                  <unittitle>Official</unittitle>
+                </did>
+              </c04>
+            </c03>
+            <c03 id="ref276" level="file">
+              <did>
+                <unittitle>Letters from Jim from Europe 1939 and from Harvard graduate school 1939-1941</unittitle>
+              </did>
+              <c04 id="ref277" level="file">
+                <did>
+                  <container type="Box">15</container>
+                  <unittitle>Letters from Europe trip</unittitle>
+                  <unitdate normal="1939/1939" calendar="gregorian" era="ce">1939</unitdate>
+                </did>
+              </c04>
+              <c04 id="ref278" level="file">
+                <did>
+                  <container type="Box">15</container>
+                  <unittitle>Letters from Harvard</unittitle>
+                  <unitdate normal="1939/1941" type="inclusive" calendar="gregorian" era="ce">1939-1941</unitdate>
+                </did>
+              </c04>
+              <c04 id="ref279" level="file">
+                <did>
+                  <container type="Box">15</container>
+                  <unittitle>Jim's letters to Harvard friends</unittitle>
+                  <unitdate normal="1940/1943" type="inclusive" calendar="gregorian" era="ce">1940-1943</unitdate>
+                </did>
+              </c04>
+              <c04 id="ref280" level="file">
+                <did>
+                  <container type="Box">15</container>
+                  <unittitle>Letters, War years</unittitle>
+                </did>
+              </c04>
+            </c03>
+            <c03 id="ref281" level="file">
+              <did>
+                <unittitle>Letters from Jim - Navy years</unittitle>
+              </did>
+              <c04 id="ref282" level="file">
+                <did>
+                  <container type="Box">15</container>
+                  <unittitle>Letters home while in Navy</unittitle>
+                </did>
+              </c04>
+              <c04 id="ref283" level="file">
+                <did>
+                  <container type="Box">16</container>
+                  <unittitle>Letters from Navy</unittitle>
+                </did>
+              </c04>
+              <c04 id="ref284" level="file">
+                <did>
+                  <container type="Box">16</container>
+                  <unittitle>Letters home</unittitle>
+                  <unitdate normal="1944/1946" type="inclusive" calendar="gregorian" era="ce">1944-1946</unitdate>
+                </did>
+              </c04>
+              <c04 id="ref285" level="file">
+                <did>
+                  <container type="Box">16</container>
+                  <unittitle>Navy citation</unittitle>
+                  <unitdate normal="1947/1947" calendar="gregorian" era="ce">1947</unitdate>
+                </did>
+              </c04>
+              <c04 id="ref286" level="file">
+                <did>
+                  <container type="Box">16</container>
+                  <unittitle>Navy - in a folder together</unittitle>
+                  <unitdate normal="1950/1959" type="inclusive" calendar="gregorian" era="ce">1950s</unitdate>
+                </did>
+              </c04>
+              <c04 id="ref287" level="file">
+                <did>
+                  <container type="Box">16</container>
+                  <unittitle>G.I. Bill - Veterans Administration</unittitle>
+                </did>
+              </c04>
+              <c04 id="ref288" level="file">
+                <did>
+                  <container type="Box">16</container>
+                  <unittitle>U.S.S. Kearny</unittitle>
+                  <unitdate normal="1993/1994" type="inclusive" calendar="gregorian" era="ce">1993-1994</unitdate>
+                </did>
+              </c04>
+              <c04 id="ref289" level="file">
+                <did>
+                  <container type="Box">16</container>
+                  <unittitle>U.S.S. Kearny - history and photographs</unittitle>
+                  <unitdate normal="1940/1949" type="inclusive" calendar="gregorian" era="ce">1940s</unitdate>
+                </did>
+              </c04>
+              <c04 id="ref290" level="file">
+                <did>
+                  <container type="Box">16</container>
+                  <unittitle>Letters - War years</unittitle>
+                  <unitdate normal="1939/1945" type="inclusive" calendar="gregorian" era="ce">1939-1945</unitdate>
+                </did>
+              </c04>
+            </c03>
+            <c03 id="ref291" level="file">
+              <did>
+                <unittitle>Letters from Jim and Betty 1949; letters to Jim 1941-1945; letters from Jim in Washington 1941-1942</unittitle>
+              </did>
+              <c04 id="ref292" level="file">
+                <did>
+                  <container type="Box">17</container>
+                  <unittitle>Letters home from Washington</unittitle>
+                  <unitdate normal="1941/1941" calendar="gregorian" era="ce">1941</unitdate>
+                </did>
+              </c04>
+              <c04 id="ref293" level="file">
+                <did>
+                  <container type="Box">17</container>
+                  <unittitle>Letters home from England</unittitle>
+                  <unitdate normal="1949/1949" calendar="gregorian" era="ce">1949</unitdate>
+                </did>
+              </c04>
+              <c04 id="ref294" level="file">
+                <did>
+                  <container type="Box">17</container>
+                  <unittitle>Letters from Jim to Betty</unittitle>
+                  <unitdate normal="1949/1949" calendar="gregorian" era="ce">1949</unitdate>
+                </did>
+              </c04>
+              <c04 id="ref295" level="file">
+                <did>
+                  <container type="Box">17</container>
+                  <unittitle>Letters to Jim</unittitle>
+                  <unitdate normal="1936/1946" type="inclusive" calendar="gregorian" era="ce">c. 1941-1945</unitdate>
+                </did>
+              </c04>
+              <c04 id="ref296" level="file">
+                <did>
+                  <container type="Box">17</container>
+                  <unittitle>Letters Worth Keeping</unittitle>
+                </did>
+              </c04>
+            </c03>
+            <c03 id="ref297" level="file">
+              <did>
+                <unittitle>1950s and 1960s</unittitle>
+              </did>
+              <c04 id="ref298" level="file">
+                <did>
+                  <container type="Box">17</container>
+                  <unittitle>Correspondence with friends</unittitle>
+                  <unitdate normal="1950/1969" type="inclusive" calendar="gregorian" era="ce">1950s-1960s</unitdate>
+                </did>
+              </c04>
+              <c04 id="ref299" level="file">
+                <did>
+                  <container type="Box">17</container>
+                  <unittitle>Clark medal</unittitle>
+                  <unitdate normal="1950/1959" type="inclusive" calendar="gregorian" era="ce">1950s</unitdate>
+                </did>
+              </c04>
+              <c04 id="ref300" level="file">
+                <did>
+                  <container type="Box">17</container>
+                  <unittitle>Professional correspondence</unittitle>
+                  <unitdate normal="1960/1969" type="inclusive" calendar="gregorian" era="ce">1960s</unitdate>
+                </did>
+              </c04>
+              <c04 id="ref301" level="file">
+                <did>
+                  <container type="Box">17</container>
+                  <unittitle>Negotiations with Cowles Foundation</unittitle>
+                  <unitdate normal="1954/1954" calendar="gregorian" era="ce">1954</unitdate>
+                </did>
+              </c04>
+              <c04 id="ref302" level="file">
+                <did>
+                  <container type="Box">17</container>
+                  <unittitle>Family correspondence</unittitle>
+                  <unitdate normal="1950/1969" type="inclusive" calendar="gregorian" era="ce">1950s-1960s</unitdate>
+                </did>
+              </c04>
+              <c04 id="ref303" level="file">
+                <did>
+                  <container type="Box">17</container>
+                  <unittitle>Purchase of Springbrook Red Barn</unittitle>
+                  <unitdate normal="1955/1955" calendar="gregorian" era="ce">1955</unitdate>
+                </did>
+              </c04>
+              <c04 id="ref304" level="file">
+                <did>
+                  <container type="Box">17</container>
+                  <unittitle>Negotiations with Harvard</unittitle>
+                  <unitdate normal="1957/1957" calendar="gregorian" era="ce">1957</unitdate>
+                </did>
+              </c04>
+              <c04 id="ref305" level="file">
+                <did>
+                  <container type="Box">17</container>
+                  <unittitle>Springbrook Upkeep</unittitle>
+                  <unitdate normal="1960/1969" type="inclusive" calendar="gregorian" era="ce">1960s</unitdate>
+                </did>
+              </c04>
+            </c03>
+            <c03 id="ref306" level="file">
+              <did>
+                <unittitle>1970s</unittitle>
+              </did>
+              <c04 id="ref307" level="file">
+                <did>
+                  <container type="Box">18</container>
+                  <unittitle>Family Correspondence from Nairobi, Kenya</unittitle>
+                  <unitdate normal="1972/1973" type="inclusive" calendar="gregorian" era="ce">1972-1973</unitdate>
+                </did>
+              </c04>
+              <c04 id="ref308" level="file">
+                <did>
+                  <container type="Box">18</container>
+                  <unittitle>Professional Correspondence and papers</unittitle>
+                  <unitdate normal="1970/1979" type="inclusive" calendar="gregorian" era="ce">1970s</unitdate>
+                </did>
+              </c04>
+              <c04 id="ref309" level="file">
+                <did>
+                  <container type="Box">18</container>
+                  <unittitle>Family Correspondence</unittitle>
+                  <unitdate normal="1970/1979" type="inclusive" calendar="gregorian" era="ce">1970s</unitdate>
+                </did>
+              </c04>
+              <c04 id="ref310" level="file">
+                <did>
+                  <container type="Box">18</container>
+                  <unittitle>Correspondence</unittitle>
+                  <unitdate normal="1970/1979" type="inclusive" calendar="gregorian" era="ce">1970s</unitdate>
+                </did>
+              </c04>
+              <c04 id="ref311" level="file">
+                <did>
+                  <container type="Box">18</container>
+                  <unittitle>Baseball game created by Jim</unittitle>
+                  <unitdate normal="1955/1965" type="inclusive" calendar="gregorian" era="ce">c. 1960s</unitdate>
+                </did>
+              </c04>
+            </c03>
+            <c03 id="ref312" level="file">
+              <did>
+                <unittitle>Clippings, photographs</unittitle>
+                <unitdate normal="1980/1999" type="inclusive" calendar="gregorian" era="ce">1980s- 1990s</unitdate>
+              </did>
+              <c04 id="ref313" level="file">
+                <did>
+                  <container type="Box">18</container>
+                  <unittitle>Safire</unittitle>
+                </did>
+              </c04>
+              <c04 id="ref314" level="file">
+                <did>
+                  <container type="Box">18</container>
+                  <unittitle>Clippings</unittitle>
+                </did>
+              </c04>
+              <c04 id="ref315" level="file">
+                <did>
+                  <container type="Box">19</container>
+                  <unittitle>Photographs</unittitle>
+                </did>
+              </c04>
+              <c04 id="ref316" level="file">
+                <did>
+                  <container type="Box">19</container>
+                  <unittitle>Magic Mountain</unittitle>
+                </did>
+              </c04>
+              <c04 id="ref317" level="file">
+                <did>
+                  <container type="Box">19</container>
+                  <unittitle>Political Interests</unittitle>
+                </did>
+              </c04>
+              <c04 id="ref318" level="file">
+                <did>
+                  <container type="Box">19</container>
+                  <unittitle>Economics in daily life</unittitle>
+                </did>
+              </c04>
+              <c04 id="ref319" level="file">
+                <did>
+                  <container type="Box">19</container>
+                  <unittitle>General Admiration</unittitle>
+                </did>
+              </c04>
+              <c04 id="ref320" level="file">
+                <did>
+                  <container type="Box">19</container>
+                  <unittitle>Betty's health</unittitle>
+                </did>
+              </c04>
+              <c04 id="ref321" level="file">
+                <did>
+                  <container type="Box">19</container>
+                  <unittitle>Miscellaneous papers at time of his death</unittitle>
+                </did>
+              </c04>
+              <c04 id="ref322" level="file">
+                <did>
+                  <container type="Box">19</container>
+                  <unittitle>Professional Correspondence</unittitle>
+                  <unitdate normal="1980/2001" type="inclusive" calendar="gregorian" era="ce">1980s-2001</unitdate>
+                </did>
+              </c04>
+              <c04 id="ref323" level="file">
+                <did>
+                  <container type="Box">19</container>
+                  <unittitle>Family Correspondence</unittitle>
+                  <unitdate normal="1980/1999" type="inclusive" calendar="gregorian" era="ce">1980s-1990s</unitdate>
+                </did>
+              </c04>
+              <c04 id="ref324" level="file">
+                <did>
+                  <container type="Box">19</container>
+                  <unittitle>Correspondence</unittitle>
+                  <unitdate normal="1930/2002" type="inclusive" calendar="gregorian" era="ce">1980s, 2001</unitdate>
+                </did>
+              </c04>
+              <c04 id="ref325" level="file">
+                <did>
+                  <container type="Box">19</container>
+                  <unittitle>Work in progress</unittitle>
+                  <unitdate normal="2001/2001" calendar="gregorian" era="ce">2001</unitdate>
+                </did>
+              </c04>
+              <c04 id="ref326" level="file">
+                <did>
+                  <container type="Box">19</container>
+                  <unittitle>Dick Finn</unittitle>
+                </did>
+              </c04>
+            </c03>
+          </c02>
+        </c01>
+        <c01 id="ref328" level="series">
+          <did>
+            <unitid>Accession 2005-M-006</unitid>
+            <unittitle>Additional Material</unittitle>
+          </did>
+          <c02 id="ref329" level="file">
+            <did>
+              <container type="Box">1</container>
+              <container type="Folder">1</container>
+              <unittitle>Letter to Linda Blum re: tenure decision at the University of Michigan</unittitle>
+              <unitdate normal="1993/1993" calendar="gregorian" era="ce">1993</unitdate>
+            </did>
+          </c02>
+          <c02 id="ref330" level="file">
+            <did>
+              <unittitle>Yale University. Local 34 strike in 1984</unittitle>
+            </did>
+            <c03 id="ref331" level="file">
+              <did>
+                <container type="Box">1</container>
+                <container type="Folder">2</container>
+                <unittitle>Letter from Tobin to Roger Tobin and Linda Blum describing the strike</unittitle>
+                <unitdate normal="1984/1984" calendar="gregorian" era="ce">[1984]</unitdate>
+              </did>
+            </c03>
+            <c03 id="ref332" level="file">
+              <did>
+                <container type="Box">1</container>
+                <container type="Folder">3 - 4</container>
+                <unittitle>Reports, memoranda, and newsletters</unittitle>
+                <unitdate normal="1984/1984" calendar="gregorian" era="ce">1984</unitdate>
+              </did>
+            </c03>
+          </c02>
+        </c01>
+        <c01 id="ref333" level="series">
+          <did>
+            <unitid>Accession 2006-M-100</unitid>
+            <unittitle>Additional Material</unittitle>
+            <unitdate calendar="gregorian" era="ce">1963-1987</unitdate>
+          </did>
+          <scopecontent>
+            <p>This accession consists of materials contributed to the collection by William C. Brainard.</p>
+          </scopecontent>
+          <c02 id="ref334" level="file">
+            <did>
+              <container type="Box">1</container>
+              <unittitle>Student loans and tuition postponement programs</unittitle>
+              <unitdate normal="1930/2002" type="inclusive" calendar="gregorian" era="ce">1968-1987, no date</unitdate>
+            </did>
+          </c02>
+          <c02 id="ref335" level="file">
+            <did>
+              <container type="Box">1</container>
+              <unittitle>Ford Foundation, Massachusetts Institute of Technology, and Yale University study on future United States economic growth</unittitle>
+              <unitdate normal="1930/2002" type="inclusive" calendar="gregorian" era="ce">1963-1967, no date</unitdate>
+            </did>
+          </c02>
+          <c02 id="ref336" level="file">
+            <did>
+              <container type="Box">2</container>
+              <unittitle>McGovern, George, campaign</unittitle>
+              <unitdate normal="1930/2002" type="inclusive" calendar="gregorian" era="ce">1967-1972, no date</unitdate>
+            </did>
+          </c02>
+          <c02 id="ref337" level="file">
+            <did>
+              <container type="Box">2</container>
+              <unittitle>University endowments</unittitle>
+              <unitdate normal="1930/2002" type="inclusive" calendar="gregorian" era="ce">1970-1978, no date</unitdate>
+            </did>
+          </c02>
+        </c01>
+        <c01 id="ref339" level="series">
+          <did>
+            <unitid>Accession 2006-M-101</unitid>
+            <unittitle>Additional Material</unittitle>
+            <unitdate calendar="gregorian" era="ce">1993-1996</unitdate>
+          </did>
+          <scopecontent>
+            <p>Original audio, film, and video recordings, as well as preservation masters and duplicating masters may not be played. Readers may only play use copies. If a use copy of a particular recording does not exist, researchers must consult with the reference archivist for policies and procedures regarding the creation of duplicating master and use copies of original recordings.</p>
+          </scopecontent>
+          <c02 id="ref340" level="file">
+            <did>
+              <container type="Box">1</container>
+              <unittitle>Interview with Tobin</unittitle>
+              <unitdate normal="1930/2002" type="inclusive" calendar="gregorian" era="ce">1996 Nov 7</unitdate>
+            </did>
+          </c02>
+          <c02 id="ref341" level="file">
+            <did>
+              <container type="Box">2</container>
+              <unittitle>XIX International Conference, "The Third Round: The Sunshine Economy" [on Mediterranean tourism; organized by the Pio ManzÃ¹ Research Centre;</unittitle>
+              <unitdate normal="1930/2002" type="inclusive" calendar="gregorian" era="ce">1993 Oct</unitdate>
+            </did>
+          </c02>
+        </c01>
+        <c01 id="ref343" level="series">
+          <did>
+            <unitid>Accession 2007-M-009</unitid>
+            <unittitle>Additional Material</unittitle>
+            <unitdate calendar="gregorian" era="ce">1947</unitdate>
+          </did>
+          <c02 id="ref344" level="file">
+            <did>
+              <container type="Box">1</container>
+              <container type="Folder">1</container>
+              <unittitle>"A Theoretical and Statistical Analysis of Consumer Saving," [James Tobin's Harvard Ph.D. dissertation]</unittitle>
+              <unitdate normal="1947/1947" calendar="gregorian" era="ce">1947</unitdate>
+            </did>
+          </c02>
+        </c01>
+      </dsc>
+   </archdesc>
+</ead>

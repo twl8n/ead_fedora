@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <foxml:digitalObject
    VERSION="1.1"
-   PID="<%= rh{'pid'} %>"
+   PID="<%= rh['pid'] %>"
    xmlns:foxml="info:fedora/fedora-system:def/foxml#"
    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
    xsi:schemaLocation="info:fedora/fedora-system:def/foxml# http://www.fedora.info/definitions/1/0/foxml1-1.xsd">
   <!-- Fix label? Where to get the value? -->
   <foxml:objectProperties>
     <foxml:property NAME="info:fedora/fedora-system:def/model#state" VALUE="Active"/>
-    <foxml:property NAME="info:fedora/fedora-system:def/model#label" VALUE="<%= rh{'agn_title'} %>"/>
+    <foxml:property NAME="info:fedora/fedora-system:def/model#label" VALUE="<%= rh['title'] %>"/>
     <foxml:property NAME="info:fedora/fedora-system:def/model#ownerId" VALUE="fedoraAdmin"/>
-    <foxml:property NAME="info:fedora/fedora-system:def/model#createdDate" VALUE="<%= rh{'ef_create_date'} %>"/>
-    <foxml:property NAME="info:fedora/fedora-system:def/view#lastModifiedDate" VALUE="<%= rh{'ef_create_date'} %>"/>
+    <foxml:property NAME="info:fedora/fedora-system:def/model#createdDate" VALUE="<%= rh['ef_create_date'] %>"/>
+    <foxml:property NAME="info:fedora/fedora-system:def/view#lastModifiedDate" VALUE="<%= rh['ef_create_date'] %>"/>
   </foxml:objectProperties>
 
   <foxml:datastream ID="DC" STATE="A" CONTROL_GROUP="X" VERSIONABLE="true">
@@ -19,7 +19,7 @@
     <foxml:datastreamVersion
        ID="DC1.0"
        LABEL="Dublin Core Record for this object" 
-       CREATED="<%= rh{'ef_create_date'} %>" 
+       CREATED="<%= rh['ef_create_date'] %>" 
        MIMETYPE="text/xml"
        FORMAT_URI="http://www.openarchives.org/OAI/2.0/oai_dc/"
        SIZE="406">
@@ -33,14 +33,14 @@
           <dc:description>
 	    <!-- a contextual comment, "this is a collection", "this
 	    is a series" include membership comment too. -->
-	    <%= rh{'agn_description'} %>
+	    <%= rh['description'] %>
 	  </dc:description>
-          <dc:title><%= rh{'agn_title'} %></dc:title>
-          <dc:creator><%= rh{'agn_creator'} %></dc:creator>
-          <dc:identifier><%= rh{'agn_id'} %></dc:identifier>
+          <dc:title><%= rh['title'] %></dc:title>
+          <dc:creator><%= rh['creator'] %></dc:creator>
+          <dc:identifier><%= rh['id'] %></dc:identifier>
 
 	  <!-- if container then add c0x id -->
-          <dc:identifier><%= rh{'agn_id'} %></dc:identifier>
+          <dc:identifier><%= rh['id'] %></dc:identifier>
 	  
         </oai_dc:dc>
       </foxml:xmlContent>
@@ -52,7 +52,7 @@
     <foxml:datastreamVersion
        ID="RELS-EXT.0"
        LABEL=""
-       CREATED="<%= rh{'ef_create_date'} %>"
+       CREATED="<%= rh['ef_create_date'] %>"
        MIMETYPE="text/xml"
        SIZE="302">
       <foxml:xmlContent>
@@ -66,7 +66,7 @@
 	       get then guidelines.  Must match PID in the header.
 	       -->
 	  
-          <rdf:Description rdf:about="info:fedora/<%= rh{'pid'} %>">
+          <rdf:Description rdf:about="info:fedora/<%= rh['pid'] %>">
 
 	    <!-- Learn more about hasModel. For now collection series,
 	    file, item all have the same model. -->
@@ -75,9 +75,9 @@
 	    
 	    <!-- If is a container then add isMemberOf element using parent PID. -->
 
-	    <% if rh{'is_container'} %>
+	    <% if rh['is_container'] %>
             <isMemberOf xmlns="info:fedora/fedora-system:def/relations-external#"
-			rdf:resource="info:fedora/<%= rh{'parent_pid'} %>" /> 
+			rdf:resource="info:fedora/<%= rh['parent_pid'] %>" /> 
 	    <% end %>
 	    
           </rdf:Description>
@@ -91,47 +91,42 @@
     <foxml:datastreamVersion
        ID="descMetadata.0"
        LABEL=""
-       CREATED="<%= rh{'ef_create_date'} %>"
+       CREATED="<%= rh['ef_create_date'] %>"
        MIMETYPE="text/xml"
        SIZE="276">
       <foxml:xmlContent>
-
 	<!-- Why does Lynn's XML have so many more mods elements? See
 	     "Set object for collection M1292" at:
 	     https://wiki.duraspace.org/display/HYPAT/Xanadu+EAD+and+Hypatia+fixture+objects
-	     -->
-
+	  -->
+	
         <mods:mods xmlns:mods="http://www.loc.gov/mods/v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="3.3" xsi:schemaLocation="http://www.loc.gov/mods/v3 http://www.loc.gov/standards/mods/v3/mods-3-3.xsd">
+	  
           <mods:titleInfo>
-
-	    <!-- unittitle -->
-	    <!-- duplicate of dc:title -->
-
-            <mods:title><%= rh{'agn_title'} %></mods:title>
+            <mods:title><%= rh['title'] %></mods:title>
           </mods:titleInfo>
+          <mods:identifier type="local"><%= rh['type'] %></mods:identifier>
+          <mods:identifier type="local"><%= rh['id'] %></mods:identifier>
 
-	  <!-- Look this up for containers. -->
-
-          <mods:typeOfResource <%= rh{'agn_type_of_resource'} %>/>
-
-	  <!-- </bioghist> <scopecontent -->
-
+	  <% if rh['is_container'] %>
+	  
+          <mods:typeOfResource collection="no"/>
+	  
+	  <% else %>
+	  
           <mods:abstract displayLabel="Scope and Contents">
-	    <%= rh{'agn_scope'} %>
+	    <%= rh['scope'] %>
 	  </mods:abstract> 
-
-          <mods:identifier type="local"><%= rh{'agn_type'} %></mods:identifier>
-
-	  <% if ! rh{'is_container'} %>
+	  
 	  <!-- What is "marcrelator"? The date is part of the EAD
-	  persname, so I've copied it over just as a computer
-	  would. -->
-
+	       persname, so I've copied it over just as a computer
+	       would. -->
+	  
           <mods:name type="personal">
-            <mods:namePart><%= rh{'agn_creator'} %></mods:namePart>
-            <mods:role>
-              <mods:roleTerm authority="marcrelator" type="text">creator</mods:roleTerm>
-            </mods:role>
+	    <mods:namePart><%= rh['creator'] %></mods:namePart>
+	    <mods:role>
+	      <mods:roleTerm authority="marcrelator" type="text">creator</mods:roleTerm>
+	    </mods:role>
           </mods:name>
 	  
 	  <!-- I have used the recommended <repository> <corpname>,
@@ -142,7 +137,7 @@
                <publisher>Manuscripts and Archives</publisher> -->
 	  
           <mods:name type="corporate">
-            <mods:namePart><%= rh{'agn_corp_name'} %></mods:namePart>
+            <mods:namePart><%= rh['corp_name'] %></mods:namePart>
             <mods:role>
               <mods:roleTerm authority="local" type="text">repository</mods:roleTerm>
             </mods:role>
@@ -154,26 +149,20 @@
 	  
           <mods:genre authority="aat"></mods:genre>
 
-	  <!-- <unitdate> -->
-
           <mods:originInfo>
-            <mods:dateCreated><%= rh{'agn_create_date'} %></mods:dateCreated>
+            <mods:dateCreated><%= rh['create_date'] %></mods:dateCreated>
           </mods:originInfo>
 
           <mods:language>
             <mods:languageTerm authority="iso639-2b" type="code">eng</mods:languageTerm>
           </mods:language>
 
-	  <!-- <physdesc> -->
-
-          <mods:physicalDescription>
-            <mods:extent><%= rh{'agn_extent'} %></mods:extent>
+	  <mods:physicalDescription>
+            <mods:extent><%= rh['extent'] %></mods:extent>
           </mods:physicalDescription>
 
-	  <!-- scopecontent -->
-	  
           <mods:abstract>
-	    <%= rh{'agn_abstract'} %>
+	    <%= rh['abstract'] %>
 	  </mods:abstract>
 	  
 	  <!-- Not in Gretchen's crosswalk. For Xanadu it said "The
@@ -185,22 +174,16 @@
 
 	  <!-- <scopcontent> has no attribute "label" -->
 
-	  <!-- <bioghist> (not including <head>) -->
-
           <mods:abstract displayLabel="Biography">
-	    <%= rh{'agn_bio'} %>
+	    <%= rh['agn_bio'] %>
 	  </mods:abstract>
-
-	  <!-- <acqinfo> -->
 
           <mods:abstract displayLabel="Acquisition Information">
-	    <%= rh{'agn_acq_info'} %>
+	    <%= rh['agn_acq_info'] %>
 	  </mods:abstract>
 
-	  <!-- prefercite -->
-
           <mods:abstract displayLabel="Preferred Citation">
-	    <%= rh{'agn_cite'} %>
+	    <%= rh['agn_cite'] %>
 	  </mods:abstract>
 
 	  <!-- Tobin has no <controlaccess> element. Example topic
@@ -227,13 +210,8 @@
 	    items.
 
 	  </mods:accessCondition>
-	  <!-- end ! rh{'is_container'} -->
+	  <!-- end of else rh['is_container'] -->
 	  <% end %>
-
-	  <!-- The Tobin id has a space in it. From <unitid> -->
-
-          <mods:identifier type="local"><%= rh{'agn_id'} %></mods:identifier>
-
         </mods:mods>
       </foxml:xmlContent>
     </foxml:datastreamVersion>
@@ -244,7 +222,7 @@
     <foxml:datastreamVersion
        ID="rightsMetadata.0"
        LABEL=""
-       CREATED="<%= rh{'ef_create_date'} %>"
+       CREATED="<%= rh['ef_create_date'] %>"
        MIMETYPE="text/xml"
        SIZE="302">
 
@@ -272,7 +250,7 @@
     <foxml:datastreamVersion
        ID="identityMetadata.0"
        LABEL=""
-       CREATED="<%= rh{'ef_create_date'} %>"
+       CREATED="<%= rh['ef_create_date'] %>"
        MIMETYPE="text/xml"
        SIZE="302">
       <foxml:xmlContent>
@@ -283,14 +261,14 @@
 	       I've entered it as a new collection name in keeping
 	       with the examples. -->
 
-          <objectId><%= rh{'pid'} %></objectId>
-          <objectType><%= rh{'agn_object_type'} %></objectType>
-          <setType><%= rh{'agn_set_type'} %></setType>
+          <objectId><%= rh['pid'] %></objectId>
+          <objectType><%= rh['object_type'] %></objectType>
+          <setType><%= rh['set_type'] %></setType>
 
 	  <!-- I've used unittitle (again). Where did Lynn fill this
 	       in from? It appears he used data from another source. -->
 	  
-          <objectLabel><%= rh{'agn_title'} %></objectLabel>
+          <objectLabel><%= rh['title'] %></objectLabel>
 
 	  <!-- What is objectCreator? -->
           <objectCreator></objectCreator>
@@ -299,8 +277,8 @@
 	       agreement. Does Tobin even have an agreement? Check to
 	       see what type of agreement is below: -->
 
-          <agreementId><%= rh{'agn_agreement_id'} %></agreementId>
-          <tag>Project : <%= rh{'agn_project'} %></tag>
+          <agreementId><%= rh['agreement_id'] %></agreementId>
+          <tag>Project : <%= rh['project'] %></tag>
 
         </identityMetadata>
       </foxml:xmlContent>

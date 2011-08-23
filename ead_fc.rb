@@ -46,7 +46,7 @@ class Fx_maker
     @xml = Nokogiri::XML(open(@fname))
 
     # Someone should explain each of the args.
-    generic_template = ERB.new(File.new(generic_t_file).read, nil, "%")
+    @generic_template = ERB.new(File.new(generic_t_file).read, nil, "%")
 
     @pid_namespace = "eadfc"
     @ef_create_date = todays_date()
@@ -63,10 +63,9 @@ class Fx_maker
 
     rh = Hash.new()
 
-    rh{'pid'} = gen_pid()
-    rh{'ef_create_date'} = @ef_create_date
-    rh{'is_container'} = false
-    rh{'type_of_resource'} = 'collection="yes"'
+    rh['pid'] = gen_pid()
+    rh['ef_create_date'] = @ef_create_date
+    rh['is_container'] = false
 
     # Ruby objects are always passed by reference? This should update
     # rh as a side effect.
@@ -77,7 +76,7 @@ class Fx_maker
     # we might not need binding() which passes the current execution
     # heap space.
     
-    @xml_out = generic_template.result(binding())
+    @xml_out = @generic_template.result(binding())
     ingest_internal()
     write_foxml(rh['pid'])
     @cn_loh.push(rh)
@@ -93,11 +92,17 @@ class Fx_maker
 
     # Modify @cn_loh.
     
-    rh = Hash.new()
-
     # If we aren't using the index xx, remove it.
 
     nset.children.each_with_index { |ele,xx|
+      # debug
+      if xx > 30
+        print "dev testing break after 30 containers\n"
+        break
+      end
+     
+      rh = Hash.new()
+
       if ele.name.match(/^c\d+/)
 
         # Actions to implment here: Get Fedora PID. Get parent PID
@@ -115,10 +120,17 @@ class Fx_maker
         # type (attr), container (value, string, could be "6-7"), may be
         # multiple <container> elements), unitdate, scopecontent
 
-        # container_element
         rh['container_element'] = ele.name
         rh['container_level'] = ele.attribute('level')
         rh['container_id'] = ele.attribute('id')
+        rh['type_of_resource'] = rh['container_level']
+        rh['id'] = rh['container_id']
+        rh['title'] = "Container id:#{rh['container_id']} level:#{rh['container_level']}"
+        rh['description'] = rh['title'] # used by DC.
+        rh['creator'] = "See parent object #{rh['parent_pid']}"
+        rh['corp_name'] = "See parent object #{rh['parent_pid']}"
+        rh['object_type'] = rh['container_element']
+        rh['set_type'] = "container"
 
         # Note: container_type and container_value need to be a list
         # of hash due to possible multiple values!
@@ -137,28 +149,37 @@ class Fx_maker
 
         # <container> element(s) are in a list of hashes.
         rh['ct'] = Array.new()
-        nset.xpath("./xmlns:c02/xmlns:c03/xmlns:did")[0].children.each { |child|
-          if child.name.match(/container/)
-            ch = Hash.new
-            ch['container_type'] = child.attribute('type')
-            ch['container_value'] = child.content
-            rh['ct'].push(ch)
-          end
-          
-          if child.name.match(/unitdate/)
-            rh['container_unitdate'] = child.content
-          end
-          
-          if child.name.match(/unittitle/)
-            rh['container_unittitle'] = child.content
-          end
-        }
+
+        if ele.xpath("./xmlns:did")[0].class.to_s.match(/nil/i)
+          print "nil did for #{ele.name} #{rh['id']}\n"
+          print "did: #{ele.xpath('./xmlns:did').to_s}\n"
+        else
+          # ele.xpath("./xmlns:c02/xmlns:c03/xmlns:did")[0].children.each { |child|
+          ele.xpath("./xmlns:did")[0].children.each { |child|
+            if child.name.match(/container/)
+              ch = Hash.new
+              ch['container_type'] = child.attribute('type')
+              ch['container_value'] = child.content
+              rh['ct'].push(ch)
+            end
+            
+            if child.name.match(/unitdate/)
+              rh['container_unitdate'] = child.content
+            end
+            
+            if child.name.match(/unittitle/)
+              rh['container_unittitle'] = child.content
+            end
+          }
+        end
+        rh['create_date'] = rh['container_unitdate']
 
         # Get the scopecontent of the current c01 node. If it is not
         # nil look at the children and pull content out of any p
         # elements. Remember that (at least in the nokogiri universe)
         # there are invisible text elements around all other elements.
 
+        rh['container_scope']
         if ele.name.match(/c01/)
           scon = ele.xpath("./xmlns:scopecontent")[0]
           if scon.class.to_s.match(/nil/i)
@@ -168,77 +189,39 @@ class Fx_maker
               tween = ""
               scon.children.each { |pp|
                 if pp.name.match(/p/)
-                  rh['scopecontent'].concat("#{tween}#{pp.content.strip.chomp}")
+                  rh['container_scope'].concat("#{tween}#{pp.content.strip.chomp}")
                   tween = "\n\n"
                 end
               }
             end
           end
         end
+        rh['scope'] = rh['container_scope']
 
-        # collection info
+        # collection info, most of which doesn't apply to containers,
+        # so these are notes for checking correspondence.
 
-        rh['titleproper'] = @xml.xpath("//*/xmlns:titleproper[@type='formal']")[0].content
-        rh['title'] = @xml.xpath("//*/xmlns:archdesc/xmlns:did/xmlns:unittitle")[0].content
-        rh['creator'] = @xml.xpath("//*/xmlns:origination[@label='Creator:']/xmlns:persname")[0].content
+        # must get from parent
+        # rh['titleproper'] = @xml.xpath("//*/xmlns:titleproper[@type='formal']")[0].content
+        # rh['title'] = @xml.xpath("//*/xmlns:archdesc/xmlns:did/xmlns:unittitle")[0].content
+        # rh['creator'] = @xml.xpath("//*/xmlns:origination[@label='Creator:']/xmlns:persname")[0].content
+        # rh['corp_name'] = ""
+        # rh['extent'] = @xml.xpath("//*/xmlns:archdesc/xmlns:did/xmlns:physdesc/xmlns:extent")[0].content
+        # rh['abstract'] = @xml.xpath("//*/xmlns:archdesc/xmlns:did/xmlns:abstract")[0].content
+        # rh['bio'] = ""
+        # rh['acq_info'] = ""
+        # rh['cite'] = ""
+        # rh['type'] = @xml.xpath("//*/xmlns:archdesc")[0].attributes['level']
+        # rh['agreement_id'] = ""
+        # rh['project'] = rh['title']
         
-        rh['id'] = @xml.xpath("//*/xmlns:archdesc/xmlns:did/xmlns:unitid")[0].content
-
-        tween = ""
-        rh['scope'] = ""
-        @xml.xpath("//*/xmlns:archdesc/xmlns:scopecontent/xmlns:p").each { |ele|
-          rh['scope'] += "#{tween}#{ele.content}"
-          tween = "\n\n"
-        }
-        
-        tween = ""
-        rh['corp_name'] = ""
-        @xml.xpath("//*/xmlns:publicationstmt/xmlns:publisher").each { |ele|
-          rh['corp_name'] += "#{tween}#{ele.content}"
-          tween = ", "
-        }
-        rh['create_date'] = @xml.xpath("//*/xmlns:archdesc/xmlns:did/xmlns:unitdate")[0].content
-        
-        rh['extent'] = @xml.xpath("//*/xmlns:archdesc/xmlns:did/xmlns:physdesc/xmlns:extent")[0].content
-        
-        rh['abstract'] = @xml.xpath("//*/xmlns:archdesc/xmlns:did/xmlns:abstract")[0].content
-        tween = ""
-        rh['bio'] = ""
-        @xml.xpath("//*/xmlns:archdesc/xmlns:bioghist/xmlns:p").each { |ele|
-          rh['bio'] += "#{tween}#{ele.content}"
-          tween = "\n\n"
-        }
-        
-        tween = ""
-        rh['acq_info'] = ""
-        @xml.xpath("//*/xmlns:archdesc/xmlns:descgrp/xmlns:descgrp/xmlns:acqinfo/xmlns:p").each { |ele|
-          rh['acq_info'] += "#{tween}#{ele.content}"
-          tween = "\n\n"
-        }
-        
-        tween = ""
-        rh['cite'] = ""
-        @xml.xpath("//*/xmlns:archdesc/xmlns:descgrp/xmlns:prefercite/xmlns:p").each { |ele|
-          rh['cite'] += "#{tween}#{ele.content.strip}"
-          tween = "\n\n"
-        }
-
-        rh['type'] = @xml.xpath("//*/xmlns:archdesc")[0].attributes['level']
-        
-        if (rh['type'] == "collection")
-          rh['object_type'] = "set"
-          rh['set_type'] = rh['type']
-        end
-        
-        rh['agreement_id'] = ""
-        rh['project'] = rh['title']
-        
-        
-        @xml_out = generic_template.result(binding())
+        @xml_out = @generic_template.result(binding())
         ingest_internal()
         write_foxml(rh['pid'])
+        print "finished #{rh['id']}\n"
 
-        result = container_parse(ele)
+        @cn_loh.push(rh)
+        container_parse(ele)
 
         # Actions to implment here: Pop stack. When we eventually
         # implement "isParentOf" then this is where we will modify the
@@ -249,7 +232,6 @@ class Fx_maker
 
       end
     }
-    return "#{nset.name} #{nset.get_attribute('id')}"
   end
 
 
@@ -398,9 +380,9 @@ class Fx_maker
 
     return Time.now.utc.strftime("%Y-%m-%dT%T.000Z")
   end
-
-def gen_pid
-
+  
+  def gen_pid
+    
     # If we use a "format" param in the URL, then the returned object
     # is of the expected type. If not, it is probably necessary to
     # include a :content_type hash key-value as the third arg to

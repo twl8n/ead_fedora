@@ -64,6 +64,7 @@ class Fx_maker
     rh = Hash.new()
 
     rh['pid'] = gen_pid()
+    @top_pid = rh['pid'] 
     rh['ef_create_date'] = @ef_create_date
     rh['is_container'] = false
 
@@ -125,10 +126,10 @@ class Fx_maker
         rh['container_id'] = ele.attribute('id')
         rh['type_of_resource'] = rh['container_level']
         rh['id'] = rh['container_id']
-        rh['title'] = "Container id:#{rh['container_id']} level:#{rh['container_level']}"
+        rh['title'] = "Container #{rh['container_element']} id:#{rh['container_id']} level:#{rh['container_level']}"
         rh['description'] = rh['title'] # used by DC.
-        rh['creator'] = "See parent object #{rh['parent_pid']}"
-        rh['corp_name'] = "See parent object #{rh['parent_pid']}"
+        rh['creator'] = "See parent object #{@top_pid}"
+        rh['corp_name'] = "See parent object #{@top_pid}"
         rh['object_type'] = rh['container_element']
         rh['set_type'] = "container"
 
@@ -151,10 +152,9 @@ class Fx_maker
         rh['ct'] = Array.new()
 
         if ele.xpath("./xmlns:did")[0].class.to_s.match(/nil/i)
-          print "nil did for #{ele.name} #{rh['id']}\n"
-          print "did: #{ele.xpath('./xmlns:did').to_s}\n"
+          # print "nil did for #{ele.name} #{rh['id']}\n"
+          # print "did: #{ele.xpath('./xmlns:did').to_s}\n"
         else
-          # ele.xpath("./xmlns:c02/xmlns:c03/xmlns:did")[0].children.each { |child|
           ele.xpath("./xmlns:did")[0].children.each { |child|
             if child.name.match(/container/)
               ch = Hash.new
@@ -174,10 +174,11 @@ class Fx_maker
         end
         rh['create_date'] = rh['container_unitdate']
 
-        # Get the scopecontent of the current c01 node. If it is not
-        # nil look at the children and pull content out of any p
-        # elements. Remember that (at least in the nokogiri universe)
-        # there are invisible text elements around all other elements.
+        # If the current node is a c01 node then get the
+        # scopecontent. If it is not nil look at the children and pull
+        # content out of any p elements. Remember that (at least in
+        # the nokogiri universe) there are invisible text elements
+        # around all other elements.
 
         rh['container_scope']
         if ele.name.match(/c01/)
@@ -218,7 +219,7 @@ class Fx_maker
         @xml_out = @generic_template.result(binding())
         ingest_internal()
         write_foxml(rh['pid'])
-        print "finished #{rh['id']}\n"
+        print "finished: pid: #{rh['pid']} id: #{rh['id']}\n"
 
         @cn_loh.push(rh)
         container_parse(ele)
@@ -229,6 +230,9 @@ class Fx_maker
         # created during the recursion.
 
         @cn_loh.pop()
+
+        # debug
+        # exit
 
       end
     }
@@ -354,14 +358,14 @@ class Fx_maker
 
     if true
       deb = payload.inspect()
-      print "working uri: #{wuri}\nvar: #{deb[0,10]}\n...\n#{deb[-80,80]}\n"
+      # print "working uri: #{wuri}\nvar: #{deb[0,10]}\n...\n#{deb[-80,80]}\n"
       ingest_result_xml = RestClient.post(wuri,
                                           payload,
                                           :content_type => "text/xml")
       return ingest_result_xml
     else
       var = payload
-      print "working uri: #{wuri}\nvar: #{payload.to_s[0,10]}\n again: #{var}more stuff\n"
+      # print "working uri: #{wuri}\nvar: #{payload.to_s[0,10]}\n again: #{var}more stuff\n"
       return ""
     end
   end

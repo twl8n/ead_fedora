@@ -154,10 +154,26 @@ class Fx_maker
           end
         }
 
+        # Get the scopecontent of the current c01 node. If it is not
+        # nil look at the children and pull content out of any p
+        # elements. Remember that (at least in the nokogiri universe)
+        # there are invisible text elements around all other elements.
+
         if ele.name.match(/c01/)
-          
-          # Only occurs as a child of c01
-          container_scopecontent
+          scon = ele.xpath("./xmlns:scopecontent")[0]
+          if scon.class.to_s.match(/nil/i)
+            # When nil do nothing.
+          else
+            if scon.name.match(/scopecontent/)
+              tween = ""
+              scon.children.each { |pp|
+                if pp.name.match(/p/)
+                  rh['scopecontent'].concat("#{tween}#{pp.content.strip.chomp}")
+                  tween = "\n\n"
+                end
+              }
+            end
+          end
         end
 
         # collection info

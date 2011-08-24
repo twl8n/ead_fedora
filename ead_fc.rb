@@ -25,8 +25,7 @@ module Ead_fc
 
 class Fx_maker
 
-  # This class can have all the action in initialize() then exit.
-  # Name the calling code "run.rb" which should be pretty obvious.
+  # This class has all the action in initialize(). 
 
   attr_reader :pid
 
@@ -37,10 +36,11 @@ class Fx_maker
     # foreach container, pull info, make foxml
     # ingest each foxml into Fedora via rest.
     
-    # ef_ is for ead_fedora system technical data
+    # ef_ prefix is memnonic for ead_fedora, system technical data
 
     @fname = fname
     @base_url = Base_url
+    print "Base URL: #{@base_url}\n"
     @pid_namespace = Pid_namespace
     @ef_create_date = todays_date()
 
@@ -66,26 +66,33 @@ class Fx_maker
     rh['ef_create_date'] = @ef_create_date
     rh['is_container'] = false
 
-    # Ruby objects are always passed by reference? This should update
-    # rh as a side effect.
+    # Ruby objects are always passed by reference. (Except Fixnum.)
+    # collection_parse updates rh. Side effects prevent bugs, right?
 
     collection_parse(rh)
+    @top_project = rh['project']
 
-    # Since we are using instance vars which are essentially global,
-    # we might not need binding() which passes the current execution
-    # heap space.
+    # binding() passes the current execution heap space.
+    # Why don't we move these lines inside collection_parse()?
     
     @xml_out = @generic_template.result(binding())
     ingest_internal()
     write_foxml(rh['pid'])
+
+    # Push the collection data onto the big loh so that the
+    # collection's children can access their parent's data.
+
     @cn_loh.push(rh)
 
-    # Process the container elements, parse, create foxml, ingest, write to file.
+    # Process the container elements, parse, create foxml, ingest,
+    # write to file.  Modifies @cn_loh. Why are we setting nset
+    # outside of container_parse()?
 
     nset = @xml.xpath("//*/xmlns:archdesc/xmlns:dsc")
     container_parse(nset)
 
   end # initialize
+
 
   def container_parse(nset)
     @break_set = false
@@ -95,7 +102,7 @@ class Fx_maker
 
     nset.children.each_with_index { |ele,xx|
       #debug
-      if xx > 30 || @break_set
+      if xx > 5 || @break_set
         print "dev testing break after 30 containers\n"
         @break_set = true
         break
@@ -103,7 +110,7 @@ class Fx_maker
       
       rh = Hash.new()
 
-      if ele.name.match(/^c\d+/)
+      if ele.name.match(/^c\d+/i)
 
         # Actions to implment here: Get Fedora PID. Get parent PID
         # from the stack. Save current node info in a hash, push onto
@@ -124,6 +131,7 @@ class Fx_maker
         rh['container_level'] = ele.attribute('level')
         rh['container_id'] = ele.attribute('id')
         rh['type_of_resource'] = rh['container_level']
+        rh['type'] = rh['container_level']
         rh['id'] = rh['container_id']
         rh['title'] = "Container #{rh['container_element']} id:#{rh['container_id']} level:#{rh['container_level']}"
         rh['description'] = rh['title'] # used by DC.
@@ -131,6 +139,7 @@ class Fx_maker
         rh['corp_name'] = "See parent object #{@top_pid}"
         rh['object_type'] = rh['container_element']
         rh['set_type'] = "container"
+        rh['project'] = @top_project
 
         # Note: container_type and container_value need to be a list
         # of hash due to possible multiple values!

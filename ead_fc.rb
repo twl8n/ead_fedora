@@ -19,6 +19,7 @@ require 'rubygems'
 require 'rest-client'
 require 'nokogiri'
 require 'erb'
+require 'config.rb'
 
 module Ead_fc
 
@@ -36,20 +37,17 @@ class Fx_maker
     # foreach container, pull info, make foxml
     # ingest each foxml into Fedora via rest.
     
-    # agn_ for agnostic_ which is a generic name of some data field.
-    
     # ef_ is for ead_fedora system technical data
 
     @fname = fname
-    @base_url = "http://fedoraAdmin:fedoraAdmin@localhost:8983/fedora"
-    generic_t_file = "/usr/local/projects/ead_fedora/generic.foxml.xml.erb"
-    @xml = Nokogiri::XML(open(@fname))
-
-    # Someone should explain each of the args.
-    @generic_template = ERB.new(File.new(generic_t_file).read, nil, "%")
-
-    @pid_namespace = "eadfc"
+    @base_url = Base_url
+    @pid_namespace = Pid_namespace
     @ef_create_date = todays_date()
+
+    # Someone should explain each of the args for ERB.new.
+    @generic_template = ERB.new(File.new(Generic_t_file).read, nil, "%")
+
+    @xml = Nokogiri::XML(open(@fname))
 
     # collection/container list of hash. Data for each foxml object is
     # in one of the array elements, and each element is a hash.
@@ -90,18 +88,19 @@ class Fx_maker
   end # initialize
 
   def container_parse(nset)
-
+    @break_set = false
     # Modify @cn_loh.
     
     # If we aren't using the index xx, remove it.
 
     nset.children.each_with_index { |ele,xx|
-      # debug
-      # if xx > 30
-      #   print "dev testing break after 30 containers\n"
-      #   break
-      # end
-     
+      #debug
+      if xx > 30 || @break_set
+        print "dev testing break after 30 containers\n"
+        @break_set = true
+        break
+      end
+      
       rh = Hash.new()
 
       if ele.name.match(/^c\d+/)
@@ -339,11 +338,21 @@ class Fx_maker
   def write_foxml(pid)
     fn = pid + ".xml"
     fn.gsub!(/:/,"_")
-    File.open(fn, "wb") { |my_xml|
-      my_xml.write(@xml_out)
+    writer = lambda {
+      File.open(fn, "wb") { |my_xml|
+        my_xml.write(@xml_out)
+      }
     }
+    
+    if File.directory?("foxml")
+      Dir.chdir("foxml") {
+        writer.call 
+      }
+    else
+      writer.call
+    end
   end
-
+    
 
   def ingest_internal
 

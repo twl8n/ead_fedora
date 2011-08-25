@@ -29,7 +29,7 @@ class Fx_maker
 
   attr_reader :pid
 
-  def initialize(fname)
+  def initialize(fname, debug)
     # read the EAD
     # pull info from collection, make foxml
     # Use a foxml erb template
@@ -37,6 +37,11 @@ class Fx_maker
     # ingest each foxml into Fedora via rest.
     
     # ef_ prefix is memnonic for ead_fedora, system technical data
+
+    @debug = false
+    if debug
+      @debug = true
+    end
 
     @fname = fname
     @base_url = Base_url
@@ -102,7 +107,7 @@ class Fx_maker
 
     nset.children.each_with_index { |ele,xx|
       #debug
-      if xx > 5 || @break_set
+      if @debug && (xx > 5 || @break_set)
         print "dev testing break after 30 containers\n"
         @break_set = true
         break
@@ -135,8 +140,8 @@ class Fx_maker
         rh['id'] = rh['container_id']
         rh['title'] = "Container #{rh['container_element']} id:#{rh['container_id']} level:#{rh['container_level']}"
         rh['description'] = rh['title'] # used by DC.
-        rh['creator'] = "See parent object #{@top_pid}"
-        rh['corp_name'] = "See parent object #{@top_pid}"
+        rh['creator'] = "See collection object #{@top_pid}"
+        rh['corp_name'] = "See collection object #{@top_pid}"
         rh['object_type'] = rh['container_element']
         rh['set_type'] = "container"
         rh['project'] = @top_project

@@ -105,9 +105,12 @@
           <mods:identifier type="local"><%= rh['id'] %></mods:identifier>
 
 	  <% if rh['is_container'] %>
-	  
           <mods:typeOfResource collection="no"/>
-	  
+	  <mods:note displayLabel="Location"> 
+	    <% rh['ct'].each { |href| %>
+	    <%= href['container_type'] %> <%= href['container_value'] %>
+	    <% } %>
+	  </mods:note>
 	  <% else %>
 	  
           <mods:abstract displayLabel="Scope and Contents">

@@ -1,0 +1,570 @@
+
+Authors:
+
+Matthew Stephens ms3uf@virginia.edu
+Tom Laudeman twl8n@virginia.edu
+
+Title:
+
+Install Fedora Commons and Tomcat on Fedora Linux
+
+
+License and credits:
+
+All files of this package are Copyright 2011 University of Virginia
+
+All files of this package are licensed under the Apache License.
+Licensed under the Apache License Version 2.0 (the "License"); you may
+not use these files except in compliance with the License.  You may
+obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+implied.  See the License for the specific language governing
+permissions and limitations under the License.
+
+
+Table of contents
+-----------------
+Conventions used
+Install Tomcat6 via yum
+MySQL notes
+MySQL session transcript
+Download the Fedora Commons installer
+Running The Fedora Commons installer
+500 Error from Fedora
+How to determine your $CATALINA_HOME
+Managing Fedora From Remote Servers
+Tomcat post install notes
+Install Tomcat6 manually
+Tomcat Catalina blank web page error
+Matt's Tomcat settings
+Tom's Tomcat settings
+
+
+
+
+
+Conventions used
+----------------
+
+$CATALINA_HOME is /usr/share/tomcat6
+
+Linux tomcat userid is tomcat
+
+Linux login userid is mst3k
+
+Linux user mst3k has the root password and can "su -l root". It would be
+sufficient if mst3k were able to "sudo su -l root"
+
+The Linux host is "zeus", although "localhost" is used for many
+instances where a hostname is required.
+
+Java is pre-installed, almost certainly via yum (the Fedora Linux
+package manager).
+
+MySQL is pre-installed, almost certainly via yum.
+
+This documentation has been tested with Fedora Linux 12.
+
+"emacs -nw somefile.txt" means to edit "somefile.txt" with your
+favorite editor. Some files will be edited by mst3k, some by root.
+
+[mst3k@zeus ~]$  uname -a
+Linux zeus.lib.virginia.edu 2.6.32.26-175.fc12.x86_64 #1 SMP Wed Dec 1 21:39:34 UTC 2010 x86_64 x86_64 x86_64 GNU/Linux
+
+[mst3k@zeus ~]$ java -version
+java version "1.6.0_20"
+Java(TM) SE Runtime Environment (build 1.6.0_20-b02)
+Java HotSpot(TM) 64-Bit Server VM (build 16.3-b01, mixed mode)
+
+Shell commands are often listed one per line such as:
+
+cd ~/
+ls -l
+pwd
+
+# Instructions interspersed with commands will be prefixed with a '#'
+# to clarify what is a command and what is comment text.
+
+# Some shell commands and their output are presented as a session
+# transcript snippet with prompt, command(s), and output.
+
+[mst3k@zeus ~]$ id
+uid=501(mst3k) gid=100(users) groups=100(users)
+[mst3k@zeus ~]$
+
+
+
+
+Install Tomcat6 via yum
+-----------------------
+
+su -l root
+yum -y install tomcat6 tomcat6-webapps.noarch tomcat6-admin-webapps.noarch
+/etc/init.d/tomcat6/start
+wget -S http://localhost:8080/
+cp /etc/tomcat6/tomcat6.conf /etc/tomcat6/tomcat6.conf.safe
+
+# Edit the tomcat config file:
+
+emacs -nw /etc/tomcat6/tomcat6.conf
+
+# Insert this line:
+
+JAVA_OPTS="-Xmx1024m -Xms512m -XX:+HeapDumpOnOutOfMemoryError -XX:MaxPermSize=128M -verbose:gc"
+
+# Edit the tomcat-users config file:
+
+emacs -nw /etc/tomcat6/tomcat-users.xml
+
+# Insert these lines:
+
+  <role rolename="tomcat"/>
+  <role rolename="manager"/>
+  <user username="tomcat" password="foobarbaz" roles="tomcat,manager"/>
+
+# Restart. Now you should be able to use the "Status" and "Tomcat
+# Manager" links on the Tomcat home page.
+
+/etc/init.d/tomcat6/restart
+
+# Environment variables CATALINA_BASE, CATALINA_HOME, JASPER_HOME,
+# CATALINA_TMPDIR, JAVA_OPTS are in:
+
+/etc/tomcat6/tomcat6.conf
+
+
+
+
+MySQL notes
+-----------
+
+First I prepared my chosen database (mysql), as per the instructions
+on the Fedora Commons installation page:
+
+https://wiki.duraspace.org/display/FEDORA35/Installation+and+Configuration
+
+I worked as root and prepared no environment variables, as those are
+primarily for client scripts, not the installer.
+
+My one change from the standard procedure was to call my database
+'fedora35' not 'fedora3', this meant I had to (slightly) alter a JDBC
+parameter during the install script (see below).
+
+Interpreting the MySQL grant statement:
+
+grant all on fedora35.* to fedoraAdmin@localhost identified by 'fedoraAdmin';
+
+fedora35.* = the database name is 'fedora35
+
+fedoraAdmin@localhost = the database user is 'fedoraAdmin'
+
+identified by 'fedoraAdmin' = the database password is 'fedoraAdmin'
+
+
+
+
+
+MySQL session transcript
+------------------------
+
+The commands below assume you have installed MySQL, and already set your
+database superuser (root) password.
+
+[mst3k@zeus ~]$ mysql -u root -p 
+Enter password: 
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 2
+Server version: 5.1.47 Source distribution
+
+Copyright (c) 2000, 2010, Oracle and/or its affiliates. All rights reserved.
+This software comes with ABSOLUTELY NO WARRANTY. This is free software,
+and you are welcome to modify and redistribute it under the GPL v2 license
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> show databases;
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
++--------------------+
+1 row in set (0.16 sec)
+
+mysql> create database fedora35;
+Query OK, 1 row affected (0.00 sec)
+
+mysql> grant all on fedora35.* to fedoraAdmin@localhost identified by 'fedoraAdmin';
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> grant all on fedora35.* to fedoraAdmin@'%' identified by 'fedoraAdmin';
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> exit
+Bye
+
+[mst3k@zeus ~]$
+
+
+
+
+Download the Fedora Commons installer
+-------------------------------------
+
+What I should have done:
+
+cd ~/
+wget http://downloads.sourceforge.net/fedora-commons/fcrepo-installer-3.5.jar
+# Continue with "Running The Fedora Commons installer" below.
+
+What I actually did:
+
+cd /usr/local/projects
+mkdir fedora
+cd fedora
+wget http://downloads.sourceforge.net/fedora-commons/fcrepo-installer-3.5.jar
+# Continue with "Running The Fedora Commons installer" below.
+
+The installer wants to create the Fedora home directory, but I
+confused it by saying I wanted Fedora installed into an existing
+directory. It worked fine, but the "should have done" procedure is
+simpler. As far as I can tell, both methods require chown'ing the
+fedora home directory tree after running the installer script. 
+
+Fedora Commons downloads:
+
+https://wiki.duraspace.org/display/FEDORA35/Downloads
+
+Fedora Commons installer download:
+
+http://downloads.sourceforge.net/fedora-commons/fcrepo-installer-3.5.jar
+
+
+
+
+Running The Fedora Commons installer
+------------------------------------
+
+# As root, I ran the installer jar, chown'd the fedore home directory,
+# and finally restart tomcat.
+
+su -l root
+cd /usr/local/projects/fedora
+java -jar fcrepo-installer-3.5.jar
+cd /usr/local/projects
+chown -R tomcat:tomcat ./fedora/
+/etc/init.d/tomcat6 restart      
+exit
+
+# After this, Fedora should be available at:
+
+http://localhost:8080/fedora/describe
+
+# Here are all the settings that were not default:
+
+Installation type = custom
+Fedora home directory = /usr/local/projects/fedora
+
+The installer gave these warnings:
+WARNING: /usr/local/projects/fedora is not empty.
+WARNING: Overwrite? (yes or no) [default is no] ==> yes
+WARNING: The environment variable, FEDORA_HOME, is not defined
+WARNING: Remember to define the FEDORA_HOME environment variable
+WARNING: before starting Fedora.
+
+Fedora administrator password = fedoraAdmin
+SSL required for API-M = false
+Servlet engine = existingTomcat
+Tomcat home directory = /usr/share/tomcat6
+
+The installer gave these warnings:
+WARNING: The environment variable, CATALINA_HOME, is not defined
+WARNING: Remember to define the CATALINA_HOME environment variable
+WARNING: before starting Fedora.
+Keystore file = default
+
+Database = mysql
+Database username = fedoraAdmin
+Database password = fedoraAdmin
+JDBC URL = jdbc:mysql://localhost/fedora35?useUnicode=true&amp;characterEncoding=UTF-8&amp;autoReconnect=true
+Policy enforcement enabled = false
+Enable Resource Index = true
+
+
+
+
+500 Error from Fedora
+---------------------
+
+If you get a 500 error in your web browser, instead of the Fedora
+page, check ownership of the fedora home driectory tree.
+
+If you have errors, check the catalina logs:
+
+/usr/share/tomcat6/logs/catalina.out
+
+aka
+
+$CATALINA_HOME/logs/catalina.out
+
+(See the section "How to determine your $CATALINA_HOME".)
+
+
+
+
+How to determine your $CATALINA_HOME
+------------------------------------
+
+Now that you can see the Tomcat home page, you still have a few more
+steps. The home page give paths that include $CATALINA_HOME, however
+this environment variable is not defined for user "root" or user
+"tomcat". The environment variables magically spring into being from
+the startup scripts. Thankfully, there are some easy ways to determine
+the catalina home directory, and where the config files exists. We
+will need to edit those config files.
+
+# Method 1, when Tomcat is running:
+
+ps aux | grep tomcat | grep -Po "catalina\.home=.*?\s+"
+
+# Method 2:
+
+locate tomcat6.conf
+grep CATALINA_HOME /etc/tomcat6/tomcat6.conf
+
+# Below is a session transcript:
+
+[root@zeus ~]# ps aux | grep tomcat | grep -Po "catalina\.home=.*?\s+"
+catalina.home=/usr/share/tomcat6 
+[root@zeus ~]# locate tomcat6.conf
+/etc/tomcat6/tomcat6.conf
+[root@zeus ~]# grep CATALINA_HOME /etc/tomcat6/tomcat6.conf 
+CATALINA_HOME="/usr/share/tomcat6"
+[root@zeus ~]#
+
+
+
+
+Managing Fedora From Remote Servers
+-----------------------------------
+
+Out of the box, fedora comes with a configuration to permit management
+operations ONLY FROM LOCALHOST.  I change this by adding the IP of my
+remote machine(s) to the Backend Security file, "beSecurity.xml",
+which is in server/config/.  Adding additional IPs to the 'iplist'
+attribute, with whitespace as a separator, allows low-level calls to
+be authorized from non-localhost IPs.  I doubt this is a best
+practice, but it gets the job done.
+
+After tomcat starts up, I like to monitor things from two log files
+and the web interface.  I use
+migration.lib.virginia.edu:8080/manager/html (auth required, visible
+in /usr/share/tomcat6/conf/tomcat-users.xml) and these logs:
+
+File catalina.out reports overall Tomcat behavior, and lots of fedora
+log messages end up here:
+
+/var/log/tomcat6/catalina.out
+
+The main Fedora servlet log:
+
+/usr/local/fedora-home/server/logs/fedora.log 
+
+I also use http://migration.lib.virginia.edu:8080/fedora/search as a
+quick interface to look for objects and ensure the servlet is running
+and accessible.
+
+The servlet code running in Tomcat lives in
+/usr/share/tomcat6/webapps/fedora, the server data, configs, logs,
+etc., reside in /usr/local/fedora-home/server
+
+Client scripts are available in /usr/local/fedora-home/client and are documented here:
+
+https://wiki.duraspace.org/display/FEDORA35/Client+Command-line+Utilities
+
+The installer leaves behind a useful 'properties' file (in
+fedora-home/install, which can be used at a later date to configure an
+installation.  Just call the jar file with the name of the properties
+file as an argument.  Mine looks like this, and can be used to
+re-create my configuration:
+
+#Install Options
+#Wed Aug 24 11:45:53 EDT 2011
+keystore.file=/etc/tomcat6/keystore
+ri.enabled=true
+messaging.enabled=false
+apia.auth.required=false
+database.jdbcDriverClass=com.mysql.jdbc.Driver
+tomcat.ssl.port=8443
+ssl.available=true
+database.jdbcURL=jdbc\:mysql\://localhost/fedora35?useUnicode\=true&amp;characterEncoding\=UTF-8&amp;autoReconnect\=true
+database.password=fedoraAdmin
+keystore.type=JKS
+database.mysql.driver=included
+database.username=fedoraAdmin
+fesl.authz.enabled=false
+tomcat.shutdown.port=8005
+deploy.local.services=true
+xacml.enabled=false
+database.mysql.jdbcDriverClass=com.mysql.jdbc.Driver
+tomcat.http.port=8080
+fedora.serverHost=localhost
+database=mysql
+database.driver=included
+fedora.serverContext=fedora
+keystore.password=changeit
+llstore.type=akubra-fs
+tomcat.home=/usr/share/tomcat6
+fesl.authn.enabled=true
+database.mysql.jdbcURL=jdbc\:mysql\://localhost/fedora35?useUnicode\=true&amp;characterEncoding\=UTF-8&amp;autoReconnect\=true
+fedora.home=/usr/local/fedora-home
+install.type=custom
+servlet.engine=existingTomcat
+apim.ssl.required=false
+fedora.admin.pass=fedoraAdmin
+apia.ssl.required=false
+
+Note: check your tomcat6 installation to make sure it's running on a
+good java (Sun HotSpot VM preferred) and has a keystore in an
+accessible place.  Also ensure your iptables permit tcp/ip over ports
+8080 and 8443.
+
+
+
+
+
+Tomcat post install notes
+-------------------------
+
+# Note that some shells do not allows space on either side of "=" and
+# the line below failed with an error:
+
+JAVA_OPTS = "-Xmx1024m -Xms512m -XX:+HeapDumpOnOutOfMemoryError -XX:MaxPermSize=128M -verbose:gc"
+
+[root@zeus ~]# /etc/init.d/tomcat6 start
+/etc/tomcat6/tomcat6.conf: line 23: JAVA_OPTS: command not found
+Starting tomcat6:                                          [  OK  ]
+[root@zeus ~]#
+
+# After the yum install, run some commands to verify.
+
+[root@zeus ~]# find /etc/tomcat6/
+/etc/tomcat6/
+/etc/tomcat6/catalina.policy
+/etc/tomcat6/logging.properties
+/etc/tomcat6/Catalina
+/etc/tomcat6/Catalina/localhost
+/etc/tomcat6/server.xml
+/etc/tomcat6/tomcat-users.xml
+/etc/tomcat6/tomcat6.conf
+/etc/tomcat6/catalina.properties
+/etc/tomcat6/context.xml
+/etc/tomcat6/web.xml
+[root@zeus ~]#
+
+# This is a successful wget http request to the tomcat server:
+
+[root@zeus ~]# wget -S http://localhost:8080/
+--2011-08-29 10:28:28--  http://localhost:8080/
+Resolving localhost... ::1, 127.0.0.1
+Connecting to localhost|::1|:8080... connected.
+HTTP request sent, awaiting response... 
+  HTTP/1.1 200 OK
+  Server: Apache-Coyote/1.1
+  Accept-Ranges: bytes
+  ETag: W/"7777-1287428557000"
+  Last-Modified: Mon, 18 Oct 2010 19:02:37 GMT
+  Content-Type: text/html
+  Content-Length: 7777
+  Date: Mon, 29 Aug 2011 14:28:28 GMT
+  Connection: keep-alive
+Length: 7777 (7.6K) [text/html]
+Saving to: “index.html”
+
+100%[==========================================================================================>] 7,777       --.-K/s   in 0s      
+
+2011-08-29 10:28:28 (410 MB/s) - “index.html” saved [7777/7777]
+
+
+
+
+
+Install Tomcat6 manually
+------------------------
+
+http://www.puschitz.com/InstallingTomcat.html
+
+
+
+
+
+Tomcat Catalina blank web page error
+------------------------------------
+
+The quick answer is that you should have run this command originally:
+
+yum -y install tomcat6 tomcat6-webapps.noarch tomcat6-admin-webapps.noarch
+
+
+What really happened was that you installed tomcat6 via yum (or apt),
+probably with a command such as:
+
+yum -y install tomcat6
+
+When you start the tomcat server and visit localhost:8080 or
+yourhostname.com:8080 but you get a blank page. You can also use wget
+to discover that there is a server error.
+
+Assuming that you don't have other permissions or system admin issue,
+the problem is that you needed to install two more packages as shown
+above: tomcat6-webapps.noarch tomcat6-admin-webapps.noarch
+
+In web browser get a blank page. You can't find any errors in log
+files. Below is the error from wget if tomcat6-webapps and
+tomcat6-admin-webapps are not installed.
+
+[root@zeus ~]# wget -S http://localhost:8080/
+--2011-08-29 10:23:09--  http://localhost:8080/
+Resolving localhost... ::1, 127.0.0.1
+Connecting to localhost|::1|:8080... connected.
+HTTP request sent, awaiting response... 
+  HTTP/1.1 400 Bad Request
+  Server: Apache-Coyote/1.1
+  Date: Mon, 29 Aug 2011 14:23:09 GMT
+  Connection: close
+2011-08-29 10:23:09 ERROR 400: Bad Request.
+
+[root@zeus ~]#
+
+
+
+
+
+Matt's Tomcat settings
+----------------------
+
+(see fcrepo.jpg)
+
+[mst3k@zeus fedora-home]$ ps -ef|grep tomcat
+tomcat    8761     1  0 12:17 ?        00:01:04 /usr/lib/jvm/java/bin/java -server -Djava.awt.headless=true -Xmx1024m -Xms512m -Djava.library.path=/usr/local/dbxml/lib/:/usr/lib64:/usr/local/djatoka/lib/Linux-x86-64 -Djavax.net.ssl.trustStore=/usr/local/fedora-home/server/truststore -Djavax.net.ssl.trustStorePassword=tomcat -DLD_LIBRARY_PATH=/usr/local/djatoka/lib/Linux-x86-64 -Dkakadu.home=/usr/local/djatoka/bin/Linux-x86-64 -DDYLD_LIBRARY_PATH=/usr/local/djatoka/lib/Linux-x86-64 -XX:+HeapDumpOnOutOfMemoryError -XX:MaxPermSize=128M -verbose:gc -classpath :/usr/share/tomcat6/bin/bootstrap.jar:/usr/share/tomcat6/bin/tomcat-juli.jar:/usr/share/java/commons-daemon.jar -Dcatalina.base=/usr/share/tomcat6 -Dcatalina.home=/usr/share/tomcat6 -Djava.endorsed.dirs= -Djava.io.tmpdir=/var/cache/tomcat6/temp -Djava.util.logging.config.file=/usr/share/tomcat6/conf/logging.properties -Djava.util.logging.manager=org.apache.juli.ClassLoaderLogManager org.apache.catalina.startup.Bootstrap start
+
+The "truststore" parameters are leftover from an old attempt to get
+fedora3 running over SSL, but may be significant here.  The truststore
+mentioned exists and is readable by tomcat, and that is the correct
+password.
+
+
+
+
+
+
+Tom's Tomcat settings
+---------------------
+
+[mst3k@zeus ~]$ ps aux | grep tomcat
+tomcat   18254  0.6 13.9 2045188 287476 ?      Sl   15:09   0:22 /usr/lib/jvm/java/bin/java -Xmx1024m -Xms512m -XX:+HeapDumpOnOutOfMemoryError -XX:MaxPermSize=128M -verbose:gc -classpath :/usr/share/tomcat6/bin/bootstrap.jar:/usr/share/tomcat6/bin/tomcat-juli.jar:/usr/share/java/commons-daemon.jar -Dcatalina.base=/usr/share/tomcat6 -Dcatalina.home=/usr/share/tomcat6 -Djava.endorsed.dirs= -Djava.io.tmpdir=/var/cache/tomcat6/temp -Djava.util.logging.config.file=/usr/share/tomcat6/conf/logging.properties -Djava.util.logging.manager=org.apache.juli.ClassLoaderLogManager org.apache.catalina.startup.Bootstrap start
+

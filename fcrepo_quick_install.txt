@@ -1,0 +1,107 @@
+
+Authors:
+
+Matthew Stephens ms3uf@virginia.edu
+Tom Laudeman twl8n@virginia.edu
+
+Title:
+
+Brief Install Fedora Commons and Tomcat on Fedora Linux
+
+# Start here
+
+# Install Tomcat6 via yum
+
+su -l root
+yum -y install tomcat6 tomcat6-webapps.noarch tomcat6-admin-webapps.noarch
+/etc/init.d/tomcat6/start
+# Test
+wget -S http://localhost:8080/
+cp /etc/tomcat6/tomcat6.conf /etc/tomcat6/tomcat6.conf.safe
+emacs -nw /etc/tomcat6/tomcat6.conf
+# Insert this line:
+JAVA_OPTS="-Xmx1024m -Xms512m -XX:+HeapDumpOnOutOfMemoryError -XX:MaxPermSize=128M -verbose:gc"
+
+emacs -nw /etc/tomcat6/tomcat-users.xml
+# Insert these lines:
+  <role rolename="tomcat"/>
+  <role rolename="manager"/>
+  <user username="tomcat" password="foobarbaz" roles="tomcat,manager"/>
+
+# Restart tomcat
+/etc/init.d/tomcat6/restart
+
+# Environment variables CATALINA_BASE, CATALINA_HOME, JASPER_HOME,
+# CATALINA_TMPDIR, JAVA_OPTS are in:
+cat /etc/tomcat6/tomcat6.conf
+
+# exit from root, back to mst3k
+exit
+
+# MySQL
+mysql -u root -p 
+create database fedora35;
+grant all on fedora35.* to fedoraAdmin@localhost identified by 'fedoraAdmin';
+grant all on fedora35.* to fedoraAdmin@'%' identified by 'fedoraAdmin';
+exit
+
+# Download the Fedora Commons installer
+# What I should have done:
+
+cd ~/
+wget http://downloads.sourceforge.net/fedora-commons/fcrepo-installer-3.5.jar
+
+# Continue with "Running The Fedora Commons installer" below.
+
+# What I actually did:
+
+cd /usr/local/projects
+mkdir fedora
+cd fedora
+wget http://downloads.sourceforge.net/fedora-commons/fcrepo-installer-3.5.jar
+
+# Continue with "Running The Fedora Commons installer" below.
+
+# Run the Fedora Commons installer
+
+su -l root
+cd /usr/local/projects/fedora
+java -jar fcrepo-installer-3.5.jar
+cd /usr/local/projects
+chown -R tomcat:tomcat ./fedora/
+/etc/init.d/tomcat6 restart      
+exit
+
+# After this, Fedora should be available at:
+
+http://localhost:8080/fedora/describe
+
+# Here are all the settings that were not default:
+
+Installation type = custom
+Fedora home directory = /usr/local/projects/fedora
+
+The installer gave these warnings:
+WARNING: /usr/local/projects/fedora is not empty.
+WARNING: Overwrite? (yes or no) [default is no] ==> yes
+WARNING: The environment variable, FEDORA_HOME, is not defined
+WARNING: Remember to define the FEDORA_HOME environment variable
+WARNING: before starting Fedora.
+
+Fedora administrator password = fedoraAdmin
+SSL required for API-M = false
+Servlet engine = existingTomcat
+Tomcat home directory = /usr/share/tomcat6
+
+The installer gave these warnings:
+WARNING: The environment variable, CATALINA_HOME, is not defined
+WARNING: Remember to define the CATALINA_HOME environment variable
+WARNING: before starting Fedora.
+Keystore file = default
+
+Database = mysql
+Database username = fedoraAdmin
+Database password = fedoraAdmin
+JDBC URL = jdbc:mysql://localhost/fedora35?useUnicode=true&amp;characterEncoding=UTF-8&amp;autoReconnect=true
+Policy enforcement enabled = false
+Enable Resource Index = true

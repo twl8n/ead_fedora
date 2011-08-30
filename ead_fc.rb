@@ -138,8 +138,6 @@ class Fx_maker
         rh['type_of_resource'] = rh['container_level']
         rh['type'] = rh['container_level']
         rh['id'] = rh['container_id']
-        rh['title'] = "Container #{rh['container_element']} id:#{rh['container_id']} level:#{rh['container_level']}"
-        rh['description'] = rh['title'] # used by DC.
         rh['creator'] = "See collection object #{@top_pid}"
         rh['corp_name'] = "See collection object #{@top_pid}"
         rh['object_type'] = rh['container_element']
@@ -186,6 +184,15 @@ class Fx_maker
           }
         end
         rh['create_date'] = rh['container_unitdate']
+
+        if rh['container_unittitle'].empty?
+          rh['title'] = "Container #{rh['container_element']} id:#{rh['container_id']} level:#{rh['container_level']}"
+        else
+          rh['title'] = rh['container_unittitle']
+        end
+          
+        rh['description'] = rh['title'] # used by DC.
+
 
         # If the current node is a c01 node then get the
         # scopecontent. If it is not nil look at the children and pull

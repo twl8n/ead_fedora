@@ -103,6 +103,9 @@
           </mods:titleInfo>
           <mods:identifier type="local"><%= rh['type'] %></mods:identifier>
           <mods:identifier type="local"><%= rh['id'] %></mods:identifier>
+          <mods:originInfo>
+            <mods:dateCreated><%= rh['create_date'] %></mods:dateCreated>
+          </mods:originInfo>
 
 	  <% if rh['is_container'] %>
           <mods:typeOfResource collection="no"/>
@@ -148,10 +151,6 @@
 	  
           <mods:genre authority="aat"></mods:genre>
 
-          <mods:originInfo>
-            <mods:dateCreated><%= rh['create_date'] %></mods:dateCreated>
-          </mods:originInfo>
-
           <mods:language>
             <mods:languageTerm authority="iso639-2b" type="code">eng</mods:languageTerm>
           </mods:language>
@@ -174,15 +173,15 @@
 	  <!-- <scopcontent> has no attribute "label" -->
 
           <mods:abstract displayLabel="Biography">
-	    <%= rh['agn_bio'] %>
+	    <%= rh['bio'] %>
 	  </mods:abstract>
 
           <mods:abstract displayLabel="Acquisition Information">
-	    <%= rh['agn_acq_info'] %>
+	    <%= rh['acq_info'] %>
 	  </mods:abstract>
 
           <mods:abstract displayLabel="Preferred Citation">
-	    <%= rh['agn_cite'] %>
+	    <%= rh['cite'] %>
 	  </mods:abstract>
 
 	  <!-- Tobin has no <controlaccess> element. Example topic

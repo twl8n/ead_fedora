@@ -1,10 +1,14 @@
 
-EAD finding aid to Fedora Commons repository objects.
+Convert EAD finding aid to Fedora Commons repository objects.
 
 Table of contents
 -----------------
 License and credits
 Introduction
+Configuration
+Requirements
+How to run with Fedora Commons plus Tomcat
+How to run with hydra-jetty
 
 
 
@@ -34,10 +38,9 @@ Introduction
 ------------
 
 This project is a small Ruby utility (Module, Class, API) that reads a
-standard EAD finding aid, and creates Fedora objects for he collection
+standard EAD finding aid, and creates Fedora objects for the collection
 and all c0x container elements. Enhancements will include creating
-objects for the digital files. This will happen via an external
-utility if such a utility can be found. 
+objects for the digital files. 
 
 
 
@@ -58,7 +61,7 @@ Pid_namespace is a string that is the Fedora PID prefix. No spaces or
 underscores. Eventually is might be nice to make this a command line
 option.
 
-You might have change the shebang of the .rb scripts.
+You might have change the shebang #! line of the .rb scripts.
 
 
 
@@ -88,19 +91,20 @@ of several other formats).
 With the FC+Tomcat server running, visit this URL (change localhost to
 your host name as necessary):
 
-http://localhost:8983/fedora/
+http://localhost:8080/fedora/
 
+Note that Tomcat's default port is 8080. (Jetty's default port is 8983).
 
 The URL below is a quick run through with shell commands and brief
 comments. Great for experienced developers when nothing goes wrong:
 
 https://github.com/twl8n/ead_fedora/blob/master/fcrepo_quick_install.txt
 
-
 The URL below is the full instructions with extensive notes and some
 session transcripts, error info, and debugging suggestions:
 
 https://github.com/twl8n/ead_fedora/blob/master/fcrepo_install.txt
+
 
 
 
@@ -167,7 +171,7 @@ log info comes out at the console (termina) and at:
 
 /usr/local/projects/hydra-jetty/fedora/default/server/logs/fedora.log
 
-x system description for successful install of hydra-jetty aug 2011
+System description for successful install of hydra-jetty aug 2011:
 
 > lsb_release -a
 LSB Version:    :core-4.0-amd64:core-4.0-noarch:graphics-4.0-amd64:graphics-4.0-noarch:printing-4.0-amd64:printing-4.0-noarch
@@ -196,8 +200,7 @@ ruby 1.8.7 (2010-07-17 patchlevel 300) [x86_64-linux]
 > which ruby
 ~/.rvm/rubies/ruby-1.8.7-head/bin/ruby
 
-
 Note that something runs out of PermGen memory, probably jetty. You
-can test with a few items, but getting pids for 330 Fedora object and
-ingesting 330 foxml objects causes an exception.
+can test with a few items, but getting pids for 330 Fedora objects and
+ingesting 330 Fedora objects as foxml causes an exception.
 

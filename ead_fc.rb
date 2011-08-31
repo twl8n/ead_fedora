@@ -53,6 +53,15 @@ class Fx_maker
     @generic_template = ERB.new(File.new(Generic_t_file).read, nil, "%")
 
     @xml = Nokogiri::XML(open(@fname))
+    
+    # Make smarter code that can figure out the default namespace.
+
+    @ns = ""
+    if @xml.namespaces.size >= 1
+      @ns = "xmlns"
+    end
+      
+
 
     # collection/container list of hash. Data for each foxml object is
     # in one of the array elements, and each element is a hash.
@@ -81,8 +90,9 @@ class Fx_maker
     # Why don't we move these lines inside collection_parse()?
     
     @xml_out = @generic_template.result(binding())
-    ingest_internal()
     write_foxml(rh['pid'])
+    print "Wrote foxml: pid: #{rh['pid']} id: #{rh['id']}\n"
+    ingest_internal()
 
     # Push the collection data onto the big loh so that the
     # collection's children can access their parent's data.
@@ -93,7 +103,7 @@ class Fx_maker
     # write to file.  Modifies @cn_loh. Why are we setting nset
     # outside of container_parse()?
 
-    nset = @xml.xpath("//*/xmlns:archdesc/xmlns:dsc")
+    nset = @xml.xpath("//*/#{@ns}archdesc/#{@ns}dsc")
     container_parse(nset)
 
   end # initialize
@@ -150,9 +160,9 @@ class Fx_maker
         # These seem to work too, returning the expected single value
         # or nil when there isn't a unitdate.
 
-        # nset.xpath("./xmlns:c02/xmlns:c03/xmlns:did").children.xpath("./xmlns:unitdate")[0]
+        # nset.xpath("./#{@ns}c02/#{@ns}c03/#{@ns}did").children.xpath("./#{@ns}unitdate")[0]
 
-        # nset.xpath("./xmlns:c02/xmlns:c03/xmlns:did")[0].xpath("./xmlns:unitdate")[0]
+        # nset.xpath("./#{@ns}c02/#{@ns}c03/#{@ns}did")[0].xpath("./#{@ns}unitdate")[0]
         
         # Default values.
 
@@ -162,11 +172,11 @@ class Fx_maker
         # <container> element(s) are in a list of hashes.
         rh['ct'] = Array.new()
 
-        if ele.xpath("./xmlns:did")[0].class.to_s.match(/nil/i)
+        if ele.xpath("./#{@ns}did")[0].class.to_s.match(/nil/i)
           # print "nil did for #{ele.name} #{rh['id']}\n"
-          # print "did: #{ele.xpath('./xmlns:did').to_s}\n"
+          # print "did: #{ele.xpath('./#{@ns}did').to_s}\n"
         else
-          ele.xpath("./xmlns:did")[0].children.each { |child|
+          ele.xpath("./#{@ns}did")[0].children.each { |child|
             if child.name.match(/container/)
               ch = Hash.new
               ch['container_type'] = child.attribute('type')
@@ -202,7 +212,7 @@ class Fx_maker
 
         rh['container_scope'] = ""
         if ele.name.match(/c01/)
-          scon = ele.xpath("./xmlns:scopecontent")[0]
+          scon = ele.xpath("./#{@ns}scopecontent")[0]
           if scon.class.to_s.match(/nil/i)
             # When nil do nothing.
           else
@@ -219,23 +229,33 @@ class Fx_maker
         end
         rh['scope'] = rh['container_scope']
 
-        # collection info, most of which doesn't apply to containers,
-        # so these are notes for checking correspondence.
+        # Collection info, most of which doesn't apply to containers,
+        # so these are notes for checking correspondence, and things
+        # must get from parent if we need them.
 
-        # must get from parent
-        # rh['titleproper'] = @xml.xpath("//*/xmlns:titleproper[@type='formal']")[0].content
-        # rh['title'] = @xml.xpath("//*/xmlns:archdesc/xmlns:did/xmlns:unittitle")[0].content
-        # rh['creator'] = @xml.xpath("//*/xmlns:origination[@label='Creator:']/xmlns:persname")[0].content
+        # rh['titleproper'] = @xml.xpath("//*/#{@ns}titleproper[@type='formal']")[0].content
+        # rh['title'] = @xml.xpath("//*/#{@ns}archdesc/#{@ns}did/#{@ns}unittitle")[0].content
+        # rh['creator'] = @xml.xpath("//*/#{@ns}origination[@label='Creator:']/#{@ns}persname")[0].content
         # rh['corp_name'] = ""
-        # rh['extent'] = @xml.xpath("//*/xmlns:archdesc/xmlns:did/xmlns:physdesc/xmlns:extent")[0].content
-        # rh['abstract'] = @xml.xpath("//*/xmlns:archdesc/xmlns:did/xmlns:abstract")[0].content
+        # rh['extent'] = @xml.xpath("//*/#{@ns}archdesc/#{@ns}did/#{@ns}physdesc/#{@ns}extent")[0].content
+        # rh['abstract'] = @xml.xpath("//*/#{@ns}archdesc/#{@ns}did/#{@ns}abstract")[0].content
         # rh['bio'] = ""
         # rh['acq_info'] = ""
         # rh['cite'] = ""
-        # rh['type'] = @xml.xpath("//*/xmlns:archdesc")[0].attributes['level']
+        # rh['type'] = @xml.xpath("//*/#{@ns}archdesc")[0].attributes['level']
         # rh['agreement_id'] = ""
         # rh['project'] = rh['title']
+
+        # The content() method of Nokogiri returns &amp; and similar
+        # entities as ascii equivalents which causes problems when we put
+        # the content back into XML. Escape everything.
         
+        rh.keys.each { |key|
+          if rh[key].class.to_s == 'String'
+            rh[key] = CGI.escapeHTML(rh[key])
+          end
+        }
+
         @xml_out = @generic_template.result(binding())
         write_foxml(rh['pid'])
         print "Wrote foxml: pid: #{rh['pid']} id: #{rh['id']}\n"
@@ -269,13 +289,18 @@ class Fx_maker
     # globals in imperative code. Obi wan says: These aren't the
     # globals you're looking for.
     
-    rh['titleproper'] = @xml.xpath("//*/xmlns:titleproper[@type='formal']")[0].content
+    tmp = @xml.xpath("//*/#{@ns}titleproper[@type='formal']")[0]
+    if ! tmp.nil?
+      rh['titleproper'] = tmp.content
+    else
+      rh['titleproper'] = @xml.xpath("//*/#{@ns}titleproper")[0].content
+    end
     
-    rh['title'] = @xml.xpath("//*/xmlns:archdesc/xmlns:did/xmlns:unittitle")[0].content
+    rh['title'] = @xml.xpath("//*/#{@ns}archdesc/#{@ns}did/#{@ns}unittitle")[0].content
     
-    rh['creator'] = @xml.xpath("//*/xmlns:origination[@label='Creator:']/xmlns:persname")[0].content
+    rh['creator'] = @xml.xpath("//*/#{@ns}origination[contains(translate(@label,'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'),'creator')]/#{@ns}persname")[0].content
     
-    rh['id'] = @xml.xpath("//*/xmlns:archdesc/xmlns:did/xmlns:unitid")[0].content
+    rh['id'] = @xml.xpath("//*/#{@ns}archdesc/#{@ns}did/#{@ns}unitid")[0].content
     
     # Ignore <head>. Get all <p> and separate by \n -->
     
@@ -286,7 +311,7 @@ class Fx_maker
     
     tween = ""
     rh['scope'] = ""
-    @xml.xpath("//*/xmlns:archdesc/xmlns:scopecontent/xmlns:p").each { |ele|
+    @xml.xpath("//*/#{@ns}archdesc/#{@ns}scopecontent/#{@ns}p").each { |ele|
       rh['scope'] += "#{tween}#{ele.content}"
       tween = "\n\n"
     }
@@ -296,37 +321,50 @@ class Fx_maker
 
     tween = ""
     rh['corp_name'] = ""
-    @xml.xpath("//*/xmlns:publicationstmt/xmlns:publisher").each { |ele|
+    @xml.xpath("//*/#{@ns}publicationstmt/#{@ns}publisher").each { |ele|
       rh['corp_name'] += "#{tween}#{ele.content}"
       tween = ", "
     }
     
-    rh['create_date'] = @xml.xpath("//*/xmlns:archdesc/xmlns:did/xmlns:unitdate")[0].content
+    tmp = @xml.xpath("//*/#{@ns}archdesc/#{@ns}did/#{@ns}unitdate")[0]
+    if ! tmp.nil?
+      rh['create_date'] = tmp.content
+    else
+      rh['create_date'] = @xml.xpath("//*/#{@ns}archdesc/#{@ns}did/#{@ns}unittitle/#{@ns}unitdate")[0].content
+    end
 
-    rh['extent'] = @xml.xpath("//*/xmlns:archdesc/xmlns:did/xmlns:physdesc/xmlns:extent")[0].content
+    rh['extent'] = ""
+    tmp = @xml.xpath("//*/#{@ns}archdesc/#{@ns}did/#{@ns}physdesc/#{@ns}extent")[0]
+    if ! tmp.nil?
+      rh['extent'] = tmp.content
+    end
 
-    rh['abstract'] = @xml.xpath("//*/xmlns:archdesc/xmlns:did/xmlns:abstract")[0].content
+    rh['abstract'] = "" 
+    tmp = @xml.xpath("//*/#{@ns}archdesc/#{@ns}did/#{@ns}abstract")[0]
+    if ! tmp.nil?
+      rh['abstract'] = tmp.content
+    end
     
     # Not including the <head>. Could be multiple <p> so separate with
     # "\n\n". See comments above about tween.
 
     tween = ""
     rh['bio'] = ""
-    @xml.xpath("//*/xmlns:archdesc/xmlns:bioghist/xmlns:p").each { |ele|
+    @xml.xpath("//*/#{@ns}archdesc/#{@ns}bioghist/#{@ns}p").each { |ele|
       rh['bio'] += "#{tween}#{ele.content}"
       tween = "\n\n"
     }
 
     tween = ""
     rh['acq_info'] = ""
-    @xml.xpath("//*/xmlns:archdesc/xmlns:descgrp/xmlns:descgrp/xmlns:acqinfo/xmlns:p").each { |ele|
+    @xml.xpath("//*/#{@ns}archdesc/#{@ns}descgrp/#{@ns}descgrp/#{@ns}acqinfo/#{@ns}p").each { |ele|
       rh['acq_info'] += "#{tween}#{ele.content}"
       tween = "\n\n"
     }
     
     tween = ""
     rh['cite'] = ""
-    @xml.xpath("//*/xmlns:archdesc/xmlns:descgrp/xmlns:prefercite/xmlns:p").each { |ele|
+    @xml.xpath("//*/#{@ns}archdesc/#{@ns}descgrp/#{@ns}prefercite/#{@ns}p").each { |ele|
       rh['cite'] += "#{tween}#{ele.content.strip}"
       tween = "\n\n"
     }
@@ -342,7 +380,7 @@ class Fx_maker
     # Some containers have a container element that tells us the type,
     # and the box id number. <did><container type="Box">1</container>
     
-    rh['type'] = @xml.xpath("//*/xmlns:archdesc")[0].attributes['level']
+    rh['type'] = @xml.xpath("//*/#{@ns}archdesc")[0].attributes['level']
     
     # Used in foxml identitymetadata <objectId> and <objectType>
 
@@ -353,6 +391,17 @@ class Fx_maker
     
     rh['agreement_id'] = ""
     rh['project'] = rh['title']
+    
+    # The content() method of Nokogiri returns &amp; and similar
+    # entities as ascii equivalents which causes problems when we put
+    # the content back into XML. Escape everything.
+
+    rh.keys.each { |key|
+      if rh[key].class.to_s == 'String'
+        rh[key] = CGI.escapeHTML(rh[key])
+      end
+    }
+
   end # collection_parse
   
   

@@ -30,9 +30,11 @@
 		   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 		   xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/oai_dc/ http://www.openarchives.org/OAI/2.0/oai_dc.xsd">
 	  <!-- duplicate of mods:abstract displayLabel="Scope and Contents" -->
+	  
+	  <!-- human readable contextual comment "this is a
+	  collection" include membership comment too. -->
+	  
           <dc:description>
-	    <!-- a contextual comment, "this is a collection", "this
-	    is a series" include membership comment too. -->
 	    <%= rh['description'] %>
 	  </dc:description>
           <dc:title><%= rh['title'] %></dc:title>

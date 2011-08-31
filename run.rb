@@ -14,8 +14,10 @@ if ARGV.size == 0
   exit
 end
 
+debug = false # true or false
+
 if File.exists?(myfile)
-  fxm = Ead_fc::Fx_maker.new(myfile, true)
+  fxm = Ead_fc::Fx_maker.new(myfile, debug)
 else
   print "Can't find file #{myfile}\n"
   exit

@@ -8,7 +8,7 @@
   <!-- Fix label? Where to get the value? -->
   <foxml:objectProperties>
     <foxml:property NAME="info:fedora/fedora-system:def/model#state" VALUE="Active"/>
-    <foxml:property NAME="info:fedora/fedora-system:def/model#label" VALUE="<%= rh['title'] %>"/>
+    <foxml:property NAME="info:fedora/fedora-system:def/model#label" VALUE="<%= rh['title'][0..254] %>"/>
     <foxml:property NAME="info:fedora/fedora-system:def/model#ownerId" VALUE="fedoraAdmin"/>
     <foxml:property NAME="info:fedora/fedora-system:def/model#createdDate" VALUE="<%= rh['ef_create_date'] %>"/>
     <foxml:property NAME="info:fedora/fedora-system:def/view#lastModifiedDate" VALUE="<%= rh['ef_create_date'] %>"/>
@@ -269,11 +269,12 @@
           <objectLabel><%= rh['title'] %></objectLabel>
 
 	  <!-- What is objectCreator? -->
+
           <objectCreator></objectCreator>
 
 	  <!-- Need new id similar to Stanford druid for the
-	       agreement. Does Tobin even have an agreement? Check to
-	       see what type of agreement is below: -->
+	       agreement. Check to see what type of agreement is
+	       below: -->
 
           <agreementId><%= rh['agreement_id'] %></agreementId>
           <tag>Project : <%= rh['project'] %></tag>

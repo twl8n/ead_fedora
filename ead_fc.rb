@@ -189,13 +189,13 @@ class Fx_maker
             end
             
             if child.name.match(/unittitle/)
-              rh['container_unittitle'] = child.content
+              rh['container_unittitle'] = child.content.strip.gsub!(/\s+/," ")
             end
           }
         end
         rh['create_date'] = rh['container_unitdate']
 
-        if rh['container_unittitle'].empty?
+        if rh['container_unittitle'].to_s.empty?
           rh['title'] = "Container #{rh['container_element']} id:#{rh['container_id']} level:#{rh['container_level']}"
         else
           rh['title'] = rh['container_unittitle']

@@ -35,7 +35,7 @@ module Ead_fc
           rh = Hash.new()
           cpath = File.dirname(file)
           # Path relative to the base Content_home. We can generate
-          # rh['fname'] from the c0x id using the Content_ref printf
+          # rh['fname'] from the c0x id using the Content_path sprintf
           # format string.
 
           rh['fname'] = file.match(/#{Content_home}\/(.*)/)[1]
@@ -256,7 +256,6 @@ module Ead_fc
 
               if child.name.match(/unitid/)
                 rh['container_unitid'] = child.content
-                printf "unitid: %s\n", rh['container_unitid'] 
               end
               
               if child.name.match(/unittitle/)
@@ -342,9 +341,9 @@ module Ead_fc
           leaf_flag = container_parse(ele)
           # printf "lf: %s id: %s\n", leaf_flag, rh['container_unitid']
 
-          if leaf_flag and rh['container_unitid']
+          if leaf_flag and ! rh['container_unitid'].empty?
             # create a list rh['cm'] that is a list of hash.
-            printf("/var/www/html/mssa.ms.1746/data/%s\n", rh['container_unitid'] )
+            printf("cuid: %s\n", rh['container_unitid'] )
             rh['cm'] = @fi_h.get(sprintf(Content_path, rh['container_unitid']))
             rh['contentmeta'] = @contentmeta_template.result(binding()) 
           end

@@ -19,10 +19,55 @@ require 'rubygems'
 require 'rest-client'
 require 'nokogiri'
 require 'erb'
+require 'mime/types'
 require 'config.rb'
+require 'find'
 
 module Ead_fc
   
+  class Fx_file_info
+
+    def initialize()
+      # A hash of lists of hashes
+      @fi_h = Hash.new
+      Find.find(Content_home) { |file|
+        if File.file?(file)
+          rh = Hash.new()
+          cpath = File.dirname(file)
+          # Path relative to the base Content_home. We can generate
+          # rh['fname'] from the c0x id using the Content_ref printf
+          # format string.
+
+          rh['fname'] = file.match(/#{Content_home}\/(.*)/)[1]
+
+          # Can't use MIME::Types.type_for() because is can't
+          # recognize certain files such as disk images.
+          # rh['format'] = MIME::Types.type_for(file).first.media_type
+          # rh['mime'] = MIME::Types.type_for(file).first.content_type
+          
+
+          rh['format'] = `file -b #{file}`.chomp
+          rh['mime'] = `file -b --mime-type #{file}`.chomp
+          rh['size'] = File.size(file)
+          # Use the shell commands because we can't read really large
+          # files into RAM
+          rh['md5'] = `md5sum #{file}`.match(/^(.*?)\s+/)[1]
+          rh['sha1'] = `sha1sum #{file}`.match(/^(.*?)\s+/)[1]
+          
+          if ! @fi_h.has_key?(cpath)
+            @fi_h[cpath] = []
+          end
+          @fi_h[cpath].push(rh)
+        end
+      }
+    end
+
+    def get(cpath)
+      # Return a list of hashes
+      return @fi_h[cpath]
+    end
+  end # end class Fx_file_info
+
   class Fx_maker
     
     # This class has all the action in initialize(). 
@@ -48,9 +93,11 @@ module Ead_fc
       print "Base URL: #{@base_url}\n"
       @pid_namespace = Pid_namespace
       @ef_create_date = todays_date()
+      @fi_h = Ead_fc::Fx_file_info.new()
 
       # Someone should explain each of the args for ERB.new.
       @generic_template = ERB.new(File.new(Generic_t_file).read, nil, "%")
+      @contentmeta_template = ERB.new(File.new(Contentmeta_t_file).read, nil, "%")
 
       @xml = Nokogiri::XML(open(@fname))
       
@@ -58,7 +105,7 @@ module Ead_fc
 
       @ns = ""
       if @xml.namespaces.size >= 1
-        @ns = "xmlns"
+        @ns = "xmlns:"
       end
       
 
@@ -84,6 +131,7 @@ module Ead_fc
       # collection_parse updates rh. Side effects prevent bugs, right?
 
       collection_parse(rh)
+      rh['files_datastream'] = ""
       @top_project = rh['project']
 
       # binding() passes the current execution heap space.
@@ -113,6 +161,11 @@ module Ead_fc
       @break_set = false
       # Modify @cn_loh.
       
+      # printf "test_c0: %s\n", nset.children.to_s.match(/<c\d+/is)
+      if nset.children.to_s.match(/<c\d+/is).nil?
+        return false
+      end
+
       # If we aren't using the index xx, remove it.
 
       nset.children.each_with_index { |ele,xx|
@@ -251,13 +304,27 @@ module Ead_fc
           
           prep_data(rh)
 
+          rh['contentmeta'] = ""
+
+          # Order critical. Push our data onto @cn_loh, then
+          # recurse. After we return from recursing, ingest ourself.
+          # A false return value from container_parse() means there
+          # are no children so we are an ITEM/FILE node. 
+
+          @cn_loh.push(rh)
+          if ! container_parse(ele) and rh['unitid']
+            # create a list rh['cm'] that is a list of hash.
+            ref_id = rh['id'].to_s.match(/(\d+)/)[1]
+            printf("/var/www/html/mssa.ms.1746/data/2004-M-088.%4.4d\n", ref_id )
+            rh['cm'] = @fi_h.get(sprintf(Content_path, ref_id))
+            rh['contentmeta'] = @contentmeta_template.result(binding()) 
+          end
+
           @xml_out = @generic_template.result(binding())
           write_foxml(rh['pid'])
           print "Wrote foxml: pid: #{rh['pid']} id: #{rh['id']}\n"
           ingest_internal()
 
-          @cn_loh.push(rh)
-          container_parse(ele)
 
           # Actions to implment here: Pop stack. When we eventually
           # implement "isParentOf" then this is where we will modify the
@@ -271,6 +338,7 @@ module Ead_fc
 
         end
       }
+      return true
     end
 
 
@@ -288,6 +356,7 @@ module Ead_fc
       if ! tmp.nil?
         rh['titleproper'] = tmp.content
       else
+        printf "tp: %s\n", @xml.xpath("//*/#{@ns}titleproper")
         rh['titleproper'] = @xml.xpath("//*/#{@ns}titleproper")[0].content
       end
       

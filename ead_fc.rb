@@ -53,6 +53,7 @@ module Ead_fc
           # files into RAM
           rh['md5'] = `md5sum #{file}`.match(/^(.*?)\s+/)[1]
           rh['sha1'] = `sha1sum #{file}`.match(/^(.*?)\s+/)[1]
+          rh['url'] = "#{Content_url}/#{rh['fname']}"
           
           if ! @fi_h.has_key?(cpath)
             @fi_h[cpath] = []
@@ -159,11 +160,13 @@ module Ead_fc
 
     def container_parse(nset)
       @break_set = false
-      # Modify @cn_loh.
+
+      # Note: we modify @cn_loh in this method.
       
-      # printf "test_c0: %s\n", nset.children.to_s.match(/<c\d+/is)
       if nset.children.to_s.match(/<c\d+/is).nil?
-        return false
+        # No child containers, so we must be a leaf container aka we
+        # describe individual items.
+        return true
       end
 
       # If we aren't using the index xx, remove it.
@@ -221,8 +224,11 @@ module Ead_fc
 
           rh['container_unitdate'] = ""
           rh['container_unittitle'] = ""
+          rh['container_unitid'] = ""
 
-          # <container> element(s) are in a list of hashes.
+          # <container type="xx"> element(s) are in a list of hashes because we
+          # have some with multiples.
+
           rh['ct'] = Array.new()
 
           if ele.xpath("./#{@ns}did")[0].class.to_s.match(/nil/i)
@@ -230,15 +236,27 @@ module Ead_fc
             # print "did: #{ele.xpath('./#{@ns}did').to_s}\n"
           else
             ele.xpath("./#{@ns}did")[0].children.each { |child|
+              
               if child.name.match(/container/)
+                # There could be several of these, so push onto a list.
                 ch = Hash.new
                 ch['container_type'] = child.attribute('type')
                 ch['container_value'] = child.content
                 rh['ct'].push(ch)
               end
               
+              # We're only expecting zero or one of these, so just
+              # assign them. If there are multiples (bad) they'll
+              # overwrite and we'll never know unless there's a
+              # separate QA step.
+
               if child.name.match(/unitdate/)
                 rh['container_unitdate'] = child.content
+              end
+
+              if child.name.match(/unitid/)
+                rh['container_unitid'] = child.content
+                printf "unitid: %s\n", rh['container_unitid'] 
               end
               
               if child.name.match(/unittitle/)
@@ -308,15 +326,26 @@ module Ead_fc
 
           # Order critical. Push our data onto @cn_loh, then
           # recurse. After we return from recursing, ingest ourself.
-          # A false return value from container_parse() means there
+          # A true return value from container_parse() means there
           # are no children so we are an ITEM/FILE node. 
 
+          # We only process file data if this is an ITEM container (no
+          # child containers) and we have a unitid. Tobin collection
+          # unitid has the directory name that contains the files.
+
           @cn_loh.push(rh)
-          if ! container_parse(ele) and rh['unitid']
+
+          # If container_parse() doesn't find any container children,
+          # then it returns true meaning 'I am a leaf' thus leaf_flag
+          # becomes true.
+
+          leaf_flag = container_parse(ele)
+          # printf "lf: %s id: %s\n", leaf_flag, rh['container_unitid']
+
+          if leaf_flag and rh['container_unitid']
             # create a list rh['cm'] that is a list of hash.
-            ref_id = rh['id'].to_s.match(/(\d+)/)[1]
-            printf("/var/www/html/mssa.ms.1746/data/2004-M-088.%4.4d\n", ref_id )
-            rh['cm'] = @fi_h.get(sprintf(Content_path, ref_id))
+            printf("/var/www/html/mssa.ms.1746/data/%s\n", rh['container_unitid'] )
+            rh['cm'] = @fi_h.get(sprintf(Content_path, rh['container_unitid']))
             rh['contentmeta'] = @contentmeta_template.result(binding()) 
           end
 
@@ -338,8 +367,12 @@ module Ead_fc
 
         end
       }
-      return true
-    end
+
+      # We finished processing which means that we recursed which
+      # means we have children which means we are not a
+      # leaf. In other words, leaf_flag is false so return false.
+      return false
+    end # container_parse
 
 
     def collection_parse(rh)

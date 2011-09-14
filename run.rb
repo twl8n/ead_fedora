@@ -14,7 +14,7 @@ if ARGV.size == 0
   exit
 end
 
-debug = false # true or false
+debug = true # true or false
 
 if File.exists?(myfile)
   fxm = Ead_fc::Fx_maker.new(myfile, debug)

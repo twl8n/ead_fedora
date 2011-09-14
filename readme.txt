@@ -75,6 +75,85 @@ gem "erb" is standard since that is the Rails template engine.
 You'll need hydra-jetty, or Fedora Commons and Tomcat. See notes below.
 
 
+> which gem
+~/.rvm/rubies/ruby-1.8.7-head/bin/gem
+
+> which ruby                            
+~/.rvm/rubies/ruby-1.8.7-head/bin/ruby
+
+gem install rest-client -v 1.6.3 --no-rdoc --no-ri
+gem install nokogiri --no-rdoc --no-ri
+gem install active-fedora --no-rdoc --no-ri
+gem install solrizer-fedora --no-rdoc --no-ri
+gem install ruby-debug --no-rdoc --no-ri
+
+> gem list
+
+*** LOCAL GEMS ***
+
+active-fedora (3.0.3)
+activemodel (3.0.10)
+activeresource (3.0.10)
+activesupport (3.0.10)
+builder (2.1.2)
+columnize (0.3.4)
+daemons (1.1.4)
+equivalent-xml (0.2.7)
+facets (2.9.2)
+fastercsv (1.5.4)
+i18n (0.5.0)
+linecache (0.46)
+mediashelf-loggable (0.4.7)
+mime-types (1.16)
+multipart-post (1.1.2)
+nokogiri (1.5.0)
+om (1.4.0)
+rake (0.8.7)
+rbx-require-relative (0.0.5)
+rdoc (2.5.9)
+rest-client (1.6.3)
+rsolr (1.0.2)
+ruby-debug (0.10.4)
+ruby-debug-base (0.10.4)
+solr-ruby (0.0.8)
+solrizer (1.1.0)
+solrizer-fedora (1.1.1)
+stomp (1.1.9)
+xml-simple (1.1.0)
+
+
+# If you are using active-fedora 2.2.2, you must use the combined
+# fedora/solr config:
+
+cp fedora_solr_dist.yml fedora.yml
+emacs fedora.yml config.rb
+
+# If you are using active-fedora 3.x.x or newer you should use the
+# separate fedora and solr config files
+
+cp fedora_dist.yml fedora.yml
+cp solr_dist.yml solr.yml
+emacs fedora.yml solr.yml config.rb
+
+# For unknown reasons, the "environment" env variable isn't set after
+# running "rvm gemset use foo", so put the env var on the command
+# line.
+
+environment=development run.rb tobin_mssa.ms.1746.bpg.xml
+
+
+
+Handy rvm commands:
+
+rvm list
+rvm gemset create foo
+rvm gemset use foo
+rvm gemset name
+# return to default gemset
+rvm gemset use 
+rvm use ruby-1.8.7-head
+
+
 
 
 How to run with Fedora Commons plus Tomcat

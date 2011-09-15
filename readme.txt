@@ -47,6 +47,11 @@ objects for the digital files.
 Input and output
 ----------------
 
+Sample files can be found at github, and you can view the files online
+or you can clone the github repository.
+
+https://github.com/twl8n/ead_fedora
+
 The sample input EAD file is tobin_mssa.ms.1746.bpg.xml. Sample output
 files are demo*.xml. Templates for the output are *.erb.
 

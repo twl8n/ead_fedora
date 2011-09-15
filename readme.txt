@@ -44,6 +44,49 @@ objects for the digital files.
 
 
 
+Input and output
+----------------
+
+The sample input EAD file is tobin_mssa.ms.1746.bpg.xml. Sample output
+files are demo*.xml. Templates for the output are *.erb.
+
+The conversion (crosswalk) code is in ead_fc.rb methods
+collection_parse() and container_parse(). You should be able to read
+the input, look at the conversion code, look at the *.erb templates,
+look at the output and be able to trace data from the input, throught
+the code, into the template and finally see the data in the sample
+output files.
+
+For example, the Tobin collection unittitle is in "tobin_mssa.ms.1746.bpg.xml":
+
+<archdesc level="collection" relatedencoding="MARC21" type="register">
+  <did>
+    <unittitle label="Title:">James Tobin papers</unittitle>
+
+The code from ead_fc.rb (approximately line 450) method
+collection_parse() has an Xpath query, and assigns the value to a hash
+key 'title':
+
+rh['title'] = @xml.xpath("//*/#{@ns}archdesc/#{@ns}did/#{@ns}unittitle")[0].content
+
+The template file "generic.foxml.xml.erb" has this line in the DC
+metadata that references the same hash key:
+
+<dc:title><%= rh['title'] %></dc:title>
+
+Finally, the collection level foxml "demo_hypatia_70.xml" has the dc metadata line:
+
+<dc:title>James Tobin papers</dc:title>
+
+All of the data crosswalks work this way, although some have
+conditional (if) statements in either the Ruby code or in the .erb
+template (or both). Some data elements also occur as multiple values
+and therefore may require a loop in the Ruby code and the .erb
+template.
+
+
+
+
 Configuration
 -------------
 

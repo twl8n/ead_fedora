@@ -5,6 +5,7 @@ Table of contents
 -----------------
 License and credits
 Introduction
+Input and output
 Configuration
 Requirements
 How to run with Fedora Commons plus Tomcat
@@ -48,7 +49,8 @@ Input and output
 ----------------
 
 Sample files can be found at github, and you can view the files online
-or you can clone the github repository.
+or you can clone the github repository. When viewing github files in
+your browser, line numbers are displayed on the left.
 
 https://github.com/twl8n/ead_fedora
 
@@ -64,20 +66,24 @@ output files. A complete understanding of then crosswalk requires all
 4 files, however, certain tasks only require you to look at one or two
 files.
 
-For example, the Tobin collection unittitle is in "tobin_mssa.ms.1746.bpg.xml":
+For example, the Tobin collection unittitle is around line 55 in
+"tobin_mssa.ms.1746.bpg.xml":
 
 <archdesc level="collection" relatedencoding="MARC21" type="register">
   <did>
     <unittitle label="Title:">James Tobin papers</unittitle>
 
-The code from ead_fc.rb (approximately line 450) method
-collection_parse() has an Xpath query, and assigns the value to a hash
-key 'title':
+The Ruby script ead_fc.rb at approximately line 450 has an Xpath query
+corresponding to the XML elements above, and assigns the value of
+<unittitle> to a hash key 'title':
 
 rh['title'] = @xml.xpath("//*/#{@ns}archdesc/#{@ns}did/#{@ns}unittitle")[0].content
 
-The template file "generic.foxml.xml.erb" has this line in the DC
-metadata that references the same hash key:
+Note that the Ruby method beginning with "def collection_parse(hr)" around
+line 430 has many Xpath queries each of which reads data from the EAD.
+
+The template file "generic.foxml.xml.erb" at line 33 has the following
+DC metadata that references the same hash key "rh['title']":
 
 <dc:title><%= rh['title'] %></dc:title>
 
@@ -85,10 +91,10 @@ Finally, the collection level foxml "demo_hypatia_70.xml" has the dc metadata li
 
 <dc:title>James Tobin papers</dc:title>
 
-All of the data crosswalks work this way, although some have
-conditional (if) statements in either the Ruby code or in the .erb
-template (or both). Some data elements also occur as multiple values
-and therefore may require a loop in the Ruby code and the .erb
+All of the EAD-to-Fedora data crosswalks work this way, although some
+have conditional (if) statements in either the Ruby code or in the
+.erb template (or both). Some data elements also occur as multiple
+values and therefore may require a loop in the Ruby code and the .erb
 template.
 
 

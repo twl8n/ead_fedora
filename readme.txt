@@ -60,7 +60,9 @@ collection_parse() and container_parse(). You should be able to read
 the input, look at the conversion code, look at the *.erb templates,
 look at the output and be able to trace data from the input, throught
 the code, into the template and finally see the data in the sample
-output files.
+output files. A complete understanding of then crosswalk requires all
+4 files, however, certain tasks only require you to look at one or two
+files.
 
 For example, the Tobin collection unittitle is in "tobin_mssa.ms.1746.bpg.xml":
 

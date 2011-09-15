@@ -1,23 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <foxml:digitalObject
    VERSION="1.1"
-   PID="<%= rh['pid'] %>"
+   PID="hypatia:70"
    xmlns:foxml="info:fedora/fedora-system:def/foxml#"
    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
    xsi:schemaLocation="info:fedora/fedora-system:def/foxml# http://www.fedora.info/definitions/1/0/foxml1-1.xsd">
   <foxml:objectProperties>
     <foxml:property NAME="info:fedora/fedora-system:def/model#state" VALUE="Active"/>
-    <foxml:property NAME="info:fedora/fedora-system:def/model#label" VALUE="<%= rh['title'][0..254] %>"/>
+    <foxml:property NAME="info:fedora/fedora-system:def/model#label" VALUE="James Tobin papers"/>
     <foxml:property NAME="info:fedora/fedora-system:def/model#ownerId" VALUE="fedoraAdmin"/>
-    <foxml:property NAME="info:fedora/fedora-system:def/model#createdDate" VALUE="<%= rh['ef_create_date'] %>"/>
-    <foxml:property NAME="info:fedora/fedora-system:def/view#lastModifiedDate" VALUE="<%= rh['ef_create_date'] %>"/>
+    <foxml:property NAME="info:fedora/fedora-system:def/model#createdDate" VALUE="2011-09-15T15:22:37.000Z"/>
+    <foxml:property NAME="info:fedora/fedora-system:def/view#lastModifiedDate" VALUE="2011-09-15T15:22:37.000Z"/>
   </foxml:objectProperties>
 
   <foxml:datastream ID="DC" STATE="A" CONTROL_GROUP="X" VERSIONABLE="true">
     <foxml:datastreamVersion
        ID="DC1.0"
        LABEL="Dublin Core Record for this object" 
-       CREATED="<%= rh['ef_create_date'] %>" 
+       CREATED="2011-09-15T15:22:37.000Z" 
        MIMETYPE="text/xml"
        FORMAT_URI="http://www.openarchives.org/OAI/2.0/oai_dc/"
        SIZE="406">
@@ -28,11 +28,11 @@
 		   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 		   xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/oai_dc/ http://www.openarchives.org/OAI/2.0/oai_dc.xsd">
           <dc:description>
-	    <%= rh['description'] %>
+	    Title: James Tobin papers Collection: MS 1746
 	  </dc:description>
-          <dc:title><%= rh['title'] %></dc:title>
-          <dc:creator><%= rh['creator'] %></dc:creator>
-          <dc:identifier><%= rh['id'] %></dc:identifier>
+          <dc:title>James Tobin papers</dc:title>
+          <dc:creator>Tobin, James, 1918-</dc:creator>
+          <dc:identifier>MS 1746</dc:identifier>
         </oai_dc:dc>
       </foxml:xmlContent>
     </foxml:datastreamVersion>
@@ -42,7 +42,7 @@
     <foxml:datastreamVersion
        ID="RELS-EXT.0"
        LABEL=""
-       CREATED="<%= rh['ef_create_date'] %>"
+       CREATED="2011-09-15T15:22:37.000Z"
        MIMETYPE="text/xml"
        SIZE="302">
       <foxml:xmlContent>
@@ -51,13 +51,10 @@
 	   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
 	   xmlns:rel="info:fedora/fedora-system:def/relations-external#"
 	   xmlns:hydra="http://projecthydra.org/ns/relations#">
-          <rdf:Description rdf:about="info:fedora/<%= rh['pid'] %>">
+          <rdf:Description rdf:about="info:fedora/hypatia:70">
 	    <hasModel xmlns="info:fedora/fedora-system:def/relations-external#"	rdf:resource="info:fedora/afmodel:HypatiaSet" />
 
-	    <% if rh['is_container'] %>
-            <isMemberOf xmlns="info:fedora/fedora-system:def/relations-external#"
-			rdf:resource="info:fedora/<%= rh['parent_pid'] %>" /> 
-	    <% end %>
+	    
 	    
           </rdf:Description>
         </rdf:RDF>
@@ -69,43 +66,36 @@
     <foxml:datastreamVersion
        ID="descMetadata.0"
        LABEL=""
-       CREATED="<%= rh['ef_create_date'] %>"
+       CREATED="2011-09-15T15:22:37.000Z"
        MIMETYPE="text/xml"
        SIZE="276">
       <foxml:xmlContent>
         <mods:mods xmlns:mods="http://www.loc.gov/mods/v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="3.3" xsi:schemaLocation="http://www.loc.gov/mods/v3 http://www.loc.gov/standards/mods/v3/mods-3-3.xsd">
 	  
           <mods:titleInfo>
-            <mods:title><%= rh['title'] %></mods:title>
+            <mods:title>James Tobin papers</mods:title>
           </mods:titleInfo>
-          <mods:identifier type="local"><%= rh['type'] %></mods:identifier>
-          <mods:identifier type="local"><%= rh['id'] %></mods:identifier>
+          <mods:identifier type="local">collection</mods:identifier>
+          <mods:identifier type="local">MS 1746</mods:identifier>
           <mods:originInfo>
-            <mods:dateCreated><%= rh['create_date'] %></mods:dateCreated>
+            <mods:dateCreated>1930-2002</mods:dateCreated>
           </mods:originInfo>
 
-	  <% if rh['is_container'] %>
-          <mods:typeOfResource collection="no"/>
-	  <mods:note displayLabel="Location"> 
-	    <% rh['ct'].each { |href| %>
-	    <%= href['container_type'] %> <%= href['container_value'] %>
-	    <% } %>
-	  </mods:note>
-	  <% else %>
+	  
 	  
           <mods:abstract displayLabel="Scope and Contents">
-	    <%= rh['scope'] %>
+	    The papers consist of correspondence, subject files, and writings, primarily documenting the professional career and personal life of James Tobin as an economist and educator.
 	  </mods:abstract> 
 	  
           <mods:name type="personal">
-	    <mods:namePart><%= rh['creator'] %></mods:namePart>
+	    <mods:namePart>Tobin, James, 1918-</mods:namePart>
 	    <mods:role>
 	      <mods:roleTerm authority="marcrelator" type="text">creator</mods:roleTerm>
 	    </mods:role>
           </mods:name>
 	  	  
           <mods:name type="corporate">
-            <mods:namePart><%= rh['corp_name'] %></mods:namePart>
+            <mods:namePart>Yale University Library, Manuscripts and Archives</mods:namePart>
             <mods:role>
               <mods:roleTerm authority="local" type="text">repository</mods:roleTerm>
             </mods:role>
@@ -120,26 +110,26 @@
           </mods:language>
 
 	  <mods:physicalDescription>
-            <mods:extent><%= rh['extent'] %></mods:extent>
+            <mods:extent>56.25 linear feet</mods:extent>
           </mods:physicalDescription>
 
           <mods:abstract>
-	    <%= rh['abstract'] %>
+	    The papers consist of correspondence, subject files, and writings, primarily documenting the professional career and personal life of James Tobin as an economist and educator.
 	  </mods:abstract>
 	  
           <mods:abstract displayLabel="Collection Scope and Content Summary">
 	  </mods:abstract>
 
           <mods:abstract displayLabel="Biography">
-	    <%= rh['bio'] %>
+	    James Tobin, Nobel laureate and long-time professor of economics at Yale University, was born in Champaign, Illinois, in 1918. In 1939, he graduated from Harvard University, where he also obtained his master's degree in 1940 and his Ph.D. in 1947. He worked in the Office of Price Administration and on the Civilian Supply and War Production Board before enlisting in the navy in 1941 and serving as an officer aboard the USS Kearney. Tobin began his career at Yale in 1950 as an associate professor, and went on to become the Sterling Professor of Economics. In 1961, he was asked to serve on the Council of Economic Advisors to President John F. Kennedy. His highly regarded work as a Keynesian macro economist, particularly the development of his &quot;portfolio selection theory,&quot; earned him the Nobel Memorial Prize in Economic Science in 1981. Tobin married Elizabeth Fay Ringo in 1946; they had four children: Margaret, Louis, Hugh, and Roger. Tobin died on March 11, 2002, in New Haven.
 	  </mods:abstract>
 
           <mods:abstract displayLabel="Acquisition Information">
-	    <%= rh['acq_info'] %>
+	    Gift of James Tobin, 1999; Elizabeth Tobin, 2002, 2004, and 2006. Gift of Roger G. Tobin and Linda M. Blum, 2004; Gift of William C. Brainard, 2005. Gift of Cowles Foundation, 2005.
 	  </mods:abstract>
 
           <mods:abstract displayLabel="Preferred Citation">
-	    <%= rh['cite'] %>
+	    James Tobin Papers. Manuscripts and Archives, Yale University Library.
 	  </mods:abstract>
 
           <mods:subject authority="lcsh">
@@ -164,7 +154,7 @@
 
 	  </mods:accessCondition>
 
-	  <% end %>
+	  
         </mods:mods>
       </foxml:xmlContent>
     </foxml:datastreamVersion>
@@ -174,7 +164,7 @@
     <foxml:datastreamVersion
        ID="rightsMetadata.0"
        LABEL=""
-       CREATED="<%= rh['ef_create_date'] %>"
+       CREATED="2011-09-15T15:22:37.000Z"
        MIMETYPE="text/xml"
        SIZE="302">
 
@@ -200,29 +190,29 @@
     <foxml:datastreamVersion
        ID="identityMetadata.0"
        LABEL=""
-       CREATED="<%= rh['ef_create_date'] %>"
+       CREATED="2011-09-15T15:22:37.000Z"
        MIMETYPE="text/xml"
        SIZE="302">
       <foxml:xmlContent>
         <identityMetadata>
           <adminPolicy>hypatia:fixture_xanadu_apo</adminPolicy>
 
-          <objectId><%= rh['pid'] %></objectId>
-          <objectType><%= rh['object_type'] %></objectType>
-          <setType><%= rh['set_type'] %></setType>
+          <objectId>hypatia:70</objectId>
+          <objectType></objectType>
+          <setType></setType>
 
-          <objectLabel><%= rh['title'] %></objectLabel>
+          <objectLabel>James Tobin papers</objectLabel>
 
           <objectCreator></objectCreator>
 
-          <agreementId><%= rh['agreement_id'] %></agreementId>
-          <tag>Project : <%= rh['project'] %></tag>
+          <agreementId></agreementId>
+          <tag>Project : James Tobin papers</tag>
 
         </identityMetadata>
       </foxml:xmlContent>
     </foxml:datastreamVersion>
   </foxml:datastream>
   
-  <%= rh['contentmeta'] %>
+  
 
 </foxml:digitalObject>

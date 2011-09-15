@@ -30,6 +30,11 @@ require "active_support"
 module Ead_fc
   
   class Fx_file_info
+    # Generate some technical metadata about digital objects (aka
+    # born-digital files) that are part of the collection. This work
+    # really should be done by Rubymatica which processes a
+    # collection, gathers technical metadata in (more or less)
+    # standard formats, and builts a Bagit bag.
 
     def initialize()
 
@@ -76,7 +81,11 @@ module Ead_fc
 
   class Fx_maker
     
-    # This class has all the action in initialize(). 
+    # memnonic: Fedora xml maker. This class has all the action in
+    # initialize() in the sense that calling the new() results not
+    # only in a new Fx_maker object, but all the action of converting
+    # EAD to FoXML occurs as well. All the other methods are simply
+    # here for support.
     
     attr_reader :pid
 
@@ -109,7 +118,14 @@ module Ead_fc
         ActiveFedora.init(:fedora_config_path=>Fedora_yaml)
       end
 
-      @solrizer = Solrizer::Fedora::Solrizer.new()
+      @use_solr = true
+
+      begin
+        @solrizer = Solrizer::Fedora::Solrizer.new()
+      rescue
+        print "Solrizer failed to connect, but we will continue working without it.\n"
+        @use_solr = false
+      end
 
       # read the EAD
       # pull info from collection, make foxml
@@ -172,8 +188,8 @@ module Ead_fc
       # Why don't we move these lines inside collection_parse()?
       
       @xml_out = @generic_template.result(binding())
-      write_foxml(rh['pid'])
-      print "Wrote foxml: pid: #{rh['pid']} id: #{rh['id']}\n"
+      wfx_name = write_foxml(rh['pid'])
+      print "Wrote foxml: #{wfx_name} pid: #{rh['pid']} id: #{rh['id']}\n"
       ingest_internal(rh['pid'])
 
       # Push the collection data onto the big loh so that the
@@ -298,13 +314,19 @@ module Ead_fc
           end
           rh['create_date'] = rh['container_unitdate']
 
-          if rh['container_unittitle'].to_s.empty?
-            rh['title'] = "Container #{rh['container_element']} id:#{rh['container_id']} level:#{rh['container_level']}"
+          # Build the description and title to be more consistent
+          # between collection, containers, etc.
+
+          rh['title'] = ""
+          details = "Container: #{rh['container_element']} id:#{rh['container_id']} level:#{rh['container_level']}"
+          if ! rh['container_unittitle'].to_s.empty?
+            rh['title'] = "#{rh['container_unittitle']} "
+            rh['description'] = "Title: #{rh['title']} #{details}"
           else
-            rh['title'] = rh['container_unittitle']
+            rh['title'] = details
+            rh['description'] = details
           end
-          
-          rh['description'] = rh['title'] # used by DC.
+
 
           # If the current node is a c01 node then get the
           # scopecontent. If it is not nil look at the children and pull
@@ -382,8 +404,8 @@ module Ead_fc
           end
 
           @xml_out = @generic_template.result(binding())
-          write_foxml(rh['pid'])
-          print "Wrote foxml: pid: #{rh['pid']} id: #{rh['id']}\n"
+          wfx_name = write_foxml(rh['pid'])
+          print "Wrote foxml: #{wfx_name} pid: #{rh['pid']} id: #{rh['id']}\n"
           ingest_internal(rh['pid'])
 
 
@@ -426,10 +448,12 @@ module Ead_fc
       end
       
       rh['title'] = @xml.xpath("//*/#{@ns}archdesc/#{@ns}did/#{@ns}unittitle")[0].content
-      
+
       rh['creator'] = @xml.xpath("//*/#{@ns}origination[contains(translate(@label,'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'),'creator')]/#{@ns}persname")[0].content
       
       rh['id'] = @xml.xpath("//*/#{@ns}archdesc/#{@ns}did/#{@ns}unitid")[0].content
+
+      rh['description'] = "Title: #{rh['title']} Collection: #{rh['id']}"
       
       # Ignore <head>. Get all <p> and separate by \n -->
       
@@ -531,7 +555,22 @@ module Ead_fc
     
     
     def write_foxml(pid)
-      fn = pid + ".xml"
+
+      # Use the debug mode both for debugging and for creating files
+      # that are part of the documentation. We need copies of the
+      # foxml checked in to the version control repo so that new users
+      # can see what the expected output is. To generate docs, run in
+      # debug mode, then copy the demo_* files to the main dir and add
+      # to the repo (github). Ideally, we'd would have collection,
+      # series, box, paper archive file, and digital file foxml
+      # examples, but that may not be the case because the debug cut
+      # off code is very simplistic.
+
+      if @debug
+        fn = "demo_" + pid + ".xml"
+      else
+        fn = pid + ".xml"
+      end
       fn.gsub!(/:/,"_")
       writer = lambda {
         File.open(fn, "wb") { |my_xml|
@@ -546,6 +585,7 @@ module Ead_fc
       else
         writer.call
       end
+      return fn;
     end
     
 
@@ -569,8 +609,15 @@ module Ead_fc
         ingest_result_xml = RestClient.post(wuri,
                                             payload,
                                             :content_type => "text/xml")
-        @solrizer.solrize(pid) 
-
+        begin
+          if @use_solr
+            @solrizer.solrize(pid) 
+          end
+        rescue
+          puts $!
+          print "Solrizer failed. We will continue without it.\n"
+          @use_solr = false
+        end
         return ingest_result_xml
       else
         var = payload

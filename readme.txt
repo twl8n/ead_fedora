@@ -60,8 +60,8 @@ files are demo*.xml. Templates for the output are *.erb.
 The conversion (crosswalk) code is in ead_fc.rb methods
 collection_parse() and container_parse(). You should be able to read
 the input, look at the conversion code, look at the *.erb templates,
-look at the output and be able to trace data from the input, throught
-the code, into the template and finally see the data in the sample
+look at the output and be able to trace data from the input, through
+the code, into the template, and finally see the data in the sample
 output files. A complete understanding of then crosswalk requires all
 4 files, however, certain tasks only require you to look at one or two
 files.

@@ -413,8 +413,15 @@ module Ead_fc
       
       rh['title'] = @xml.xpath("//*/#{@ns}archdesc/#{@ns}did/#{@ns}unittitle")[0].content
 
-      rh['creator'] = @xml.xpath("//*/#{@ns}origination[contains(translate(@label,'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'),'creator')]/#{@ns}persname")[0].content
-      
+      rh['creator'] = ""
+
+      begin
+        @xml.xpath("//*/#{@ns}origination[contains(translate(@label,'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'),'creator')]/#{@ns}persname")[0].content
+      rescue NameError => err
+        # If there was an error we don't really care why, but print a message regardless.
+        print "Warning: Cannot get <origination><persname>\n"
+      end
+
       rh['id'] = @xml.xpath("//*/#{@ns}archdesc/#{@ns}did/#{@ns}unitid")[0].content
 
       rh['description'] = "Title: #{rh['title']} Collection: #{rh['id']}"

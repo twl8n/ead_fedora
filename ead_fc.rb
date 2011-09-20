@@ -22,9 +22,9 @@ require 'erb'
 require 'mime/types'
 require 'config.rb'
 require 'find'
-require "active-fedora"
-require "solrizer-fedora"
-require "active_support"
+#require "active-fedora"
+#require "solrizer-fedora"
+#require "active_support"
 
 
 module Ead_fc
@@ -91,42 +91,6 @@ module Ead_fc
 
     def initialize(fname, debug)
 
-      # ruby-1.8.7-head > ActiveFedora.version NameError:
-      # uninitialized constant ActiveFedora::VERSION from
-      # /home/twl8n/.rvm/gems/ruby-1.8.7-head@baretull/gems/active-fedora-3.0.3/lib/active_fedora.rb:268:in
-      # `version' from (irb):4
-
-      # Full path to the fedora yaml, and solr assumes that it will
-      # find solr.yml in the same dir.
-
-      # Can't use ActiveFedora.version == "2.2.2" due to the bug above in 3.0.3.
-
-      # Sometime after 2.2.2 passing of the config file as a string
-      # was deprecated. Put in a little workaround to keep v 3.x.x
-      # from complaining.
-
-      # Unfortunately, the new separate yml files don't work with the
-      # old version resulting in an error "`init': undefined method
-      # `[]' for nil:NilClass (NoMethodError)" from
-      # active_fedora.rb:64. Therefore you must copy the proper
-      # *_dist.yml files. See the readme.txt.
-
-      if ActiveFedora.constants.include?("VERSION") &&
-          ActiveFedora.const_get("VERSION") < "3.0.0"
-        ActiveFedora.init(Fedora_yaml)
-      else
-        ActiveFedora.init(:fedora_config_path=>Fedora_yaml)
-      end
-
-      @use_solr = true
-
-      begin
-        @solrizer = Solrizer::Fedora::Solrizer.new()
-      rescue
-        print "Solrizer failed to connect, but we will continue working without it.\n"
-        @use_solr = false
-      end
-
       # read the EAD
       # pull info from collection, make foxml
       # Use a foxml erb template
@@ -190,7 +154,6 @@ module Ead_fc
       @xml_out = @generic_template.result(binding())
       wfx_name = write_foxml(rh['pid'])
       print "Wrote foxml: #{wfx_name} pid: #{rh['pid']} id: #{rh['id']}\n"
-      ingest_internal(rh['pid'])
 
       # Push the collection data onto the big loh so that the
       # collection's children can access their parent's data.
@@ -406,8 +369,6 @@ module Ead_fc
           @xml_out = @generic_template.result(binding())
           wfx_name = write_foxml(rh['pid'])
           print "Wrote foxml: #{wfx_name} pid: #{rh['pid']} id: #{rh['id']}\n"
-          ingest_internal(rh['pid'])
-
 
           # Actions to implment here: Pop stack. When we eventually
           # implement "isParentOf" then this is where we will modify the
@@ -439,11 +400,14 @@ module Ead_fc
       # globals in imperative code. Obi wan says: These aren't the
       # globals you're looking for.
       
+      # Interestingly, titleproper can occur in at least two places,
+      # so only use the first [0]th instance.
+
       tmp = @xml.xpath("//*/#{@ns}titleproper[@type='formal']")[0]
       if ! tmp.nil?
         rh['titleproper'] = tmp.content
       else
-        printf "tp: %s\n", @xml.xpath("//*/#{@ns}titleproper")
+        # printf "tp: %s\n", @xml.xpath("//*/#{@ns}titleproper")
         rh['titleproper'] = @xml.xpath("//*/#{@ns}titleproper")[0].content
       end
       
@@ -588,44 +552,6 @@ module Ead_fc
       return fn;
     end
     
-
-    def ingest_internal(pid)
-
-      # pid is passed in as a convenience for solr. The ingested xml
-      # already has a pid, so we don't worry about that.
-
-      # Ingest existing @xml_out. 
-
-      wuri = "#{@base_url}/objects/new?format=info:fedora/fedora-system:FOXML-1.1"
-      payload = RestClient::Payload.generate(@xml_out)
-
-      # Do not call to_s() on payload because payload is a stream object
-      # and to_s() doesn't reset the stream byte counter which
-      # essentially means the stream becomes empty.
-
-      if true
-        # deb = payload.inspect()
-        # print "working uri: #{wuri}\nvar: #{deb[0,10]}\n...\n#{deb[-80,80]}\n"
-        ingest_result_xml = RestClient.post(wuri,
-                                            payload,
-                                            :content_type => "text/xml")
-        begin
-          if @use_solr
-            @solrizer.solrize(pid) 
-          end
-        rescue
-          puts $!
-          print "Solrizer failed. We will continue without it.\n"
-          @use_solr = false
-        end
-        return ingest_result_xml
-      else
-        var = payload
-        # print "working uri: #{wuri}\nvar: #{payload.to_s[0,10]}\n again: #{var}more stuff\n"
-        return ""
-      end
-    end
-
     def xml_out
       return @xml_out
     end

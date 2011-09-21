@@ -174,10 +174,16 @@ module Ead_fc
       @break_set = false
 
       # Note: we modify @cn_loh in this method.
-      
-      if nset.children.to_s.match(/<c\d+/is).nil?
+
+      if nset.children.to_s.match(/(?:<c\d+)|(?:<c(?:\s+)|(?:>))/is).nil?
         # No child containers, so we must be a leaf container aka we
         # describe individual items.
+
+        # If we are a leaf, don't we need to create foxml for ourself?
+        printf "Leaf container: %s\n", nset[0].name
+
+        # puts nset.children.to_s
+
         return true
       end
 
@@ -193,7 +199,15 @@ module Ead_fc
         
         rh = Hash.new()
 
-        if ele.name.match(/^c\d+/i)
+        # oldthink:
+        # if ele.name.match(/^c\d+/i)
+
+        # newthink:
+        # Use non-capturing zero width assertion to be a bit more
+        # efficient, and to clarify our intention to match but not
+        # capture, and to clarify that (?:) is for alternation.
+
+        if ele.name.match(/(?:^c\d+)|(?:^c$)/i)
 
           # Actions to implment here: Get Fedora PID. Get parent PID
           # from the stack. Save current node info in a hash, push onto
@@ -210,6 +224,8 @@ module Ead_fc
           # type (attr), container (value, string, could be "6-7"), may be
           # multiple <container> elements), unitdate, scopecontent
 
+          # Hull containers are <c> only, no matter the nesting depth.
+
           rh['container_element'] = ele.name
           rh['container_level'] = ele.attribute('level')
           rh['container_id'] = ele.attribute('id')
@@ -225,8 +241,10 @@ module Ead_fc
           # Note: container_type and container_value need to be a list
           # of hash due to possible multiple values!
           
-          # These seem to work too, returning the expected single value
-          # or nil when there isn't a unitdate.
+          # These seem to work too for Tobin, Cheuse and others with
+          # <c0x> but would fail with Hull <c>. When the work, they
+          # return the expected single value or nil when there isn't a
+          # unitdate.
 
           # nset.xpath("./#{@ns}c02/#{@ns}c03/#{@ns}did").children.xpath("./#{@ns}unitdate")[0]
 
@@ -291,14 +309,21 @@ module Ead_fc
           end
 
 
-          # If the current node is a c01 node then get the
-          # scopecontent. If it is not nil look at the children and pull
-          # content out of any p elements. Remember that (at least in
-          # the nokogiri universe) there are invisible text elements
-          # around all other elements.
+          # If the current node is a top level container node then get
+          # the scopecontent. If it is not nil look at the children
+          # and pull content out of any p elements. Remember that (at
+          # least in the nokogiri universe) there are invisible text
+          # elements around all other elements.
 
           rh['container_scope'] = ""
-          if ele.name.match(/c01/)
+
+          # Old code looked for c01 as top level containers. 
+          #if ele.name.match(/c01/) 
+
+          # New code looks for a container with a dsc parent.
+
+          if ele.parent.name.match(/dsc/)
+            print "Found top level container. "
             scon = ele.xpath("./#{@ns}scopecontent")[0]
             if scon.class.to_s.match(/nil/i)
               # When nil do nothing.
@@ -311,8 +336,10 @@ module Ead_fc
                     tween = "\n\n"
                   end
                 }
+                printf "sc: %s...", rh['container_scope'][0..20]
               end
             end
+            print "\n"
           end
           rh['scope'] = rh['container_scope']
 

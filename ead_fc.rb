@@ -22,14 +22,19 @@ require 'erb'
 require 'mime/types'
 require 'config.rb'
 require 'find'
-#require "active-fedora"
-#require "solrizer-fedora"
-#require "active_support"
-
+require 'escape'
 
 module Ead_fc
   
   class Fx_file_info
+
+    # This class is Tobin specific. The failure to use a unique UUID
+    # for each file means that we have to parse contextual information
+    # from the EAD, and there is no standard for that contextual
+    # information. If we had a unique id such as a UUID for each file,
+    # I could just search all files (via a hash or SQL database) and I
+    # wouldn't need any contextual information.
+    
     # Generate some technical metadata about digital objects (aka
     # born-digital files) that are part of the collection. This work
     # really should be done by Rubymatica which processes a
@@ -38,17 +43,26 @@ module Ead_fc
 
     def initialize()
 
-      # A hash of lists of hashes
+      # File Info hash (fi_h), a hash of lists of hashes. The outer
+      # hash key is the path, and the list are files in that
+      # directory. Since Tobin is essentially flat, the directory is
+      # the unitid, and the internal files are all part of the digital
+      # "item".
+
+      print "Building file technical meta data for: #{Digital_assets_home}\n"
+
       @fi_h = Hash.new
-      Find.find(Content_home) { |file|
+      xx = 0
+      Find.find(Digital_assets_home) { |file|
         if File.file?(file)
+          shell_file = Escape.shell_command(file)
           rh = Hash.new()
           cpath = File.dirname(file)
-          # Path relative to the base Content_home. We can generate
+          # Path relative to the base Digital_assets_home. We can generate
           # rh['fname'] from the c0x id using the Content_path sprintf
           # format string.
 
-          rh['fname'] = file.match(/#{Content_home}\/(.*)/)[1]
+          rh['fname'] = file.match(/#{Digital_assets_home}\/(.*)/)[1]
 
           # Can't use MIME::Types.type_for() because is can't
           # recognize certain files such as disk images.
@@ -56,26 +70,38 @@ module Ead_fc
           # rh['mime'] = MIME::Types.type_for(file).first.content_type
           
 
-          rh['format'] = `file -b #{file}`.chomp
-          rh['mime'] = `file -b --mime-type #{file}`.chomp
+          rh['format'] = `file -b #{shell_file}`.chomp
+          rh['mime'] = `file -b --mime-type #{shell_file}`.chomp
           rh['size'] = File.size(file)
           # Use the shell commands because we can't read really large
           # files into RAM
-          rh['md5'] = `md5sum #{file}`.match(/^(.*?)\s+/)[1]
-          rh['sha1'] = `sha1sum #{file}`.match(/^(.*?)\s+/)[1]
-          rh['url'] = "#{Content_url}/#{rh['fname']}"
+          rh['md5'] = `md5sum #{shell_file}`.match(/^(.*?)\s+/)[1]
+          rh['sha1'] = `sha1sum #{shell_file}`.match(/^(.*?)\s+/)[1]
+          rh['url'] = "#{Digital_assets_url}/#{rh['fname']}"
           
           if ! @fi_h.has_key?(cpath)
             @fi_h[cpath] = []
           end
           @fi_h[cpath].push(rh)
+          xx = xx + 1
+          if (xx % 10) == 0
+            print "Completed #{xx} curr fname: #{rh['fname']}\n"
+          end
+          if (xx % 50) == 0
+            break
+          end
         end
       }
+      print "Done building file technical meta data for: #{Digital_assets_home}\n"
     end
 
     def get(cpath)
-      # Return a list of hashes
-      return @fi_h[cpath]
+      # Return a list of hashes or return an empty list.
+      if @fi_h.has_key?(cpath)
+        return @fi_h[cpath]
+      else
+        return []  
+      end
     end
   end # end class Fx_file_info
 
@@ -143,7 +169,7 @@ module Ead_fc
 
       # Ruby objects are always passed by reference. (Except Fixnum.)
       # collection_parse updates rh. Side effects prevent bugs, right?
-
+      
       collection_parse(rh)
       rh['files_datastream'] = ""
       @top_project = rh['project']
@@ -165,17 +191,24 @@ module Ead_fc
       # outside of container_parse()?
 
       nset = @xml.xpath("//*/#{@ns}archdesc/#{@ns}dsc")
-      container_parse(nset)
+      container_parse(nset, "")
 
     end # initialize
 
 
-    def container_parse(nset)
+    def container_parse(nset, parent_path)
+      
+      # params are a node set and the parent's path to digital
+      # assets. The path is built from contextual data and may not be
+      # quite a true path, but should match via some sort of regex
+      # against the actual paths created by the Fx_file_info class.
+
       @break_set = false
 
       # Note: we modify @cn_loh in this method.
 
       if nset.children.to_s.match(/(?:<c\d+)|(?:<c(?:\s+)|(?:>))/is).nil?
+
         # No child containers, so we must be a leaf container aka we
         # describe individual items.
 
@@ -187,8 +220,7 @@ module Ead_fc
         return true
       end
 
-      # If we aren't using the index xx, remove it.
-
+      have_c_children = false;
       nset.children.each_with_index { |ele,xx|
         #debug
         if @debug && (xx > 5 || @break_set)
@@ -208,6 +240,8 @@ module Ead_fc
         # capture, and to clarify that (?:) is for alternation.
 
         if ele.name.match(/(?:^c\d+)|(?:^c$)/i)
+
+          have_c_children = true
 
           # Actions to implment here: Get Fedora PID. Get parent PID
           # from the stack. Save current node info in a hash, push onto
@@ -255,6 +289,7 @@ module Ead_fc
           rh['container_unitdate'] = ""
           rh['container_unittitle'] = ""
           rh['container_unitid'] = ""
+          rh['path_key'] = ""
 
           # <container type="xx"> element(s) are in a list of hashes because we
           # have some with multiples.
@@ -286,13 +321,34 @@ module Ead_fc
 
               if child.name.match(/unitid/)
                 rh['container_unitid'] = child.content
+
+                # It seems best to simply hard code the path_key for
+                # each case. They don't easily generalize and a
+                # general solution won't be robust.
+                if Path_key_name == 'tobin'
+                  rh['path_key'] = rh['container_unitid']
+                end
               end
               
               if child.name.match(/unittitle/)
-                rh['container_unittitle'] = child.content.strip.gsub!(/\s+/," ")
+                
+                # Don't use .gsub! because if it does nothing, it
+                # returns nil rather than the expected returning the
+                # input string. In other words, it only returns the
+                # input string if it changes it.
+
+                rh['container_unittitle'] = child.content.strip.gsub(/\s+/," ")
+
+                # It seems best to simply hard code the path_key for
+                # each case. They don't easily generalize and a
+                # general solution won't be robust.
+                if Path_key_name == 'hull'
+                  rh['path_key'] = rh['container_unittitle']
+                end
               end
             }
           end
+
           rh['create_date'] = rh['container_unitdate']
 
           # Build the description and title to be more consistent
@@ -366,6 +422,8 @@ module Ead_fc
           
           prep_data(rh)
 
+          curr_path = "#{parent_path}/#{rh['path_key']}"
+
           rh['contentmeta'] = ""
 
           # Order critical. Push our data onto @cn_loh, then
@@ -373,9 +431,10 @@ module Ead_fc
           # A true return value from container_parse() means there
           # are no children so we are an ITEM/FILE node. 
 
-          # We only process file data if this is an ITEM container (no
-          # child containers) and we have a unitid. Tobin collection
-          # unitid has the directory name that contains the files.
+          # We only process file data if this has no child
+          # containers. Tobin collection unitid has the directory name
+          # that contains the files. Hull uses the unittitle as
+          # directory or file depending on context.
 
           @cn_loh.push(rh)
 
@@ -383,14 +442,29 @@ module Ead_fc
           # then it returns true meaning 'I am a leaf' thus leaf_flag
           # becomes true.
 
-          leaf_flag = container_parse(ele)
-          # printf "lf: %s id: %s\n", leaf_flag, rh['container_unitid']
+          # *************** important ****************
+          # This is where container_parse() recurses to process container children.
 
-          if leaf_flag and ! rh['container_unitid'].empty?
-            # create a list rh['cm'] that is a list of hash.
-            printf("cuid: %s\n", rh['container_unitid'] )
-            rh['cm'] = @fi_h.get(sprintf(Content_path, rh['container_unitid']))
+          leaf_flag = container_parse(ele, curr_path)
+
+          if leaf_flag and ! rh['path_key'].empty?
+
+            # create a list rh['cm'] that is a list of hash of
+            # technical meta data for the files (digital assets) in
+            # this directory aka the files described by this container
+            # <c> or <c0x> element.
+
+            rh['cm'] = @fi_h.get(sprintf(Digital_assets_home, rh['container_unitid']))
             rh['contentmeta'] = @contentmeta_template.result(binding()) 
+
+            printf "cuid: %s path: %s path_key: %s\n", rh['container_unitid'], curr_path, rh['path_key']
+            if rh['cm'].size > 0
+              rh['cm'].each { |fi_h|
+                printf "Found %s\n", fi_h['fname']
+              }
+            end
+            else
+            printf "lf: %s pk: %s title: %s\n", leaf_flag, curr_path, rh['path_key'], rh['container_unittitle']
           end
 
           @xml_out = @generic_template.result(binding())
@@ -403,17 +477,18 @@ module Ead_fc
           # created during the recursion.
 
           @cn_loh.pop()
-
-          # debug
-          # exit
-
         end
       }
 
       # We finished processing which means that we recursed which
       # means we have children which means we are not a
       # leaf. In other words, leaf_flag is false so return false.
-      return false
+      
+      # The "have no children" case where we return true is at the top
+      # of the method.
+      
+      return have_c_children
+
     end # container_parse
 
 

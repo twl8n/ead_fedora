@@ -1,5 +1,6 @@
 #!/usr/bin/ruby 
 
+
 # Copyright 2011 University of Virginia
 # Created by Tom Laudeman
 
@@ -20,9 +21,10 @@ require 'rest-client'
 require 'nokogiri'
 require 'erb'
 require 'mime/types'
-require 'config.rb'
+# require 'config.rb'
 require 'find'
 require 'escape'
+require 'sqlite3'
 
 module Ead_fc
   
@@ -43,55 +45,149 @@ module Ead_fc
 
     def initialize()
 
+      @fi_h = Hash.new
+
       # File Info hash (fi_h), a hash of lists of hashes. The outer
       # hash key is the path, and the list are files in that
       # directory. Since Tobin is essentially flat, the directory is
       # the unitid, and the internal files are all part of the digital
       # "item".
 
-      print "Building file technical meta data for: #{Digital_assets_home}\n"
+      # Save the technical meta data in a SQLite db. If the db exists,
+      # use it, if not create and populate it.
 
-      @fi_h = Hash.new
-      xx = 0
-      Find.find(Digital_assets_home) { |file|
-        if File.file?(file)
-          shell_file = Escape.shell_command(file)
-          rh = Hash.new()
-          cpath = File.dirname(file)
-          # Path relative to the base Digital_assets_home. We can generate
-          # rh['fname'] from the c0x id using the Content_path sprintf
-          # format string.
+      @fn = "#{Path_key_name}_tech_data.db"
 
-          rh['fname'] = file.match(/#{Digital_assets_home}\/(.*)/)[1]
+      if (! File.size?(@fn))
+        db = SQLite3::Database.new(@fn)
+        db.busy_timeout(1000) # milliseconds?
+        db.transaction(:immediate)
+        db.execute_batch(IO.read(Schema_sql))
+        db.commit
+        db.close
 
-          # Can't use MIME::Types.type_for() because is can't
-          # recognize certain files such as disk images.
-          # rh['format'] = MIME::Types.type_for(file).first.media_type
-          # rh['mime'] = MIME::Types.type_for(file).first.content_type
-          
+        print "Building file technical meta data for: #{Digital_assets_home}\n"
 
-          rh['format'] = `file -b #{shell_file}`.chomp
-          rh['mime'] = `file -b --mime-type #{shell_file}`.chomp
-          rh['size'] = File.size(file)
-          # Use the shell commands because we can't read really large
-          # files into RAM
-          rh['md5'] = `md5sum #{shell_file}`.match(/^(.*?)\s+/)[1]
-          rh['sha1'] = `sha1sum #{shell_file}`.match(/^(.*?)\s+/)[1]
-          rh['url'] = "#{Digital_assets_url}/#{rh['fname']}"
-          
+        xx = 0
+        Find.find(Digital_assets_home) { |file|
+          if File.file?(file)
+            shell_file = Escape.shell_command(file)
+            rh = Hash.new()
+            cpath = File.dirname(file)
+            # Path relative to the base Digital_assets_home. We can generate
+            # rh['fname'] from the c0x id using the Content_path sprintf
+            # format string.
+
+            rh['fname'] = file.match(/#{Digital_assets_home}\/(.*)/)[1]
+
+            if Path_key_name == 'hull'
+              # Create a string that we can test against the
+              # path-matching info we can pull out of the EAD XML.
+
+              rh['test_name'] = rh['fname']
+
+              # Remove leading numbers \d+\.\s+ e.g. "1. "
+              rh['test_name'].gsub!(/^\d+\.\s+/, "/")
+
+              # Remove numbers after / e.g "/1. "
+              rh['test_name'].gsub!(/\/\d+\.\s+/, "/")
+
+              # Remove file name from the end
+              rh['test_name'].gsub!(/(.*\/).*/, '\1')
+
+              # Remove trailing /
+              rh['test_name'].gsub!(/\/$/, '')
+            end
+
+            # Can't use MIME::Types.type_for() because is can't
+            # recognize certain files such as disk images.
+            # rh['format'] = MIME::Types.type_for(file).first.media_type
+            # rh['mime'] = MIME::Types.type_for(file).first.content_type
+
+            rh['format'] = `file -b #{shell_file}`.chomp
+            rh['mime'] = `file -b --mime-type #{shell_file}`.chomp
+            rh['size'] = File.size(file)
+            # Use the shell commands because we can't read really large
+            # files into RAM
+            rh['md5'] = `md5sum #{shell_file}`.match(/^(.*?)\s+/)[1]
+            rh['sha1'] = `sha1sum #{shell_file}`.match(/^(.*?)\s+/)[1]
+            rh['url'] = "#{Digital_assets_url}/#{rh['fname']}"
+            rh['cpath'] = cpath
+            
+            if ! @fi_h.has_key?(cpath)
+              @fi_h[cpath] = []
+            end
+            @fi_h[cpath].push(rh)
+            xx = xx + 1
+
+            # if xx == 10
+            #   break
+            # end
+            if (xx % 20) == 0
+              print "Completed #{xx}\n"
+            end
+          end
+        }
+        print "Finished traversing: #{xx}\n"
+        
+        db = SQLite3::Database.new(@fn)
+        db.busy_timeout(1000) # milliseconds?
+        db.transaction(:immediate)
+        stmt = db.prepare("insert into file_info (cpath,fname,test_name,format,mime,size,md5,sha1,url) values (?,?,?,?,?,?,?,?,?)")
+        
+        # hash of list of hash
+
+        @fi_h.keys.each { |key|
+          @fi_h[key].each { |rh|
+            stmt.execute(rh['cpath'],
+                         rh['fname'],
+                         rh['test_name'],
+                         rh['format'],
+                         rh['mime'],
+                         rh['size'],
+                         rh['md5'],
+                         rh['sha1'],
+                         rh['url'])
+          }
+        }
+        stmt.close
+        db.commit
+        db.close
+        print "All complete: #{xx}.\n"
+
+      else
+        yy = 0
+        db = SQLite3::Database.new(@fn)
+        db.busy_timeout(1000) # milliseconds?
+        db.transaction(:immediate)
+        stmt = db.prepare("select * from file_info")
+        ps = Proc_sql.new();
+        stmt.execute(){ |rs|
+          ps.chew(rs)
+        }
+        stmt.close
+        db.close()
+
+        # Get the list of hash from ps and create a hash keyed by
+        # cpath and then push each file with that cpath into the list
+        # that is the value of the hash.
+
+        ps.loh.each { |hr|
+          yy = yy + 1
+          # Use a temp var "cpath" for legibility and to be just like the
+          # non-db code above.
+          cpath = hr['cpath']
+          puts hr['test_name']
           if ! @fi_h.has_key?(cpath)
+            # Can't push to a nonexistent hash key in Ruby. 
             @fi_h[cpath] = []
           end
-          @fi_h[cpath].push(rh)
-          xx = xx + 1
-          if (xx % 10) == 0
-            print "Completed #{xx} curr fname: #{rh['fname']}\n"
-          end
-          if (xx % 50) == 0
-            break
-          end
-        end
-      }
+          @fi_h[cpath].push(hr)
+        }
+        print "Read #{yy} records from file_info database: #{Schema_sql}\n"
+        return
+      end
+
       print "Done building file technical meta data for: #{Digital_assets_home}\n"
     end
 
@@ -509,7 +605,7 @@ module Ead_fc
       if ! tmp.nil?
         rh['titleproper'] = tmp.content
       else
-        # printf "tp: %s\n", @xml.xpath("//*/#{@ns}titleproper")
+        # printf "tp: %s ns:\n", @xml.xpath("//*/#{@ns}titleproper"), @xml.inspect
         rh['titleproper'] = @xml.xpath("//*/#{@ns}titleproper")[0].content
       end
       
@@ -731,5 +827,50 @@ module Ead_fc
     end
     
   end
+
+
+  class Proc_sql
+    # Process (chew) sql records into a list of hash. Called in an
+    # execute2() loop. Ruby doesn't really know how to return SQL results
+    # as a list of hash, so we need this helper method to create a
+    # list-of-hash. You'll see Proc_sql all over where we pull back some
+    # data and send that data off to a Rails erb to be looped through,
+    # usually as table tr tags.
+    
+    def initialize
+      @columns = []
+      @loh = []
+    end
+
+    def loh
+      if (@loh.length>0)
+        return @loh
+      else
+        return [{'msg' => "n/a", 'date' => 'now'}];
+      end
+    end
+
+    # Initially I thought I was sending this an array from db.execute2
+    # which sends the row names as the first record. However, using
+    # db.prepare we use stmt.execute (there is no execute2 for
+    # statements), so we're getting a ResultSet on which we'll use the
+    # columns() method to get column names.
+
+    # It makes sense to each through the result set here. The calling
+    # code is cleaner.
+
+    def chew(rset)
+      if (@columns.length == 0 )
+        @columns = rset.columns;
+      end
+      rset.each { |row|
+        rh = Hash.new();
+        @columns.each_index { |xx|
+          rh[@columns[xx]] = row[xx];
+        }
+        @loh.push(rh);
+      }
+    end
+  end # class Proc_sql
 
 end

@@ -9,16 +9,16 @@ STDOUT.sync = true
 
 myfile = ARGV[0]
 
+require myfile
+
 if ARGV.size == 0
-  print "Usage: #{$0} ead_file.xml\n"
+  print "Usage: #{$0} collction_config_file.rb\n"
   exit
 end
 
-debug = false # true or false
-
-if File.exists?(myfile)
-  fxm = Ead_fc::Fx_maker.new(myfile, debug)
+if File.exists?(Ead_file)
+  fxm = Ead_fc::Fx_maker.new(Ead_file, Fx_debug)
 else
-  print "Can't find file #{myfile}\n"
+  print "Can't find file #{Ead_file}\n"
   exit
 end

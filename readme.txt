@@ -6,6 +6,7 @@ Table of contents
 License and credits
 Introduction
 Input and output
+Collection digital assets
 Configuration
 Requirements
 How to run with Fedora Commons plus Tomcat
@@ -96,6 +97,26 @@ have conditional (if) statements in either the Ruby code or in the
 .erb template (or both). Some data elements also occur as multiple
 values and therefore may require a loop in the Ruby code and the .erb
 template.
+
+
+Collection digital assets
+-------------------------
+
+
+If a collection has file associated with it, then those files need to
+be manually downloaded and stored locally.
+
+See the config.rb variable Digital_assets_home.
+
+run.rb (via class Fx_maker in ead_fc.rb) will attempt to locate files
+that correspond to EAD <c0x> or <c> containers. Current code
+understands the organization of files for Yale and Hull.
+
+The file system is traversed by Fx_file_info, and the path/file from
+the EAD is tested against the known paths. The test is either full
+equivalence or via a regular expression. Ideally, the test will be a
+regular expression determined by the config file. 
+
 
 
 

@@ -3,6 +3,7 @@ Convert EAD finding aid to Fedora Commons repository objects.
 
 Table of contents
 -----------------
+Updates
 License and credits
 Introduction
 Input and output
@@ -11,6 +12,22 @@ Configuration
 Requirements
 How to run with Fedora Commons plus Tomcat
 How to run with hydra-jetty
+
+Updates
+-------
+
+
+*_config.rb is collection specific. See hull_config.rb
+
+*_tech_data.db is a SQLite database of technical metadata for
+ files. Each db is collection specific. If the file exists it will be
+ used. If it does not exist, it will be created which can take a few
+ seconds.
+
+The old, original code that ingested and (attempted) to update the
+Solr index is ead_fc_solr.rb. The old versions of ead_fc.rb are in git
+as well, but I wanted a static file that was the end of the old way of
+doing things.
 
 
 

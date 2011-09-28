@@ -1,7 +1,0 @@
-development:
-    url: http://fedoraAdmin:fedoraAdmin@localhost:8983/fedora
-test:
-    url: http://fedoraAdmin:fedoraAdmin@localhost:8983/fedora
-production:
-    url: http://fedoraAdmin:fedoraAdmin@localhost:8983/fedora
-    

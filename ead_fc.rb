@@ -84,7 +84,7 @@ module Ead_fc
               # Create a string that we can test against the
               # path-matching info we can pull out of the EAD XML.
 
-              rh['test_name'] = rh['fname']
+              rh['test_name'] = String.new(rh['fname'])
 
               # Remove leading numbers \d+\.\s+ e.g. "1. "
               rh['test_name'].gsub!(/^\d+\.\s+/, "/")
@@ -112,7 +112,7 @@ module Ead_fc
             rh['md5'] = `md5sum #{shell_file}`.match(/^(.*?)\s+/)[1]
             rh['sha1'] = `sha1sum #{shell_file}`.match(/^(.*?)\s+/)[1]
             rh['url'] = "#{Digital_assets_url}/#{rh['fname']}"
-            rh['cpath'] = cpath
+            rh['cpath'] = String.new(cpath)
             
             if ! @fi_h.has_key?(cpath)
               @fi_h[cpath] = []
@@ -176,8 +176,8 @@ module Ead_fc
           yy = yy + 1
           # Use a temp var "cpath" for legibility and to be just like the
           # non-db code above.
-          cpath = hr['cpath']
-          puts hr['test_name']
+          cpath = String.new(hr['cpath'])
+
           if ! @fi_h.has_key?(cpath)
             # Can't push to a nonexistent hash key in Ruby. 
             @fi_h[cpath] = []
@@ -189,6 +189,19 @@ module Ead_fc
       end
 
       print "Done building file technical meta data for: #{Digital_assets_home}\n"
+    end
+
+    def discover(tpath)
+      file_list = []
+      @fi_h.keys.each { |key|
+        @fi_h[key].each { |rh|
+          # print "tpa: #{rh['test_name']}\n"
+          if rh['test_name'] == tpath
+            file_list.push(rh)
+          end
+        }
+      }
+      return file_list
     end
 
     def get(cpath)
@@ -259,8 +272,8 @@ module Ead_fc
       rh = Hash.new()
 
       rh['pid'] = gen_pid()
-      @top_pid = rh['pid'] 
-      rh['ef_create_date'] = @ef_create_date
+      @top_pid = String.new(rh['pid'])
+      rh['ef_create_date'] = String.new(@ef_create_date)
       rh['is_container'] = false
 
       # Ruby objects are always passed by reference. (Except Fixnum.)
@@ -268,7 +281,7 @@ module Ead_fc
       
       collection_parse(rh)
       rh['files_datastream'] = ""
-      @top_project = rh['project']
+      @top_project = String.new(rh['project'])
 
       # binding() passes the current execution heap space.
       # Why don't we move these lines inside collection_parse()?
@@ -311,8 +324,6 @@ module Ead_fc
         # If we are a leaf, don't we need to create foxml for ourself?
         printf "Leaf container: %s\n", nset[0].name
 
-        # puts nset.children.to_s
-
         return true
       end
 
@@ -344,10 +355,10 @@ module Ead_fc
           # the container stack, generate foxml, ingest.
 
           rh['pid'] = gen_pid()
-          rh['ef_create_date'] = @ef_create_date
+          rh['ef_create_date'] = String.new(@ef_create_date)
           rh['is_container'] = true
           rh['type_of_resource'] = 'container="yes"'
-          rh['parent_pid'] =  @cn_loh.last['pid']
+          rh['parent_pid'] =  String.new(@cn_loh.last['pid'])
 
           # container id (attr), container level (attr),
           # container (element, c01, c02, ...), unittitle, container
@@ -356,17 +367,17 @@ module Ead_fc
 
           # Hull containers are <c> only, no matter the nesting depth.
 
-          rh['container_element'] = ele.name
-          rh['container_level'] = ele.attribute('level')
-          rh['container_id'] = ele.attribute('id')
-          rh['type_of_resource'] = rh['container_level']
-          rh['type'] = rh['container_level']
-          rh['id'] = rh['container_id']
+          rh['container_element'] = String.new(ele.name)
+          rh['container_level'] = String.new(ele.attribute('level'))
+          rh['container_id'] = String.new(ele.attribute('id'))
+          rh['type_of_resource'] = String.new(rh['container_level'])
+          rh['type'] = String.new(rh['container_level'])
+          rh['id'] = String.new(rh['container_id'])
           rh['creator'] = "See collection object #{@top_pid}"
           rh['corp_name'] = "See collection object #{@top_pid}"
-          rh['object_type'] = rh['container_element']
+          rh['object_type'] = String.new(rh['container_element'])
           rh['set_type'] = "container"
-          rh['project'] = @top_project
+          rh['project'] = String.new(@top_project)
 
           # Note: container_type and container_value need to be a list
           # of hash due to possible multiple values!
@@ -422,7 +433,7 @@ module Ead_fc
                 # each case. They don't easily generalize and a
                 # general solution won't be robust.
                 if Path_key_name == 'tobin'
-                  rh['path_key'] = rh['container_unitid']
+                  rh['path_key'] = String.new(rh['container_unitid'])
                 end
               end
               
@@ -439,13 +450,13 @@ module Ead_fc
                 # each case. They don't easily generalize and a
                 # general solution won't be robust.
                 if Path_key_name == 'hull'
-                  rh['path_key'] = rh['container_unittitle']
+                  rh['path_key'] = String.new(rh['container_unittitle'])
                 end
               end
             }
           end
 
-          rh['create_date'] = rh['container_unitdate']
+          rh['create_date'] = String.new(rh['container_unitdate'])
 
           # Build the description and title to be more consistent
           # between collection, containers, etc.
@@ -456,8 +467,8 @@ module Ead_fc
             rh['title'] = "#{rh['container_unittitle']} "
             rh['description'] = "Title: #{rh['title']} #{details}"
           else
-            rh['title'] = details
-            rh['description'] = details
+            rh['title'] = String.new(details)
+            rh['description'] = String.new(details)
           end
 
 
@@ -475,7 +486,6 @@ module Ead_fc
           # New code looks for a container with a dsc parent.
 
           if ele.parent.name.match(/dsc/)
-            print "Found top level container. "
             scon = ele.xpath("./#{@ns}scopecontent")[0]
             if scon.class.to_s.match(/nil/i)
               # When nil do nothing.
@@ -488,12 +498,10 @@ module Ead_fc
                     tween = "\n\n"
                   end
                 }
-                printf "sc: %s...", rh['container_scope'][0..20]
               end
             end
-            print "\n"
           end
-          rh['scope'] = rh['container_scope']
+          rh['scope'] = String.new(rh['container_scope'])
 
           # Collection info, most of which doesn't apply to containers,
           # so these are notes for checking correspondence, and things
@@ -510,7 +518,7 @@ module Ead_fc
           # rh['cite'] = ""
           # rh['type'] = @xml.xpath("//*/#{@ns}archdesc")[0].attributes['level']
           # rh['agreement_id'] = ""
-          # rh['project'] = rh['title']
+          # rh['project'] = String.new(rh['title'])
 
           # The content() method of Nokogiri returns &amp; and similar
           # entities as ascii equivalents which causes problems when we put
@@ -553,14 +561,27 @@ module Ead_fc
             rh['cm'] = @fi_h.get(sprintf(Digital_assets_home, rh['container_unitid']))
             rh['contentmeta'] = @contentmeta_template.result(binding()) 
 
-            printf "cuid: %s path: %s path_key: %s\n", rh['container_unitid'], curr_path, rh['path_key']
+            # printf "cuid: %s path: %s path_key: %s\n", rh['container_unitid'], curr_path, rh['path_key']
+
+            # A list of files that (may) exist in the file system. If
+            # the list is size>0 then we have files.
+
+            flist = @fi_h.discover(curr_path)
+            
+            # debug 
+            # if flist.size > 0
+            #   flist.each { |flh|
+            #     print "fname:  #{flh['fname']}\n"
+            #   }
+            # end
+
             if rh['cm'].size > 0
               rh['cm'].each { |fi_h|
                 printf "Found %s\n", fi_h['fname']
               }
             end
-            else
-            printf "lf: %s pk: %s title: %s\n", leaf_flag, curr_path, rh['path_key'], rh['container_unittitle']
+          else
+            # printf "lf: %s pk: %s title: %s\n", leaf_flag, curr_path, rh['path_key'], rh['container_unittitle']
           end
 
           @xml_out = @generic_template.result(binding())
@@ -603,7 +624,7 @@ module Ead_fc
 
       tmp = @xml.xpath("//*/#{@ns}titleproper[@type='formal']")[0]
       if ! tmp.nil?
-        rh['titleproper'] = tmp.content
+        rh['titleproper'] = String.new(tmp.content)
       else
         # printf "tp: %s ns:\n", @xml.xpath("//*/#{@ns}titleproper"), @xml.inspect
         rh['titleproper'] = @xml.xpath("//*/#{@ns}titleproper")[0].content
@@ -708,11 +729,11 @@ module Ead_fc
 
       if (rh['type'] == "collection")
         rh['object_type'] = "set"
-        rh['set_type'] = rh['type']
+        rh['set_type'] = String.new(rh['type'])
       end
       
       rh['agreement_id'] = ""
-      rh['project'] = rh['title']
+      rh['project'] = String.new(rh['title'])
       
       # The content() method of Nokogiri returns &amp; and similar
       # entities as ascii equivalents which causes problems when we put

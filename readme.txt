@@ -24,6 +24,8 @@ Updates
  used. If it does not exist, it will be created which can take a few
  seconds.
 
+schema.sql
+
 The old, original code that ingested and (attempted) to update the
 Solr index is ead_fc_solr.rb. The old versions of ead_fc.rb are in git
 as well, but I wanted a static file that was the end of the old way of
@@ -162,6 +164,12 @@ You might have change the shebang #! line of the .rb scripts.
 
 Requirements
 ------------
+
+mkdir foxml
+
+The output foxml files are written to a local directory "foxml" if one
+exists. I suggest that you make this directory before running the
+application to keep the files organized.
 
 You may have to install gems: rest-client, nokogiri. I suppose that
 gem "erb" is standard since that is the Rails template engine.

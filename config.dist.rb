@@ -1,3 +1,4 @@
+
 # Constants for run.rb
 
 # Copy this file to foo_config.rb where "foo" is the collection name,
@@ -33,7 +34,7 @@ Pid_namespace = "hypatia"
 
 Path_key_name = 'hull'
 
-# Document root for web services for a given collection.
+# URL root for web services for a given collection.
 
 Digital_assets_url = "http://aims.lib.virginia.edu/test"
 
@@ -43,4 +44,3 @@ Digital_assets_url = "http://aims.lib.virginia.edu/test"
 
 Digital_assets_home = "/var/www/html/gallagher/Stephen Gallagher - refined"
 
-# Digital_assets_home = "/var/www/html/mssa.ms.1746/data/%s"

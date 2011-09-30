@@ -686,18 +686,23 @@ module Ead_fc
 
             if Path_key_name == 'hull'
               rh['cm'] = @fi_h.discover(curr_path)
-              if rh['cm'].size > 0
-                printf "Found group: %s size: %s\n", curr_path, rh['cm'].size
-                create_file_objects(rh)
-              end
+              # if rh['cm'].size > 0
+              #   printf "Found group: %s size: %s\n", curr_path, rh['cm'].size
+              #   create_file_objects(rh)
+              # end
             else
               rh['cm'] = @fi_h.get(curr_path)
-              if rh['cm'].size > 0
-                rh['cm'].each { |fi_h|
-                  printf "Found %s\n", fi_h['fname']
-                  create_file_objects(rh)
-                }
-              end
+              # if rh['cm'].size > 0
+              #   rh['cm'].each { |fi_h|
+              #     printf "Found %s\n", fi_h['fname']
+              #     create_file_objects(rh)
+              #   }
+              # end
+            end
+
+            if rh['cm'].size > 0
+              printf "Found group: %s size: %s\n", curr_path, rh['cm'].size
+              create_file_objects(rh)
             end
 
           else

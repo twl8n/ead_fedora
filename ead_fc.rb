@@ -670,6 +670,7 @@ module Ead_fc
               rh['cm'].each { |fi_h|
                 printf "Found %s\n", fi_h['fname']
                 create_file_objects(rh)
+
               }
             end
           else

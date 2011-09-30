@@ -122,6 +122,15 @@ module Ead_fc
 
               # Remove trailing /
               rh['test_name'].gsub!(/\/$/, '')
+            else
+              rh['test_name'] = String.new(rh['fname'].to_s)
+
+              # Remove file name from the end
+              rh['test_name'].gsub!(/(.*\/).*/, '\1')
+
+              # Remove trailing /
+              rh['test_name'].gsub!(/\/$/, '')
+              print "rt: #{rh['test_name']}\n"
             end
 
             # Can't use MIME::Types.type_for() because is can't
@@ -212,7 +221,6 @@ module Ead_fc
         print "Read #{yy} records from file_info database: #{Schema_sql}\n"
         return
       end
-
       print "Done building file technical meta data for: #{Digital_assets_home}\n"
     end
 
@@ -237,8 +245,9 @@ module Ead_fc
 
     def get(cpath)
       # Return a list of hashes or return an empty list.
-      if @fi_h.has_key?(cpath)
-        return @fi_h[cpath]
+      test_key = "#{Digital_assets_home}/#{cpath}"
+      if @fi_h.has_key?(test_key)
+        return @fi_h[test_key]
       else
         return []  
       end
@@ -394,15 +403,22 @@ module Ead_fc
 
       # Note: we modify @cn_loh in this method.
 
-      if nset.children.to_s.match(/(?:<c\d+)|(?:<c(?:\s+)|(?:>))/is).nil?
+      cmatch = nset.children.to_s.match(/(?:<c\d+)|(?:<c(?:(?:\s+)|(?:>)))/is)
+
+      if cmatch.nil?
 
         # No child containers, so we must be a leaf container aka we
         # describe individual items.
 
-        # If we are a leaf, don't we need to create foxml for ourself?
-        printf "Leaf container: %s\n", nset[0].name
+        # If we are a leaf, return true and we will process
+        # ourself. The recursive call to content_parse() is checking
+        # our children.
+
+        # printf "Leaf container: %s\n", nset.name # nset[0].name
 
         return true
+      else
+        # print "cm: #{cmatch.inspect}\n"
       end
 
       have_c_children = false;
@@ -615,7 +631,11 @@ module Ead_fc
           
           prep_data(rh)
 
-          curr_path = "#{parent_path}/#{rh['path_key']}"
+          if Path_key_name == 'hull'
+            curr_path = "#{parent_path}/#{rh['path_key']}"
+          else
+            curr_path = "#{rh['path_key']}"
+          end
 
           rh['contentmeta'] = ""
 
@@ -664,7 +684,11 @@ module Ead_fc
             # A list of files that (may) exist in the file system. If
             # the list is size>0 then we have files.
 
-            rh['cm'] = @fi_h.discover(curr_path)
+            if Path_key_name == 'hull'
+              rh['cm'] = @fi_h.discover(curr_path)
+            else
+              rh['cm'] = @fi_h.get(curr_path)
+            end
 
             if rh['cm'].size > 0
               rh['cm'].each { |fi_h|

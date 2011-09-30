@@ -32,6 +32,35 @@ as well, but I wanted a static file that was the end of the old way of
 doing things.
 
 
+foo_tech_data.db is the technical metadata for collection foo. To view
+a sample of the data, use sqlite3.
+
+    twl8n@tull Fri Sep 30 13:59:10 EDT 2011
+    /usr/local/projects/ead_fedora
+> sqlite3 tobin_tech_data.db 
+SQLite version 3.6.20
+Enter ".help" for instructions
+Enter SQL statements terminated with a ";"
+sqlite> .mode line
+sqlite> select * from file_info limit 10;
+    fi_pk = 1
+    cpath = /var/www/html/mssa.ms.1746/data/2004-M-088.0010
+    fname = 2004-M-088.0010/2004-M-088.0010.dd
+test_name = 2004-M-088.0010/2004-M-088.0010.dd
+   format = DOS floppy 1440k, x86 hard disk boot sector
+     mime = application/octet-stream
+     size = 1474560
+      md5 = a66b5a76eb73295c04d23a703ed5540e
+     sha1 = 529cefbaac0c03ed368b13398c3a93bff80327b5
+      url = http://aims.lib.virginia.edu/mssa.ms.1746/data/2004-M-088.0010/2004-M-088.0010.dd
+...
+
+The command ".mode line" can make it easier to view records, although
+this format is less compact than the default.
+
+SQLite built-in help is ".help".
+
+
 
 License and credits
 -------------------

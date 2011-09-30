@@ -16,13 +16,28 @@ How to run with hydra-jetty
 Updates
 -------
 
+If there are somenode.nil errors when processing a collection, just go
+into the code and add some sort of error catching conditional or fix
+the xpath() call to be more generalized.
 
-*_config.rb is collection specific. See hull_config.rb
+Digital objects are being generated for Tobin (Yale) and Gallagher
+(Hull). The foxml for the digital object is identical to the parent
+object except for two things:
+
+1) The child's isMemberOf is the parent
+
+2) The child has an extra stream ID="contentMetadata" with some
+clearly named if non-standard elements describing the file technical
+metadata.
+
+
+*_config.rb is collection specific. See config.dist.rb as an example.
 
 *_tech_data.db is a SQLite database of technical metadata for
- files. Each db is collection specific. If the file exists it will be
- used. If it does not exist, it will be created which can take a few
- seconds.
+ files. Each db is collection specific. If it does not exist, it will
+ be created by running run.rb (with the appropriate config) which can
+ take a few seconds. If the file exists it will be used instead of
+ traversing the ingested file directory tree aka Digital_assets_home.
 
 schema.sql
 

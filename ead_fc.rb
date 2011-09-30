@@ -673,38 +673,24 @@ module Ead_fc
 
           if leaf_flag and ! rh['path_key'].empty?
 
-            # oldthink, yale, tobin, probably no longer necessary:
-            # create a list rh['cm'] that is a list of hash of
+            # Create a list rh['cm'] that is a list of hash of
             # technical meta data for the files (digital assets) in
-            # this directory aka the files described by this container
+            # the assets directory aka the files described by this container
             # <c> or <c0x> element.
-            # rh['cm'] = @fi_h.get(sprintf(Digital_assets_home, rh['container_unitid']))
-
 
             # A list of files that (may) exist in the file system. If
             # the list is size>0 then we have files.
 
             if Path_key_name == 'hull'
               rh['cm'] = @fi_h.discover(curr_path)
-              # if rh['cm'].size > 0
-              #   printf "Found group: %s size: %s\n", curr_path, rh['cm'].size
-              #   create_file_objects(rh)
-              # end
             else
               rh['cm'] = @fi_h.get(curr_path)
-              # if rh['cm'].size > 0
-              #   rh['cm'].each { |fi_h|
-              #     printf "Found %s\n", fi_h['fname']
-              #     create_file_objects(rh)
-              #   }
-              # end
             end
 
             if rh['cm'].size > 0
               printf "Found group: %s size: %s\n", curr_path, rh['cm'].size
               create_file_objects(rh)
             end
-
           else
             # printf "lf: %s pk: %s title: %s\n", leaf_flag, curr_path, rh['path_key'], rh['container_unittitle']
           end

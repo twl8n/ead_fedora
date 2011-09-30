@@ -340,6 +340,41 @@ module Ead_fc
     end # initialize
 
 
+    def create_file_objects(rh_orig)
+
+      # Important that our local hash is named "rh" so that it works
+      # with the templates. Also important that it is a copy of the
+      # original since we are modifying it, and we do not want to
+      # modify a reference to the original and thereby munge the
+      # original. Make the copy here in order to hide our strange
+      # behavior from the calling code. 
+
+      rh = Hash.new.replace(rh_orig)
+
+      # Put our parent containers pid into the parent_pid so the
+      # isMemberOf will be correct.
+
+      rh['parent_pid'] = rh['pid']
+
+      if rh['cm'].size > 0
+        rh['cm'].each { |rsrc|
+          rh['pid'] = gen_pid()
+          
+          # contentmeta_template uses rh[] and rsrc[]. Remember that
+          # rh[] is a local copy, but rh['pid'] and rh['parent_pid']
+          # are the only differences between the copy and the
+          # original.
+          
+          rh['contentmeta'] = @contentmeta_template.result(binding())
+          
+          @xml_out = @generic_template.result(binding())
+          wfx_name = write_foxml(rh['pid'])
+          print "Wrote foxml (digital object): #{wfx_name} pid: #{rh['pid']} id: #{rh['id']}\n"
+        }
+      end
+    end
+
+
     def container_parse(nset, parent_path)
       
       # Process the <c> aka <c0x> container elements.
@@ -605,38 +640,48 @@ module Ead_fc
 
           leaf_flag = container_parse(ele, curr_path)
 
+          # Any changes to rh[] below this line will not be available
+          # to our children. That is fine as things are now, but don't
+          # add any rh[] keys below this line that are necessary to
+          # children of the current node (ele).
+
+          # Side effect warning: we'll use rh['cm'].size > 0 to mean
+          # that this EAD container has files and we need to create
+          # file objects.
+
+          rh['cm'] = []
+
           if leaf_flag and ! rh['path_key'].empty?
 
+            # oldthink, yale, tobin, probably no longer necessary:
             # create a list rh['cm'] that is a list of hash of
             # technical meta data for the files (digital assets) in
             # this directory aka the files described by this container
             # <c> or <c0x> element.
+            # rh['cm'] = @fi_h.get(sprintf(Digital_assets_home, rh['container_unitid']))
 
-            rh['cm'] = @fi_h.get(sprintf(Digital_assets_home, rh['container_unitid']))
-            rh['contentmeta'] = @contentmeta_template.result(binding()) 
-
-            # printf "cuid: %s path: %s path_key: %s\n", rh['container_unitid'], curr_path, rh['path_key']
 
             # A list of files that (may) exist in the file system. If
             # the list is size>0 then we have files.
 
-            flist = @fi_h.discover(curr_path)
-            
-            # debug 
-            # if flist.size > 0
-            #   flist.each { |flh|
-            #     print "fname:  #{flh['fname']}\n"
-            #   }
-            # end
+            rh['cm'] = @fi_h.discover(curr_path)
 
             if rh['cm'].size > 0
               rh['cm'].each { |fi_h|
                 printf "Found %s\n", fi_h['fname']
+                create_file_objects(rh)
               }
             end
           else
             # printf "lf: %s pk: %s title: %s\n", leaf_flag, curr_path, rh['path_key'], rh['container_unittitle']
           end
+
+          # Important concept: we don't want to render our own foXML
+          # until our children are finished rendering. Children are
+          # rendered when content_parse() recurses (above), so the
+          # call to result() and write_foxml() must come after
+          # content_parse(). Siblings are rendered in the order in
+          # which they occur in the EAD, naturally.
 
           @xml_out = @generic_template.result(binding())
           wfx_name = write_foxml(rh['pid'])
